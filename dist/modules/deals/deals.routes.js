@@ -1,0 +1,14 @@
+import { Router } from 'express';
+import { DealsController } from './deals.controller.js';
+import { auth } from '../../middleware/auth.middleware.js';
+import { checkPermission } from '../../middleware/rbac.middleware.js';
+import { PERMISSIONS } from '../../config/constants.js';
+const router = Router();
+const controller = new DealsController();
+router.use(auth);
+router.get('/', checkPermission(PERMISSIONS.DEALS_VIEW), controller.getAll);
+router.get('/:id', checkPermission(PERMISSIONS.DEALS_VIEW), controller.getById);
+router.post('/', checkPermission(PERMISSIONS.DEALS_CREATE), controller.create);
+router.put('/:id', checkPermission(PERMISSIONS.DEALS_EDIT), controller.update);
+router.delete('/:id', checkPermission(PERMISSIONS.DEALS_DELETE), controller.delete);
+export default router;

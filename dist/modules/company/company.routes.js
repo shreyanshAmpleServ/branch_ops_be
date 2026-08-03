@@ -1,0 +1,11 @@
+import { Router } from 'express';
+import { CompanyController } from './company.controller.js';
+import { auth } from '../../middleware/auth.middleware.js';
+import { checkPermission } from '../../middleware/rbac.middleware.js';
+import { PERMISSIONS } from '../../config/constants.js';
+const router = Router();
+const controller = new CompanyController();
+router.use(auth);
+router.get('/', controller.get);
+router.put('/', checkPermission(PERMISSIONS.USERS_MANAGE), controller.update);
+export default router;

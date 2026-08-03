@@ -1,0 +1,3993 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model Activities {
+  ID          Int       @id(map: "PK_Activities") @default(autoincrement())
+  UserId      Int
+  ActionID    Int
+  TypeID      Int
+  SubjectID   Int
+  BPCode      String?   @db.NVarChar(50)
+  BPName      String    @db.NVarChar(200)
+  Details     String?   @db.NVarChar(200)
+  StartDate   DateTime  @db.Date
+  StartTime   DateTime  @db.Time
+  EndDate     DateTime  @db.Date
+  EndTime     DateTime  @db.Time
+  Duration    Decimal   @db.Decimal(19, 6)
+  Priority    String    @default("L", map: "DF_Activities_Priority") @db.Char(1)
+  Location    Int?
+  Notes       String?   @db.Text
+  Attachment  Bytes?    @db.Image
+  Recur       String?   @default("N", map: "DF_Activities_Recur") @db.Char(1)
+  Inactive    String?   @default("N", map: "DF_Activities_Inactive") @db.Char(1)
+  Closed      String?   @default("N", map: "DF_Activities_Closed") @db.Char(1)
+  Status      Boolean?
+  CreatedDate DateTime? @default(now(), map: "DF_Activities_CreatedDate") @db.DateTime
+  CGuid       String?   @db.NVarChar(50)
+  CreatedBy   Int?
+  UpdatedBy   Int?
+  UpdatedDate DateTime? @db.Date
+  DMLFlag     Int?      @default(1, map: "DF__Activitie__DMLFl__2F9A1060") @db.SmallInt
+}
+
+model ActivityActions {
+  ID          Int      @id(map: "PK_ActivityActions") @default(autoincrement())
+  Code        String   @db.NVarChar(50)
+  Name        String   @db.NVarChar(50)
+  Active      String   @default("Y", map: "DF_ActivityActions_Active") @db.Char(1)
+  CreatedDate DateTime @default(now(), map: "DF_ActivityActions_CreatedDate") @db.DateTime
+  UserId      Int      @default(0, map: "DF_ActivityActions_UserId")
+  CGuid       String?  @db.NVarChar(50)
+}
+
+model ActivityStatus {
+  ID          Int      @id(map: "PK_ActivityStatus") @default(autoincrement())
+  Name        String   @db.NVarChar(60)
+  Remarks     String?  @db.NVarChar(500)
+  CreatedDate DateTime @default(now(), map: "DF_ActivityStatus_CreatedDate") @db.DateTime
+  UserId      Int      @default(0, map: "DF_ActivityStatus_UserId")
+  CGuid       String?  @db.NVarChar(50)
+}
+
+model ActivitySubjects {
+  ID          Int      @id(map: "PK_ActivitySubjects") @default(autoincrement())
+  Name        String   @db.NVarChar(50)
+  ActTypeID   Int
+  Active      String   @default("Y", map: "DF_ActivitySubjects_Active") @db.Char(1)
+  CreatedDate DateTime @default(now(), map: "DF_ActivitySubjects_CreatedDate") @db.DateTime
+  UserId      Int      @default(0, map: "DF_ActivitySubjects_UserId")
+  CGuid       String?  @db.NVarChar(50)
+}
+
+model ActivityTypes {
+  ID          Int      @id(map: "PK_ActivityTypes") @default(autoincrement())
+  Name        String   @db.NVarChar(50)
+  Active      String   @default("Y", map: "DF_ActivityTypes_Active") @db.Char(1)
+  CreatedDate DateTime @default(now(), map: "DF_ActivityTypes_CreatedDate") @db.DateTime
+  UserId      Int      @default(0, map: "DF_ActivityTypes_UserId")
+  CGuid       String?  @db.NVarChar(50)
+}
+
+model Areas {
+  ID          Int       @id(map: "PK_Areas") @default(autoincrement())
+  AreaCode    String    @db.VarChar(60)
+  Prefix      String?   @db.VarChar(50)
+  OrdStartNum Int?      @default(1, map: "DF_Areas_OrdStartNum")
+  OrdNumDigit Int?      @default(4, map: "DF_Areas_OrdNumDigit")
+  Building    String    @db.VarChar(800)
+  Street      String?   @db.VarChar(100)
+  Block       String?   @db.VarChar(100)
+  ZipCode     String?   @db.VarChar(50)
+  City        Int?
+  County      String?   @db.VarChar(100)
+  State       Int?
+  Country     Int?
+  Latitude    Decimal   @default(0, map: "DF_Areas_Latitude") @db.Decimal(18, 5)
+  Longitude   Decimal   @default(0, map: "DF_Areas_Longitude") @db.Decimal(18, 5)
+  Remarks     String?   @db.VarChar(1000)
+  Active      String?   @db.Char(1)
+  UserId      Int       @default(0, map: "DF_Areas_UserId")
+  CreatedDate DateTime  @default(now(), map: "DF_Areas_CreatedDate") @db.DateTime
+  CGuid       String?   @db.VarChar(50)
+  SAPSlpCode  Int?
+  EmailTo     String?   @db.VarChar(500)
+  EmailCc     String?   @db.VarChar(500)
+  AreaHead    String?   @db.VarChar(100)
+  SAPCode     String?   @db.NVarChar(100)
+  Outlets     Outlets[]
+}
+
+model AreaUserMapping {
+  ID      Int     @id(map: "PK_AreaUserMapping") @default(autoincrement())
+  AreaId  Int
+  UserId  Int
+  Remarks String  @db.NVarChar(800)
+  Active  String  @default("Y", map: "DF_AreaUserMapping_Active") @db.Char(1)
+  CGuid   String? @db.NVarChar(50)
+}
+
+model BPClass {
+  ID          Int      @id(map: "PK_DCC_MstOutletCategory") @default(autoincrement())
+  Code        String   @db.VarChar(50)
+  Name        String   @db.VarChar(254)
+  CreatedDate DateTime @default(now(), map: "DF_BPClass_CreatedDate") @db.DateTime
+  UserId      Int      @default(0, map: "DF_BPClass_UserId")
+  CGuid       String?  @db.NVarChar(50)
+}
+
+model BPGroup {
+  ID             Int      @id(map: "PK_DCC_MstOutletType") @default(autoincrement())
+  Code           String   @db.VarChar(50)
+  Name           String   @db.VarChar(254)
+  CreatedDate    DateTime @default(now(), map: "DF_BPGroup_CreatedDate") @db.DateTime
+  UserId         Int      @default(0, map: "DF_BPGroup_UserId")
+  CGuid          String?  @db.NVarChar(50)
+  DocType        Int?
+  SAPItmsGrpCode Int?     @db.SmallInt
+  SAPGrpCode     Int?     @db.SmallInt
+  Branch         String?  @db.NChar(50)
+}
+
+model CashReceipts {
+  ID                   Int       @id(map: "PK_CashReceipts") @default(autoincrement())
+  CustCode             String    @db.NVarChar(60)
+  CustName             String?   @db.NVarChar(200)
+  Currency             String    @db.NChar(3)
+  Amount               Decimal   @db.Decimal(20, 5)
+  Mode                 Int?
+  RefNo                String?   @db.NVarChar(200)
+  ReceiptRemarks       String?   @db.NVarChar(Max)
+  ReceivedFrom         String?   @db.NVarChar(200)
+  ReceivedBy           String?   @db.NVarChar(200)
+  SignatureImg         Bytes?    @db.Image
+  CreatedDate          DateTime? @db.DateTime
+  UserId               Int
+  SignatureImgReceiver Bytes?    @db.Image
+  SignatureImgCustomer Bytes?    @db.Image
+  OrderID              String?   @db.NVarChar(10)
+  ImgReceipt           Bytes?    @db.Image
+  CGuid                String?   @db.NVarChar(50)
+  SAPDocEntry          Int?
+  CreatedBy            Int?
+  UpdatedBy            Int?
+  UpdatedDate          DateTime? @db.Date
+  DMLFlag              Int?      @default(1, map: "DF__CashRecei__DMLFl__4B422AD5") @db.SmallInt
+  Branch_id            Int?
+  AccountNo            String?   @db.NVarChar(50)
+  BankCode             String?   @db.NVarChar(30)
+  CashCode             String?   @db.VarChar(100)
+  SAPDocNum            String?   @db.NVarChar(10)
+  SAPDraftKey          String?   @db.NVarChar(10)
+}
+
+model Cities {
+  ID          Int        @id(map: "PK_Cities") @default(autoincrement())
+  Code        String?    @db.NVarChar(20)
+  Name        String     @db.NVarChar(200)
+  CountryId   Int?
+  StateId     Int?
+  DistrictId  Int?
+  Latitude    Decimal?   @db.Decimal(18, 5)
+  Longitude   Decimal?   @db.Decimal(18, 5)
+  CreatedDate DateTime   @default(now(), map: "DF_Cities_CreatedDate") @db.DateTime
+  UserId      Int        @default(0, map: "DF_Cities_UserId")
+  CGuid       String?    @db.NVarChar(50)
+  Countries   Countries? @relation(fields: [CountryId], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "FK_Cities_Countries")
+  Districts   Districts? @relation(fields: [DistrictId], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "FK_Cities_Districts")
+  States      States?    @relation(fields: [StateId], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "FK_Cities_States")
+}
+
+model COMP {
+  COMPANY_ID     Int       @id(map: "PK__COMP__73B8DCFFD0BD3867")
+  COMPANY_NAME   String?   @db.NVarChar(255)
+  COMPANY_ALIAS  String?   @db.NVarChar(255)
+  CADDRESS       String?   @db.NVarChar(255)
+  TELEPHONE_NO1  String?   @db.NVarChar(50)
+  TELEPHONE_NO2  String?   @db.NVarChar(50)
+  MOBILE_NO      String?   @db.NVarChar(50)
+  FAX            String?   @db.NVarChar(50)
+  EMAIL_ADDRESS  String?   @db.NVarChar(255)
+  LOGO           Bytes?
+  CONTACT_PERSON String?   @db.NVarChar(255)
+  PHONE_NO       String?   @db.NVarChar(50)
+  EMAIL_ID       String?   @db.NVarChar(255)
+  RecordDate     DateTime? @db.DateTime
+  SMTPServer     String?   @db.NVarChar(255)
+  SMTPPort       Int?
+  SMTPssl        Boolean?
+  SMTPEmail      String?   @db.NVarChar(255)
+  SMTPPassword   String?   @db.NVarChar(255)
+  Url            String?   @db.NVarChar(255)
+  CountryID      Int?
+  SAP_DB         String?   @db.NVarChar(255)
+  GPSUrl         String?   @db.NVarChar(255)
+  GPSUserName    String?   @db.NVarChar(255)
+  GPSToken       String?   @db.NVarChar(255)
+  HeaderColor    String?   @db.NVarChar(50)
+  LeftMenuColor  String?   @db.NVarChar(50)
+  FontColor      String?   @db.NVarChar(50)
+  LicenseKey     String?   @db.NVarChar(255)
+  VFDApiUrl      String?   @db.NVarChar(255)
+  VFDUserName    String?   @db.NVarChar(255)
+  VFDPassword    String?   @db.NVarChar(255)
+}
+
+model CompanyDetails {
+  CompanyName     String  @id(map: "PK_CompanyDetails") @db.NVarChar(200)
+  CompanyAddr     String?
+  PrintHeader     String? @db.NVarChar(200)
+  Phone1          String? @db.NVarChar(40)
+  Phone2          String? @db.NVarChar(40)
+  Fax             String? @db.NVarChar(40)
+  E_Mail          String? @db.NVarChar(200)
+  LocalCur        String? @db.NVarChar(6)
+  SystemCur       String? @db.NVarChar(6)
+  TIN             String? @db.NVarChar(64)
+  VRN             String? @db.NVarChar(64)
+  CountryId       Int?
+  CGuid           String? @db.NVarChar(50)
+  QuotMailSubject String? @db.VarChar(500)
+  SendGridKey     String? @db.VarChar(500)
+  SmtpEmail       String? @db.VarChar(100)
+  SmtpPassword    String? @db.VarChar(500)
+  SmtpServer      String? @db.VarChar(100)
+  SmtpPort        String? @db.VarChar(100)
+  SmtpType        String? @db.VarChar(100)
+  HeaderColor     String? @db.NVarChar(50)
+  LeftMenuColor   String? @db.NVarChar(50)
+  compUrl         String? @db.VarChar(500)
+  compLogo        String? @db.VarChar(500)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model CostCenters {
+  ID    Int     @default(autoincrement())
+  Code  String? @db.NVarChar(100)
+  Name  String? @db.NVarChar(100)
+  CGuid String? @db.NVarChar(50)
+
+  @@ignore
+}
+
+model Countries {
+  ID        Int         @id(map: "PK_Countries") @default(autoincrement())
+  Code      String      @db.NVarChar(6)
+  Name      String      @db.NVarChar(200)
+  Latitude  Decimal?    @db.Decimal(18, 5)
+  Longitude Decimal?    @db.Decimal(18, 5)
+  CGuid     String?     @db.NVarChar(50)
+  Cities    Cities[]
+  Districts Districts[]
+  States    States[]
+}
+
+model Currencies {
+  ID       Int     @id(map: "PK_Currencies") @default(autoincrement())
+  CurrCode String  @db.NVarChar(6)
+  CurrName String  @db.NVarChar(50)
+  IsActive String  @default("N'Y'", map: "DF_Currencies_IsActive") @db.Char(1)
+  CGuid    String? @db.NVarChar(50)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model CustomerFeedback {
+  ID              Int       @default(autoincrement())
+  CustomerCode    String?   @db.NVarChar(50)
+  SalesPersonCode String?   @db.NVarChar(50)
+  Date            DateTime? @db.Date
+  Time            DateTime? @db.Time
+  BrandCode       String?   @db.NVarChar(50)
+  Complaint       String?   @db.NVarChar(Max)
+  InvAtSite       String?   @db.NVarChar(Max)
+  OrderId         Int?
+  Status          String?   @default("O", map: "DF_CustomerFeedback_Status") @db.Char(1)
+  CGuid           String?   @db.NVarChar(100)
+  CreatedBy       Int?
+  CreatedDate     DateTime? @db.Date
+  UpdatedBy       Int?
+  UpdatedDate     DateTime? @db.Date
+  DMLFlag         Int?      @default(1, map: "DF__CustomerF__DMLFl__7CCD9821") @db.SmallInt
+  Remarks         String?   @db.Text
+  InvoiceNo       String?   @db.VarChar(100)
+  Branch_id       Int?
+  DiscPrcnt       Decimal?  @db.Decimal(20, 5)
+  Rounding        String?   @db.Char(1)
+  RoundingAmnt    Decimal?  @db.Decimal(20, 5)
+  TaxTotal        Decimal?  @db.Decimal(18, 0)
+  DocTotal        Decimal?  @db.Decimal(18, 0)
+  UserId          Int?
+  Series          String?   @db.NVarChar(50)
+  RetQty          Int?
+  SAPDocEntry     Int?
+  SAPDraftKey     Int?
+  SAPDocNum       Int?
+  CreateCrNote    String?   @db.NVarChar(1)
+  Attachment      String?   @db.NVarChar(Max)
+  ReqBy           Int?
+  AprStatus       String?   @db.Char(1)
+  AprBy           String?   @db.VarChar(100)
+  AprDate         DateTime? @db.Date
+  AprRemark       String?   @db.Text
+
+  @@ignore
+}
+
+model CustomerFeedbackItem {
+  LineNum         Int
+  ItemID          Int
+  ItemName        String?   @db.VarChar(254)
+  LineStatus      String    @db.Char(1)
+  Quantity        Decimal?  @db.Decimal(19, 5)
+  DeliveredQty    Decimal?  @db.Decimal(19, 5)
+  OpenQty         Decimal?  @db.Decimal(19, 5)
+  WhsCode         Int?
+  UnitPrice       Decimal?  @db.Decimal(19, 5)
+  Currency        Int?      @db.SmallInt
+  Rate            Decimal?  @db.Decimal(19, 5)
+  DiscPrcnt       Decimal?  @db.Decimal(19, 5)
+  VATCode         String?   @db.NVarChar(200)
+  VATPer          Decimal?  @db.Decimal(19, 5)
+  LineTax         Decimal?  @db.Decimal(19, 5)
+  LineTotalLC     Decimal?  @db.Decimal(19, 5)
+  LineTotalFC     Decimal?  @db.Decimal(19, 5)
+  LineTotalSC     Decimal?  @db.Decimal(19, 5)
+  SourceDocId     String?   @db.NVarChar(50)
+  SourceLineNum   Int?
+  SourceDocType   String?   @db.NVarChar(80)
+  SourceSystem    String?   @db.NVarChar(50)
+  TargetDocId     Int?
+  TargetLineNum   Int?
+  TargetDocType   String?   @db.NVarChar(80)
+  cost_center     Int?
+  project         String?   @db.NVarChar(199)
+  Remarks         String?   @db.NVarChar(800)
+  BatchNo         String?   @db.NVarChar(50)
+  CGuid           String    @db.NVarChar(50)
+  SAPLineId       Int?
+  TotalBefDisc    Decimal?  @db.Decimal(19, 5)
+  NoInvTryMV      String?   @default("N", map: "DF_CustomerFeedbackItem_NoInvTryMV") @db.Char(1)
+  NatureoftheComp String?   @db.VarChar(254)
+  QualityStatus   String?   @db.VarChar(254)
+  MfgTime         DateTime? @db.Time
+  MfgDate         DateTime? @db.Date
+  AffecQty        Decimal?  @db.Decimal(19, 3)
+  ID              Int       @id(map: "PK__Customer__3214EC27550D7D41") @default(autoincrement())
+  IsBatch         String?   @db.Char(1)
+  ItemCode        String?   @db.NVarChar(50)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model dcc_area {
+  ID          Int      @default(autoincrement())
+  AreaCode    String   @db.VarChar(60)
+  Prefix      String?  @db.VarChar(50)
+  OrdStartNum Int?
+  OrdNumDigit Int?
+  Building    String   @db.VarChar(800)
+  Street      String?  @db.VarChar(100)
+  Block       String?  @db.VarChar(100)
+  ZipCode     String?  @db.VarChar(50)
+  City        Int?
+  County      String?  @db.VarChar(100)
+  State       Int?
+  Country     Int?
+  Latitude    Decimal  @db.Decimal(18, 5)
+  Longitude   Decimal  @db.Decimal(18, 5)
+  Remarks     String?  @db.VarChar(1000)
+  Active      String?  @db.Char(1)
+  UserId      Int
+  CreatedDate DateTime @db.DateTime
+  CGuid       String?  @db.VarChar(50)
+  SAPSlpCode  Int?
+  EmailTo     String?  @db.VarChar(500)
+  EmailCc     String?  @db.VarChar(500)
+  AreaHead    String?  @db.VarChar(100)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model DCC_SA_OrderApproval {
+  ID               Int
+  AppOrderGUID     String @db.NVarChar(100)
+  IntegrationId    BigInt
+  ApprovalCheckVal String @db.Char(1)
+
+  @@ignore
+}
+
+model Delivery {
+  ID            Int       @id(map: "PK_Delivery") @default(autoincrement())
+  CustCode      String    @db.NVarChar(50)
+  CustName      String    @db.NVarChar(254)
+  Address       String?
+  CustRefNo     String?   @db.NVarChar(200)
+  ContPerson    Int?
+  Currency      String?   @db.NVarChar(6)
+  CurRate       Decimal?  @db.Decimal(20, 5)
+  PostDate      DateTime? @db.Date
+  DueDate       DateTime? @db.Date
+  TaxDate       DateTime? @db.Date
+  DiscPrcnt     Decimal?  @db.Decimal(20, 5)
+  TaxTotal      Decimal?  @db.Decimal(20, 5)
+  DocTotal      Decimal?  @db.Decimal(20, 5)
+  DocTotalFC    Decimal?  @db.Decimal(20, 5)
+  DocTotalSC    Decimal?  @db.Decimal(20, 5)
+  SourceSeries  Int?
+  SourceDocId   String?   @db.NVarChar(50)
+  SourceDocType String?   @db.NVarChar(80)
+  SourceSystem  String?   @db.NVarChar(50)
+  UserId        Int?
+  OwnerCode     Int?
+  Rounding      String?   @default("N", map: "DF_Delivery_Rounding") @db.Char(1)
+  RoundingAmnt  Decimal?  @db.Decimal(20, 5)
+  Remarks       String?   @db.NVarChar(800)
+  ShiptoID      String?   @db.NVarChar(50)
+  BilltoID      String?   @db.NVarChar(50)
+  Status        String?   @db.NVarChar(10)
+  CreatedDate   DateTime  @default(now(), map: "DF_Delivery_CreatedDate") @db.DateTime
+  CGuid         String    @db.NVarChar(50)
+  SignatureImg  Bytes?    @db.Image
+  SalesType     Int?
+  SAPDocEntry   Int?
+  TotalBefDisc  Decimal?  @db.Decimal(19, 5)
+  AprStatus     String    @default("Y", map: "DF__Delivery__AprSta__55BFB948") @db.Char(1)
+  AprBy         String?   @db.VarChar(100)
+  AprDate       DateTime? @db.Date
+  AprRemark     String?   @db.VarChar(500)
+  CreatedBy     Int?
+  UpdatedBy     Int?
+  UpdatedDate   DateTime? @db.Date
+  DMLFlag       Int?      @default(1, map: "DF__Delivery__DMLFla__56B3DD81") @db.SmallInt
+  OrderCode     String?   @db.VarChar(100)
+}
+
+model DeliveryAttachments {
+  ID         Int    @id(map: "PK_DeliveryAttachments") @default(autoincrement())
+  LineNum    Int    @db.SmallInt
+  Attachment Bytes? @db.Image
+  CGuid      String @db.NVarChar(50)
+}
+
+model DeliveryItems {
+  ID            Int      @id(map: "PK_DeliveryItems") @default(autoincrement())
+  LineNum       Int
+  ItemID        Int
+  ItemName      String?  @db.VarChar(254)
+  LineStatus    String   @default("O", map: "DF_DeliveryItems_LineStatus") @db.Char(1)
+  Quantity      Decimal? @db.Decimal(19, 5)
+  DeliveredQty  Decimal? @db.Decimal(19, 5)
+  OpenQty       Decimal? @db.Decimal(19, 5)
+  WhsCode       Int?
+  UnitPrice     Decimal? @db.Decimal(19, 5)
+  Currency      Int?     @db.SmallInt
+  Rate          Decimal? @db.Decimal(19, 5)
+  DiscPrcnt     Decimal? @db.Decimal(19, 5)
+  VATCode       Int?
+  VATPer        Decimal? @db.Decimal(19, 5)
+  LineTax       Decimal? @db.Decimal(19, 5)
+  LineTotalLC   Decimal? @db.Decimal(19, 5)
+  LineTotalFC   Decimal? @db.Decimal(19, 5)
+  LineTotalSC   Decimal? @db.Decimal(19, 5)
+  SourceDocId   String?  @db.NVarChar(50)
+  SourceLineNum Int?
+  SourceDocType String?  @db.NVarChar(80)
+  SourceSystem  String?  @db.NVarChar(50)
+  TargetDocId   Int?
+  TargetLineNum Int?
+  cost_center   Int?
+  project       Int?
+  TargetDocType String?  @db.NVarChar(80)
+  Remarks       String?  @db.NVarChar(800)
+  BatchNo       String?  @db.NVarChar(100)
+  CGuid         String   @db.NVarChar(50)
+  TotalBefDisc  Decimal? @db.Decimal(19, 5)
+}
+
+model Districts {
+  ID        Int        @id(map: "PK_Districts") @default(autoincrement())
+  Code      String     @db.NVarChar(6)
+  Name      String     @db.NVarChar(200)
+  CountryId Int?
+  StateId   Int?
+  Latitude  Decimal?   @db.Decimal(18, 5)
+  Longitude Decimal?   @db.Decimal(18, 5)
+  CGuid     String?    @db.NVarChar(50)
+  Cities    Cities[]
+  Countries Countries? @relation(fields: [CountryId], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "FK_Districts_Countries")
+  States    States?    @relation(fields: [StateId], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "FK_Districts_States")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model DocumentMapp {
+  SourceType   String? @db.NVarChar(10)
+  SourceDoc    String? @db.NVarChar(50)
+  SAPDocEntry  String? @db.NVarChar(10)
+  SAPLineId    Int?
+  SourceLineId String? @db.NVarChar(10)
+  IntId        String? @db.NVarChar(20)
+
+  @@ignore
+}
+
+model FeedbackBreederAgent {
+  ID                  Int       @id(map: "PK__Feedback__3214EC27176BAB99") @default(autoincrement())
+  CustCode            String?   @db.NVarChar(50)
+  CustName            String?   @db.VarChar(230)
+  CustMobile          String?   @db.VarChar(50)
+  CustType            Int?
+  Broilers_eggs       String?   @db.VarChar(50)
+  farming_size        String?   @db.VarChar(50)
+  satisfy_shaMil      String?   @db.VarChar(50)
+  advise_shafa        Int?
+  Products_shaMil     String?   @db.VarChar(50)
+  Products_What       String?   @db.VarChar(50)
+  About_Products      String?   @db.Text
+  OverallQuality      Int?
+  Additional_Comments String?   @db.Text
+  ifBoilerLayerA      Int?
+  BirdsFarmsA         String?   @db.VarChar(50)
+  weightsBirdsA       String?   @db.VarChar(50)
+  birdsAgeA           String?   @db.VarChar(50)
+  PermingBirdsA       String?   @db.VarChar(50)
+  FeedingBirdsA       String?   @db.VarChar(50)
+  diseaseBirdsA       String?   @db.VarChar(50)
+  problemExplainA     String?   @db.VarChar(50)
+  orderfeedA          String?   @db.VarChar(50)
+  SalesVisitedA       String?   @db.VarChar(50)
+  complaintCustA      String?   @db.VarChar(250)
+  layersFarmerA       String?   @db.VarChar(50)
+  birdsPerformingA    String?   @db.VarChar(50)
+  colleagueshaMill    Int?
+  birdsDiseaseA       String?   @db.VarChar(50)
+  explainProblemA     String?   @db.VarChar(250)
+  FavoriteThingA      String?   @db.VarChar(50)
+  visitedSalesA       Int?
+  extraCommentA       String?   @db.VarChar(250)
+  satisfied           String?   @db.VarChar(50)
+  satisfactionLevel   String?   @db.VarChar(50)
+  buy_product         String?   @db.VarChar(50)
+  change_things       String?   @db.VarChar(250)
+  favorite_thing      String?   @db.VarChar(250)
+  Overall_rate        String?   @db.VarChar(50)
+  AdditionalsCom      String?   @db.VarChar(250)
+  user_id             Int?
+  created_date        DateTime? @db.Date
+  layingPer           String?   @db.VarChar(250)
+  NoBirdsLayer        String?   @db.VarChar(250)
+  weightsLayer        String?   @db.VarChar(250)
+  birdsLayer          String?   @db.VarChar(250)
+  performLayer        String?   @db.VarChar(250)
+  FeedingLayer        String?   @db.VarChar(250)
+  sufferLayer         String?   @db.VarChar(250)
+  nextFeedLayer       String?   @db.VarChar(250)
+  visitedLayer        String?   @db.VarChar(250)
+  explainLayer        String?   @db.VarChar(250)
+}
+
+model Goods {
+  ID             Int       @id(map: "PK_Goods") @default(autoincrement())
+  PostDate       DateTime? @db.Date
+  DeliveryDate   DateTime? @db.Date
+  PODate         DateTime? @db.Date
+  TypePayment    String    @db.NVarChar(50)
+  DiscPrcnt      Decimal?  @db.Decimal(20, 5)
+  TaxTotal       Decimal?  @db.Decimal(20, 5)
+  DocTotal       Decimal?  @db.Decimal(20, 5)
+  DocTotalFC     Decimal?  @db.Decimal(20, 5)
+  DocTotalSC     Decimal?  @db.Decimal(20, 5)
+  UserId         Int?
+  OwnerCode      Int?
+  Rounding       String?   @db.Char(1)
+  RoundingAmnt   Decimal?  @db.Decimal(20, 5)
+  Remarks        String?   @db.NVarChar(800)
+  ReceiptNo      String?   @db.NVarChar(800)
+  ShiptoID       String?   @db.NVarChar(50)
+  BilltoID       String?   @db.NVarChar(50)
+  Status         String?   @db.NVarChar(10)
+  CreatedDate    DateTime  @db.Date
+  CGuid          String    @db.NVarChar(50)
+  SignatureImg   Bytes?    @db.Image
+  DueDateString  String?   @db.NVarChar(100)
+  SalesType      Int?
+  SAPDocEntry    Int?
+  TotalBefDisc   Decimal?  @db.Decimal(19, 5)
+  AprStatus      String    @db.Char(1)
+  AprBy          String?   @db.VarChar(100)
+  AprDate        DateTime? @db.Date
+  AprRemark      String?   @db.VarChar(500)
+  CreatedBy      Int?
+  UpdatedBy      Int?
+  UpdatedDate    DateTime? @db.Date
+  DMLFlag        Int?      @db.SmallInt
+  OrderCode      String?   @db.VarChar(100)
+  Branch_id      Int?
+  RequestType    String?   @db.VarChar(50)
+  TypeRequest    String?   @db.VarChar(50)
+  DueDate        DateTime? @db.Date
+  GoodsIssue_Qty String?   @db.VarChar(100)
+  series         String?   @db.NVarChar(100)
+  SAPDocNum      String?   @db.NVarChar(100)
+  ReqBy          Int?
+  relation_from  String?   @db.NVarChar(200)
+}
+
+model goods_recepts_purchased_order {
+  ID            Int       @id(map: "PK_goods_recepts_purchased_order") @default(autoincrement())
+  PostDate      DateTime? @db.Date
+  DeliveryDate  DateTime? @db.Date
+  PODate        DateTime? @db.Date
+  TypePayment   String    @db.NVarChar(50)
+  DiscPrcnt     Decimal?  @db.Decimal(20, 5)
+  TaxTotal      Decimal?  @db.Decimal(20, 5)
+  DocTotal      Decimal?  @db.Decimal(20, 5)
+  DocTotalFC    Decimal?  @db.Decimal(20, 5)
+  DocTotalSC    Decimal?  @db.Decimal(20, 5)
+  UserId        Int?
+  OwnerCode     Int?
+  Rounding      String?   @db.Char(1)
+  RoundingAmnt  Decimal?  @db.Decimal(20, 5)
+  Remarks       String?   @db.NVarChar(800)
+  ShiptoID      String?   @db.NVarChar(50)
+  BilltoID      String?   @db.NVarChar(50)
+  Status        String?   @db.NVarChar(10)
+  CreatedDate   DateTime  @db.Date
+  CGuid         String    @db.NVarChar(50)
+  SignatureImg  Bytes?    @db.Image
+  DueDateString String?   @db.NVarChar(100)
+  SalesType     Int?
+  SAPDocEntry   Int?
+  TotalBefDisc  Decimal?  @db.Decimal(19, 5)
+  AprStatus     String    @db.Char(1)
+  AprBy         String?   @db.VarChar(100)
+  AprDate       DateTime? @db.Date
+  AprRemark     String?   @db.VarChar(500)
+  CreatedBy     Int?
+  UpdatedBy     Int?
+  UpdatedDate   DateTime? @db.Date
+  DMLFlag       Int?      @db.SmallInt
+  OrderCode     String?   @db.VarChar(100)
+  Branch_id     Int?
+  RequestType   String?   @db.VarChar(50)
+  TypeRequest   String?   @db.VarChar(50)
+  CustCode      String?   @db.VarChar(50)
+  CustName      String?   @db.VarChar(100)
+  purchaseOrder String?   @db.VarChar(100)
+  DocName       String?   @db.VarChar(100)
+  RequestedNo   String?   @db.NVarChar(100)
+  series        String?   @db.NVarChar(100)
+  SAPDocNum     String?   @db.NVarChar(100)
+  BOL           String?   @db.NVarChar(100)
+  Freight       Decimal?  @db.Decimal(20, 5)
+  ReqBy         Int?
+  ExpenseType   String?   @db.NVarChar(100)
+  Department    String?   @db.NVarChar(100)
+  ActivityName  String?   @db.NVarChar(100)
+  relation_from String?   @db.NVarChar(200)
+  SapStatus     String    @default("N", map: "DF__goods_rec__SapSt__1AF3F935") @db.Char(1)
+}
+
+model goods_recepts_purchased_order_items {
+  ID             Int      @id(map: "PK_goods_recepts_purchased_order_items") @default(autoincrement())
+  LineNum        Int
+  ItemID         Int
+  ItemName       String?  @db.VarChar(254)
+  LineStatus     String   @db.Char(1)
+  Quantity       Decimal? @db.Decimal(19, 5)
+  DeliveredQty   Decimal? @db.Decimal(19, 5)
+  OpenQty        Decimal? @db.Decimal(19, 5)
+  WhsCode        Int?
+  UnitPrice      Decimal? @db.Decimal(19, 5)
+  Currency       Int?     @db.SmallInt
+  Rate           Decimal? @db.Decimal(19, 5)
+  DiscPrcnt      Decimal? @db.Decimal(19, 5)
+  VATCode        String?  @db.NVarChar(100)
+  VATPer         Decimal? @db.Decimal(19, 5)
+  LineTax        Decimal? @db.Decimal(19, 5)
+  LineTotalLC    Decimal? @db.Decimal(19, 5)
+  LineTotalFC    Decimal? @db.Decimal(19, 5)
+  LineTotalSC    Decimal? @db.Decimal(19, 5)
+  SourceDocId    String?  @db.NVarChar(50)
+  SourceLineNum  Int?
+  SourceDocType  String?  @db.NVarChar(80)
+  SourceSystem   String?  @db.NVarChar(50)
+  TargetDocId    Int?
+  TargetLineNum  Int?
+  TargetDocType  String?  @db.NVarChar(80)
+  cost_center    Int?
+  project        String?  @db.NVarChar(199)
+  Remarks        String?  @db.NVarChar(800)
+  CGuid          String   @db.NVarChar(50)
+  SAPLineId      Int?
+  TotalBefDisc   Decimal? @db.Decimal(19, 5)
+  vendor         String?  @db.VarChar(200)
+  ferightType    String?  @db.VarChar(100)
+  vendorRef      String?  @db.VarChar(100)
+  mainCguid      String?  @db.NVarChar(100)
+  Location       String?  @db.NVarChar(100)
+  DIM1           String?  @db.NVarChar(100)
+  DIM2           String?  @db.NVarChar(100)
+  DIM3           String?  @db.NVarChar(100)
+  DIM4           String?  @db.NVarChar(100)
+  isBatchManaged String?  @default("N", map: "DF_goods_recepts_purchased_order_items_isBatchManaged") @db.Char(1)
+  IsBatchSerial  String?  @db.Char(1)
+  SelectedQty    Decimal? @db.Decimal(19, 5)
+  SapLine        String?  @db.VarChar(100)
+  SapType        String?  @db.VarChar(100)
+  SAPDocEntry    String?  @db.VarChar(100)
+  UoM            String?  @db.NVarChar(100)
+  IsBatch        String?  @db.Char(1)
+  ItemCode       String?  @db.NVarChar(100)
+  DIM5           String?  @db.NVarChar(100)
+}
+
+model GoodsIssueItems {
+  ID             Int      @id(map: "PK_GoodsIssueItems") @default(autoincrement())
+  LineNum        Int
+  ItemID         Int
+  ItemName       String?  @db.VarChar(254)
+  LineStatus     String   @db.Char(1)
+  Quantity       Decimal? @db.Decimal(19, 5)
+  DeliveredQty   Decimal? @db.Decimal(19, 5)
+  OpenQty        Decimal? @db.Decimal(19, 5)
+  WhsCode        Int?
+  UnitPrice      Decimal? @db.Decimal(19, 5)
+  Currency       Int?     @db.SmallInt
+  Rate           Decimal? @db.Decimal(19, 5)
+  DiscPrcnt      Decimal? @db.Decimal(19, 5)
+  VATCode        String?  @db.NVarChar(100)
+  VATPer         Decimal? @db.Decimal(19, 5)
+  LineTax        Decimal? @db.Decimal(19, 5)
+  LineTotalLC    Decimal? @db.Decimal(19, 5)
+  LineTotalFC    Decimal? @db.Decimal(19, 5)
+  LineTotalSC    Decimal? @db.Decimal(19, 5)
+  SourceDocId    String?  @db.NVarChar(50)
+  SourceLineNum  Int?
+  SourceDocType  String?  @db.NVarChar(80)
+  SourceSystem   String?  @db.NVarChar(50)
+  TargetDocId    Int?
+  TargetLineNum  Int?
+  TargetDocType  String?  @db.NVarChar(80)
+  cost_center    Int?
+  project        String?  @db.NVarChar(199)
+  Remarks        String?  @db.NVarChar(800)
+  CGuid          String   @db.NVarChar(50)
+  SAPLineId      Int?
+  TotalBefDisc   Decimal? @db.Decimal(19, 5)
+  vendor         String?  @db.VarChar(200)
+  DIM1           String?  @db.VarChar(50)
+  DIM2           String?  @db.VarChar(50)
+  DIM3           String?  @db.VarChar(50)
+  DIM4           String?  @db.VarChar(50)
+  DIM5           String?  @db.VarChar(50)
+  ferightType    String?  @db.VarChar(100)
+  vendorRef      String?  @db.VarChar(50)
+  isBatchManaged String?  @default("N", map: "DF_GoodsIssueItems_isBatchManaged") @db.Char(1)
+  IsBatchSerial  String?  @default("N", map: "DF_GoodsIssueItems_IsBatchSerial") @db.Char(1)
+  SelectedQty    Decimal? @db.Decimal(19, 5)
+  SapLine        String?  @db.VarChar(100)
+  SapType        String?  @db.VarChar(100)
+  SAPDocEntry    String?  @db.VarChar(100)
+  UoM            String?  @db.NVarChar(100)
+  IsBatch        String?  @db.Char(1)
+  ItemCode       Int?
+}
+
+model GoodsIssues {
+  ID              Int       @id(map: "PK_GoodsIssues") @default(autoincrement())
+  PostDate        DateTime? @db.Date
+  DeliveryDate    DateTime? @db.Date
+  PODate          DateTime? @db.Date
+  TypePayment     String    @db.NVarChar(50)
+  DiscPrcnt       Decimal?  @db.Decimal(20, 5)
+  TaxTotal        Decimal?  @db.Decimal(20, 5)
+  DocTotal        Decimal?  @db.Decimal(20, 5)
+  DocTotalFC      Decimal?  @db.Decimal(20, 5)
+  DocTotalSC      Decimal?  @db.Decimal(20, 5)
+  UserId          Int?
+  OwnerCode       Int?
+  Rounding        String?   @db.Char(1)
+  RoundingAmnt    Decimal?  @db.Decimal(20, 5)
+  Remarks         String?   @db.NVarChar(800)
+  ReceiptNo       String?   @db.NVarChar(800)
+  ShiptoID        String?   @db.NVarChar(50)
+  BilltoID        String?   @db.NVarChar(50)
+  Status          String?   @db.NVarChar(10)
+  CreatedDate     DateTime  @db.Date
+  CGuid           String    @db.NVarChar(50)
+  SignatureImg    Bytes?    @db.Image
+  DueDateString   String?   @db.NVarChar(100)
+  SalesType       Int?
+  SAPDocEntry     Int?
+  TotalBefDisc    Decimal?  @db.Decimal(19, 5)
+  AprStatus       String    @db.Char(1)
+  AprBy           String?   @db.VarChar(100)
+  AprDate         DateTime? @db.Date
+  AprRemark       String?   @db.VarChar(500)
+  CreatedBy       Int?
+  UpdatedBy       Int?
+  UpdatedDate     DateTime? @db.Date
+  DMLFlag         Int?      @db.SmallInt
+  OrderCode       String?   @db.VarChar(100)
+  Branch_id       Int?
+  RequestType     String?   @db.VarChar(50)
+  TypeRequest     String?   @db.VarChar(50)
+  DueDate         DateTime? @db.Date
+  Goods_Recipt_ID String?   @db.VarChar(100)
+  series          String?   @db.NVarChar(100)
+  SAPDocNum       String?   @db.NVarChar(100)
+  ReqBy           Int?
+}
+
+model GoodsItems {
+  ID             Int      @id(map: "PK_GoodsItems") @default(autoincrement())
+  LineNum        Int
+  ItemID         Int
+  ItemName       String?  @db.VarChar(254)
+  LineStatus     String   @db.Char(1)
+  Quantity       Decimal? @db.Decimal(19, 5)
+  DeliveredQty   Decimal? @db.Decimal(19, 5)
+  OpenQty        Decimal? @db.Decimal(19, 5)
+  WhsCode        Int?
+  UnitPrice      Decimal? @db.Decimal(19, 5)
+  Currency       Int?     @db.SmallInt
+  Rate           Decimal? @db.Decimal(19, 5)
+  DiscPrcnt      Decimal? @db.Decimal(19, 5)
+  VATCode        String?  @db.NVarChar(100)
+  VATPer         Decimal? @db.Decimal(19, 5)
+  LineTax        Decimal? @db.Decimal(19, 5)
+  LineTotalLC    Decimal? @db.Decimal(19, 5)
+  LineTotalFC    Decimal? @db.Decimal(19, 5)
+  LineTotalSC    Decimal? @db.Decimal(19, 5)
+  SourceDocId    String?  @db.NVarChar(50)
+  SourceLineNum  Int?
+  SourceDocType  String?  @db.NVarChar(80)
+  SourceSystem   String?  @db.NVarChar(50)
+  TargetDocId    Int?
+  TargetLineNum  Int?
+  TargetDocType  String?  @db.NVarChar(80)
+  cost_center    Int?
+  project        String?  @db.NVarChar(199)
+  Remarks        String?  @db.NVarChar(800)
+  CGuid          String   @db.NVarChar(50)
+  SAPLineId      Int?
+  TotalBefDisc   Decimal? @db.Decimal(19, 5)
+  vendor         String?  @db.VarChar(200)
+  DIM1           String?  @db.VarChar(50)
+  DIM2           String?  @db.VarChar(50)
+  DIM3           String?  @db.VarChar(50)
+  DIM4           String?  @db.VarChar(50)
+  DIM5           String?  @db.VarChar(50)
+  ferightType    String?  @db.VarChar(100)
+  vendorRef      String?  @db.VarChar(50)
+  Issue_QTY      String?  @db.VarChar(100)
+  mainCguid      String?  @db.NVarChar(800)
+  Location       String?  @db.NVarChar(800)
+  GL             String?  @db.NVarChar(800)
+  isBatchManaged String?  @db.Char(1)
+  SelectedQty    Decimal? @db.Decimal(19, 5)
+  IsBatchSerial  String?  @default("N", map: "DF_GoodsItems_IsBatchSerial") @db.Char(1)
+  SapLine        String?  @db.VarChar(100)
+  SapType        String?  @db.VarChar(100)
+  SAPDocEntry    String?  @db.VarChar(100)
+  UoM            String?  @db.NVarChar(100)
+  IsBatch        String?  @db.Char(1)
+  ItemCode       Int?
+}
+
+model GoodsRecipts {
+  ID            Int       @id(map: "PK_GoodsRecipts") @default(autoincrement())
+  PostDate      DateTime? @db.Date
+  DeliveryDate  DateTime? @db.Date
+  PODate        DateTime? @db.Date
+  TypePayment   String    @db.NVarChar(50)
+  DiscPrcnt     Decimal?  @db.Decimal(20, 5)
+  TaxTotal      Decimal?  @db.Decimal(20, 5)
+  DocTotal      Decimal?  @db.Decimal(20, 5)
+  DocTotalFC    Decimal?  @db.Decimal(20, 5)
+  DocTotalSC    Decimal?  @db.Decimal(20, 5)
+  UserId        Int?
+  OwnerCode     Int?
+  Rounding      String?   @db.Char(1)
+  RoundingAmnt  Decimal?  @db.Decimal(20, 5)
+  Remarks       String?   @db.NVarChar(800)
+  ShiptoID      String?   @db.NVarChar(50)
+  BilltoID      String?   @db.NVarChar(50)
+  Status        String?   @db.NVarChar(10)
+  CreatedDate   DateTime  @db.Date
+  CGuid         String    @db.NVarChar(50)
+  SignatureImg  Bytes?    @db.Image
+  DueDateString String?   @db.NVarChar(100)
+  SalesType     Int?
+  SAPDocEntry   Int?
+  TotalBefDisc  Decimal?  @db.Decimal(19, 5)
+  AprStatus     String    @db.Char(1)
+  AprBy         String?   @db.VarChar(100)
+  AprDate       DateTime? @db.Date
+  AprRemark     String?   @db.VarChar(500)
+  CreatedBy     Int?
+  UpdatedBy     Int?
+  UpdatedDate   DateTime? @db.Date
+  DMLFlag       Int?      @db.SmallInt
+  OrderCode     String?   @db.VarChar(100)
+  Branch_id     Int?
+  RequestType   String?   @db.VarChar(50)
+  TypeRequest   String?   @db.VarChar(50)
+  DocName       String?   @db.VarChar(100)
+}
+
+model IntegrationAudit {
+  IntegrationId BigInt    @id(map: "IntegrationTransactionId_PK") @default(autoincrement())
+  SourceType    Int
+  SourceId      String    @db.NVarChar(50)
+  OperationType Int       @db.SmallInt
+  StoreId       String?   @db.NVarChar(50)
+  Flag          Boolean
+  Status        Boolean?
+  ErrorMessage  String?   @db.VarChar(5000)
+  LogDatetime   DateTime? @default(now(), map: "DF_IntegrationAudit_LogDatetime") @db.DateTime
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model InvactiveItem {
+  ID               Int       @default(autoincrement())
+  Code             String?   @db.VarChar(50)
+  Name             String    @db.VarChar(254)
+  CreatedDate      DateTime? @db.DateTime
+  CatID            Int?
+  SubCatId         Int?
+  OnHand           Decimal?  @db.Decimal(20, 5)
+  IsCommited       Decimal?  @db.Decimal(20, 5)
+  OnOrder          Decimal?  @db.Decimal(20, 5)
+  DfltWhsID        Int?
+  UoM              String?   @db.NVarChar(50)
+  QtyinCase        Decimal?  @db.Decimal(20, 5)
+  MinQtyLevel      Decimal?  @db.Decimal(20, 5)
+  MaxQtyLevel      Decimal?  @db.Decimal(20, 5)
+  LastPurPrc       Decimal?  @db.Decimal(20, 5)
+  Weight           Decimal?  @db.Decimal(20, 5)
+  Street           String?   @db.VarChar(100)
+  ManBatch         String?   @db.VarChar(1)
+  ManSerial        String?   @db.VarChar(1)
+  ItemImage        Bytes?    @db.Image
+  SaleVAT          Int?
+  Remarks          String?   @db.VarChar(254)
+  SalesScheme1     Int?
+  SalesScheme2     Int?
+  Scheme1FreeItem  String?   @db.NVarChar(60)
+  Scheme2FreeItem  String?   @db.NVarChar(60)
+  SalesPromoID     Int?
+  MonthlyTargetQty Decimal?  @db.Decimal(20, 5)
+  DailyTargetQty   Decimal?  @db.Decimal(20, 5)
+  CGuid            String?   @db.NVarChar(50)
+  SAPItemGrpCode   Int?
+
+  @@ignore
+}
+
+model InvoiceAttachments {
+  ID         Int    @id(map: "PK_InvoiceAttachments") @default(autoincrement())
+  LineNum    Int    @db.SmallInt
+  Attachment Bytes? @db.Image
+  CGuid      String @db.NVarChar(50)
+}
+
+model InvoiceItems {
+  ID            Int      @id(map: "PK_InvoiceItems") @default(autoincrement())
+  LineNum       Int
+  ItemID        Int
+  ItemName      String?  @db.VarChar(254)
+  LineStatus    String   @default("O", map: "DF_InvoiceItems_LineStatus") @db.Char(1)
+  Quantity      Decimal? @db.Decimal(19, 5)
+  DeliveredQty  Decimal? @db.Decimal(19, 5)
+  OpenQty       Decimal? @db.Decimal(19, 5)
+  WhsCode       Int?
+  UnitPrice     Decimal? @db.Decimal(19, 5)
+  Currency      Int?     @db.SmallInt
+  Rate          Decimal? @db.Decimal(19, 5)
+  DiscPrcnt     Decimal? @db.Decimal(19, 5)
+  VATCode       Int?
+  VATPer        Decimal? @db.Decimal(19, 5)
+  LineTax       Decimal? @db.Decimal(19, 5)
+  LineTotalLC   Decimal? @db.Decimal(19, 5)
+  LineTotalFC   Decimal? @db.Decimal(19, 5)
+  LineTotalSC   Decimal? @db.Decimal(19, 5)
+  SourceDocId   Int?
+  SourceLineNum Int?
+  SourceDocType String?  @db.NVarChar(80)
+  SourceSystem  String?  @db.NVarChar(50)
+  TargetDocId   Int?
+  TargetLineNum Int?
+  TargetDocType String?  @db.NVarChar(80)
+  Remarks       String?  @db.NVarChar(800)
+  CGuid         String   @db.NVarChar(50)
+  UoM           String?  @db.NVarChar(100)
+}
+
+model Invoices {
+  ID            Int       @id(map: "PK_Invoices") @default(autoincrement())
+  CustCode      String    @db.NVarChar(50)
+  CustName      String    @db.NVarChar(254)
+  Address       String?
+  CustRefNo     String?   @db.NVarChar(200)
+  ContPerson    Int?
+  Currency      String?   @db.NVarChar(6)
+  CurRate       Decimal?  @db.Decimal(20, 5)
+  PostDate      DateTime? @db.Date
+  DueDate       DateTime? @db.Date
+  TaxDate       DateTime? @db.Date
+  DiscPrcnt     Decimal?  @db.Decimal(20, 5)
+  TaxTotal      Decimal?  @db.Decimal(20, 5)
+  DocTotal      Decimal?  @db.Decimal(20, 5)
+  DocTotalFC    Decimal?  @db.Decimal(20, 5)
+  DocTotalSC    Decimal?  @db.Decimal(20, 5)
+  SourceSeries  Int?
+  SourceDocId   Int?
+  SourceDocType String?   @db.NVarChar(80)
+  SourceSystem  String?   @db.NVarChar(50)
+  UserId        Int?
+  OwnerCode     Int?
+  Rounding      String?   @default("N", map: "DF_Invoices_Rounding") @db.Char(1)
+  RoundingAmnt  Decimal?  @db.Decimal(20, 5)
+  Remarks       String?   @db.NVarChar(800)
+  ShiptoID      Int?
+  BilltoID      Int?
+  Status        String?   @db.NVarChar(10)
+  CreatedDate   DateTime  @default(now(), map: "DF_Invoices_CreatedDate") @db.Date
+  CGuid         String?   @db.NVarChar(50)
+  SignatureImg  Bytes?    @db.Image
+  IsColor       Boolean?
+  SAPDocEntry   Int?
+  SapStatus     String    @default("N", map: "DF__Invoices__SapSta__1BE81D6E") @db.Char(1)
+}
+
+model ItemMovements {
+  ID         Int       @id(map: "PK_InvTrans") @default(autoincrement())
+  TransNum   Int?
+  TransType  Int?
+  CreatedBy  Int?
+  DocLineNum Int?
+  DocDate    DateTime? @db.Date
+  DocDueDate DateTime? @db.Date
+  TaxDate    DateTime? @db.Date
+  BPCode     String?   @db.NVarChar(60)
+  BPName     String?   @db.NVarChar(200)
+  Ref1       String?   @db.NVarChar(30)
+  Ref2       String?   @db.NVarChar(30)
+  Comments   String?   @db.NVarChar(800)
+  TransDate  DateTime  @default(now(), map: "DF_InvTrans_TransDate") @db.DateTime
+  ItemCode   String?   @db.NVarChar(50)
+  ItemName   String?   @db.NVarChar(400)
+  Quantity   Decimal?  @db.Decimal(18, 6)
+  Price      Decimal?  @db.Decimal(18, 6)
+  Currency   String?   @db.NVarChar(6)
+  WhsCode    String?   @db.NVarChar(16)
+  SlpCode    Int?
+  UserId     Int?
+  CGuid      String?   @db.NVarChar(50)
+}
+
+model ItemPrices {
+  ID          Int      @id(map: "PK_DCC_ItemPrices") @default(autoincrement())
+  PriceListID Int
+  ItemID      Int
+  Price       Decimal? @default(0, map: "DF__ItemPrice__Price__72C60C4A") @db.Decimal(20, 5)
+  Currency    String?  @db.Char(6)
+  CGuid       String?  @db.NVarChar(50)
+}
+
+model Items {
+  ID               Int       @id(map: "PK_DCC_Items") @default(autoincrement())
+  Code             String?   @db.VarChar(50)
+  Name             String    @db.VarChar(254)
+  CreatedDate      DateTime? @default(now(), map: "DF__Items__CreatedDa__6383C8BA") @db.DateTime
+  CatID            Int?
+  SubCatId         Int?
+  OnHand           Decimal?  @db.Decimal(20, 5)
+  IsCommited       Decimal?  @db.Decimal(20, 5)
+  OnOrder          Decimal?  @db.Decimal(20, 5)
+  DfltWhsID        Int?      @default(0, map: "DF__Items__DfltWhsID__6477ECF3")
+  UoM              String?   @db.NVarChar(50)
+  QtyinCase        Decimal?  @db.Decimal(20, 5)
+  MinQtyLevel      Decimal?  @default(0, map: "DF__Items__MinQtyLev__656C112C") @db.Decimal(20, 5)
+  MaxQtyLevel      Decimal?  @default(0, map: "DF__Items__MaxQtyLev__66603565") @db.Decimal(20, 5)
+  LastPurPrc       Decimal?  @db.Decimal(20, 5)
+  Weight           Decimal?  @db.Decimal(20, 5)
+  Street           String?   @db.VarChar(100)
+  ManBatch         String?   @default("N", map: "DF__Items__ManBatch__6754599E") @db.VarChar(1)
+  ManSerial        String?   @default("N", map: "DF__Items__ManSerial__68487DD7") @db.VarChar(1)
+  ItemImage        Bytes?    @db.Image
+  SaleVAT          Int?
+  Remarks          String?   @db.VarChar(254)
+  SalesScheme1     Int?
+  SalesScheme2     Int?
+  Scheme1FreeItem  String?   @db.NVarChar(60)
+  Scheme2FreeItem  String?   @db.NVarChar(60)
+  SalesPromoID     Int?
+  MonthlyTargetQty Decimal?  @db.Decimal(20, 5)
+  DailyTargetQty   Decimal?  @db.Decimal(20, 5)
+  CGuid            String?   @db.NVarChar(50)
+  SAPItemGrpCode   Int?
+  GL               String?   @db.NVarChar(100)
+  GLName           String?   @db.NVarChar(100)
+  POSItem          String?   @db.Char(1)
+  ItemPurchased    String?   @db.Char(1)
+  ItemSales        String?   @db.Char(1)
+  ItemInventory    String?   @db.Char(1)
+  VATH             VATH?     @relation(fields: [SaleVAT], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "FK_Items_VATH")
+}
+
+model ItemWhs {
+  ID       Int      @id(map: "PK_DCC_ItemInventory") @default(autoincrement())
+  WhsID    Int
+  ItemID   Int
+  OnHand   Decimal? @default(0, map: "DF__ItemWhs__OnHand__74444068") @db.Decimal(20, 5)
+  Commited Decimal? @db.Decimal(20, 5)
+  Ordered  Decimal? @db.Decimal(20, 5)
+  CGuid    String?  @db.NVarChar(50)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model itm {
+  ID               Int       @default(autoincrement())
+  Code             String?   @db.VarChar(50)
+  Name             String    @db.VarChar(254)
+  CreatedDate      DateTime? @db.DateTime
+  CatID            Int?
+  SubCatId         Int?
+  OnHand           Decimal?  @db.Decimal(20, 5)
+  IsCommited       Decimal?  @db.Decimal(20, 5)
+  OnOrder          Decimal?  @db.Decimal(20, 5)
+  DfltWhsID        Int?
+  UoM              String?   @db.NVarChar(50)
+  QtyinCase        Decimal?  @db.Decimal(20, 5)
+  MinQtyLevel      Decimal?  @db.Decimal(20, 5)
+  MaxQtyLevel      Decimal?  @db.Decimal(20, 5)
+  LastPurPrc       Decimal?  @db.Decimal(20, 5)
+  Weight           Decimal?  @db.Decimal(20, 5)
+  Street           String?   @db.VarChar(100)
+  ManBatch         String?   @db.VarChar(1)
+  ManSerial        String?   @db.VarChar(1)
+  ItemImage        Bytes?    @db.Image
+  SaleVAT          Int?
+  Remarks          String?   @db.VarChar(254)
+  SalesScheme1     Int?
+  SalesScheme2     Int?
+  Scheme1FreeItem  String?   @db.NVarChar(60)
+  Scheme2FreeItem  String?   @db.NVarChar(60)
+  SalesPromoID     Int?
+  MonthlyTargetQty Decimal?  @db.Decimal(20, 5)
+  DailyTargetQty   Decimal?  @db.Decimal(20, 5)
+  CGuid            String?   @db.NVarChar(50)
+  SAPItemGrpCode   Int?
+
+  @@ignore
+}
+
+model ITMCategory {
+  ID                    Int       @id(map: "PK_DCC_MstItemCategory") @default(autoincrement())
+  Code                  String?   @db.VarChar(50)
+  Name                  String    @db.VarChar(254)
+  CreatedDate           DateTime? @db.DateTime
+  SalesScheme1          Int?
+  SalesScheme2          Int?
+  SalesPromoID          Int?
+  PickFreeItemFromItems String?   @default("Y", map: "DF_ITMCategory_PickFreeItemFromItems") @db.Char(1)
+  FreeItem              String?   @db.NVarChar(60)
+  MonthlyTargetQty      Decimal?  @db.Decimal(20, 5)
+  DailyTargetQty        Decimal?  @db.Decimal(20, 5)
+  CGuid                 String?   @db.NVarChar(50)
+  SAPItmsGrpCode        Int?
+  BPLId                 String?   @db.NVarChar(10)
+}
+
+model ITMSubCat {
+  ID               Int       @id(map: "PK_DCC_MstItemSubCategory") @default(autoincrement())
+  Code             String?   @db.VarChar(50)
+  Name             String    @db.VarChar(254)
+  ParentCategoryID Int?
+  CreatedDate      DateTime? @db.DateTime
+  CGuid            String?   @db.NVarChar(50)
+  SAPItmsGrpCode   Int?      @db.SmallInt
+}
+
+model m_approval_request {
+  id              Int       @id(map: "PK_m_approval_request") @default(autoincrement())
+  approval_id     Int
+  action_id       Int
+  action_name     String?   @db.NVarChar(50)
+  requested_by    Int?
+  request_date    DateTime  @db.DateTime
+  request_details String?   @db.NVarChar(500)
+  request_status  String    @default("P", map: "DF__m_approva__reque__762C88DA") @db.Char(1)
+  createdate      DateTime? @db.DateTime
+  updatedate      DateTime? @db.DateTime
+  createdby       Int?
+  updatedby       Int?
+  log_inst        Int?
+  request_no      String?   @db.NVarChar(500)
+  CustName        String?   @db.VarChar(100)
+}
+
+model m_approval_request_details {
+  id                   Int       @id(map: "PK__m_approv__3213E83F03D96D1E") @default(autoincrement())
+  parent_id            Int
+  approver_user_id     Int
+  stepnumber           Int?      @db.SmallInt
+  ready_to_notify      String    @default("N", map: "DF__m_approva__ready__63E5521B") @db.Char(1)
+  request_status       String    @default("P", map: "DF__m_approva__reque__64D97654") @db.Char(1)
+  approver_remarks     String?   @db.VarChar(500)
+  approver_action_date DateTime? @db.DateTime
+  setup_user_id        Int?
+  doc_id               Int?
+  Users                Users     @relation(fields: [approver_user_id], references: [id], onUpdate: NoAction, map: "FK__m_approva__appro__66C1BEC6")
+}
+
+model MeetingLocations {
+  ID      Int     @id(map: "PK_MeetingLocations") @default(autoincrement())
+  Name    String  @db.NVarChar(200)
+  Remarks String?
+  CGuid   String? @db.NVarChar(50)
+}
+
+model OrderAttachments {
+  ID         Int    @id(map: "PK_OrderAttachments") @default(autoincrement())
+  LineNum    Int    @db.SmallInt
+  Attachment Bytes? @db.Image
+  CGuid      String @db.NVarChar(50)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model OrderIdByCustomer {
+  OrderID      String? @db.NVarChar(50)
+  CustomerCode String? @db.NVarChar(50)
+  CGuid        String? @db.NVarChar(50)
+
+  @@ignore
+}
+
+model OrderItems {
+  ID            Int      @id(map: "PK_OrderItems") @default(autoincrement())
+  LineNum       Int
+  ItemID        Int
+  ItemName      String?  @db.VarChar(254)
+  LineStatus    String   @default("O", map: "DF_OrderItems_LineStatus") @db.Char(1)
+  Quantity      Decimal? @db.Decimal(19, 5)
+  DeliveredQty  Decimal? @db.Decimal(19, 5)
+  OpenQty       Decimal? @db.Decimal(19, 5)
+  WhsCode       Int?
+  UnitPrice     Decimal? @db.Decimal(19, 5)
+  Currency      Int?     @db.SmallInt
+  Rate          Decimal? @db.Decimal(19, 5)
+  DiscPrcnt     Decimal? @db.Decimal(19, 5)
+  VATCode       String?  @db.VarChar(50)
+  VATPer        Decimal? @db.Decimal(19, 5)
+  LineTax       Decimal? @db.Decimal(19, 5)
+  LineTotalLC   Decimal? @db.Decimal(19, 5)
+  LineTotalFC   Decimal? @db.Decimal(19, 5)
+  LineTotalSC   Decimal? @db.Decimal(19, 5)
+  SourceDocId   String?  @db.NVarChar(50)
+  SourceLineNum Int?
+  SourceDocType String?  @db.NVarChar(80)
+  SourceSystem  String?  @db.NVarChar(50)
+  TargetDocId   Int?
+  TargetLineNum Int?
+  TargetDocType String?  @db.NVarChar(80)
+  cost_center   Int?
+  project       String?  @db.VarChar(50)
+  Remarks       String?  @db.NVarChar(800)
+  BatchNo       String?  @db.NVarChar(50)
+  CGuid         String   @db.NVarChar(50)
+  SAPLineId     Int?
+  TotalBefDisc  Decimal? @db.Decimal(19, 5)
+  IsBatch       String?  @db.Char(1)
+  ItemCode      String?  @db.NVarChar(50)
+  DIM1          String?  @db.NVarChar(100)
+  mainCguid     String?  @db.NVarChar(100)
+  DIM2          String?  @db.NVarChar(100)
+  DIM3          String?  @db.NVarChar(100)
+  DIM4          String?  @db.NVarChar(100)
+  DIM5          String?  @db.NVarChar(100)
+  UoM           String?  @db.NVarChar(100)
+}
+
+model Orders {
+  ID             Int       @id(map: "PK_Orders") @default(autoincrement())
+  CustCode       String    @db.NVarChar(50)
+  CustName       String    @db.NVarChar(254)
+  Address        String?
+  CustRefNo      String?   @db.NVarChar(200)
+  ContPerson     Int?
+  Currency       String?   @db.NVarChar(6)
+  CurRate        Decimal?  @db.Decimal(20, 5)
+  PostDate       DateTime? @db.Date
+  DueDate        DateTime? @db.Date
+  TaxDate        DateTime? @db.Date
+  DiscPrcnt      Decimal?  @db.Decimal(20, 5)
+  TaxTotal       Decimal?  @db.Decimal(20, 5)
+  DocTotal       Decimal?  @db.Decimal(20, 5)
+  DocTotalFC     Decimal?  @db.Decimal(20, 5)
+  DocTotalSC     Decimal?  @db.Decimal(20, 5)
+  SourceSeries   Int?
+  SourceDocId    String?   @db.NVarChar(50)
+  SourceDocType  String?   @db.NVarChar(80)
+  SourceSystem   String?   @db.NVarChar(50)
+  UserId         Int?
+  OwnerCode      Int?
+  Rounding       String?   @default("N", map: "DF_Orders_Rounding") @db.Char(1)
+  RoundingAmnt   Decimal?  @db.Decimal(20, 5)
+  Remarks        String?   @db.NVarChar(800)
+  ShiptoID       String?   @db.NVarChar(50)
+  BilltoID       String?   @db.NVarChar(50)
+  Status         String?   @db.NVarChar(10)
+  CreatedDate    DateTime  @default(now(), map: "DF_Orders_CreatedDate") @db.Date
+  CGuid          String    @db.NVarChar(50)
+  SignatureImg   Bytes?    @db.Image
+  DueDateString  String?   @db.NVarChar(50)
+  IsNotesInfo    Boolean?
+  SalesType      Int?
+  SAPDocEntry    Int?
+  SAPDocNum      String?   @db.VarChar(50)
+  TotalBefDisc   Decimal?  @db.Decimal(19, 5)
+  AprStatus      String    @default("Y", map: "DF__Orders__AprStatu__68336F3E") @db.Char(1)
+  AprBy          String?   @db.VarChar(100)
+  AprDate        DateTime? @db.Date
+  AprRemark      String?   @db.VarChar(500)
+  CreatedBy      Int?
+  UpdatedBy      Int?
+  UpdatedDate    DateTime? @db.Date
+  DMLFlag        Int?      @default(1, map: "DF__Orders__DMLFlag__69279377") @db.SmallInt
+  NotifyStatus   String?   @default("N", map: "DF__Orders__NotifySt__6A1BB7B0") @db.Char(1)
+  AutoApproved   String?   @default("N", map: "DF__Orders__AutoAppr__6B0FDBE9") @db.Char(1)
+  SAPDraftKey    Int?
+  OrderRecTime   DateTime? @db.Time
+  OrderCode      String?   @db.VarChar(100)
+  Attachment     String?   @db.NText
+  AttachmentPath String?   @db.VarChar(200)
+  Attachment_1   String?   @db.VarChar(500)
+  Attachment_2   String?   @db.VarChar(500)
+  VehicleId      String?   @db.VarChar(50)
+  DriverName     String?   @db.VarChar(100)
+  VehicleTimeIn  DateTime? @db.Time
+  VehicleTimeOut DateTime? @db.Time
+  OrderType      String?   @db.VarChar(50)
+  SAPInvoiceNo   Int?
+  Branch_id      Int?
+  ReqBy          Int?
+  ExpenseType    String?   @db.NVarChar(100)
+  relation_from  String?   @db.NVarChar(100)
+}
+
+model OutletContacts {
+  ID          Int      @id(map: "PK_OutletContacts") @default(autoincrement())
+  OutletId    Int
+  FirstName   String?  @db.NVarChar(200)
+  MiddleName  String?  @db.NVarChar(200)
+  LastName    String?  @db.NVarChar(200)
+  Gender      String?  @db.Char(1)
+  Title       String?  @db.NVarChar(20)
+  Position    String?  @db.NVarChar(50)
+  Phone1      String?  @db.NVarChar(50)
+  Phone2      String?  @db.NVarChar(50)
+  E_Mail      String?  @db.NVarChar(50)
+  HomeAddress String?
+  Active      String?  @db.Char(1)
+  CreatedDate DateTime @default(now(), map: "DF_OutletContacts_CreatedDate") @db.DateTime
+  CGuid       String?  @db.NVarChar(50)
+}
+
+model Outlets {
+  ID               Int      @id(map: "PK_DCC_Outlets") @default(autoincrement())
+  Code             String   @db.VarChar(50)
+  Name             String   @db.VarChar(254)
+  Address          String?  @db.NVarChar(254)
+  AreaID           Int?
+  Owner            String?  @db.VarChar(50)
+  OwnerMobileNo    String   @db.VarChar(50)
+  OwnerEmail       String?  @db.NVarChar(200)
+  OutGroup         BigInt?
+  OutClass         BigInt?
+  Balance          Decimal? @db.Decimal(20, 5)
+  CrLimit          Decimal? @db.Decimal(20, 5)
+  CreatedDate      DateTime @default(now(), map: "DF_Outlets_CreatedDate") @db.DateTime
+  Latitude         String?  @db.NVarChar(200)
+  Longitude        String?  @db.NVarChar(200)
+  MonthlyTargetQty Decimal? @db.Decimal(20, 5)
+  DailyTargetQty   Decimal? @db.Decimal(20, 5)
+  IsPJP            String?  @default("N'Y'", map: "DF_Outlets_IsPJP") @db.NChar(1)
+  CGuid            String?  @db.NVarChar(50)
+  Areas            Areas?   @relation(fields: [AreaID], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "FK_Outlets_Areas")
+}
+
+model PayMeans {
+  ID            Int     @id(map: "PK_PayMeans") @default(autoincrement())
+  Name          String? @db.NVarChar(100)
+  CGuid         String? @db.NVarChar(50)
+  SAPTargetType String? @db.NVarChar(50)
+}
+
+model Permission {
+  ID      Int     @id(map: "PK_Permission") @default(autoincrement())
+  ObjType Int     @db.SmallInt
+  ObjName String  @db.NVarChar(200)
+  CGuid   String? @db.NVarChar(50)
+}
+
+model PermissionGroupH {
+  ID               Int                @id(map: "PK_PermissionGroupH") @default(autoincrement())
+  GroupName        String             @db.NVarChar(200)
+  Active           String             @default("B", map: "DF_Table_1_Access") @db.Char(1)
+  CGuid            String?            @db.NVarChar(50)
+  PermissionGroupL PermissionGroupL[]
+}
+
+model PermissionGroupL {
+  ID               Int              @id(map: "PK_PermissionGroup") @default(autoincrement())
+  GroupId          Int
+  PermId           Int
+  Permitted        String           @default("N", map: "DF_PermissionGroup_Permitted") @db.Char(1)
+  Access           String           @default("B", map: "DF_PermissionGroup_Access") @db.Char(1)
+  CGuid            String?          @db.NVarChar(50)
+  PermissionGroupH PermissionGroupH @relation(fields: [GroupId], references: [ID], onUpdate: NoAction, map: "FK_PermissionGroup_PermissionGroupH")
+}
+
+model Positions {
+  ID          Int       @id(map: "PK_DCC_Designation") @default(autoincrement())
+  Code        String    @db.VarChar(50)
+  Name        String    @db.VarChar(254)
+  CreatedDate DateTime? @db.DateTime
+  CGuid       String?   @db.NVarChar(50)
+}
+
+model PriceList {
+  ID          Int       @id(map: "PK_DCC_MstPriceList") @default(autoincrement())
+  Code        String?   @db.VarChar(50)
+  Name        String    @db.VarChar(254)
+  CreatedDate DateTime? @db.DateTime
+  CGuid       String?   @db.NVarChar(50)
+  PriceType   Int?      @default(0, map: "DF__PriceList__Price__056ECC6A")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model Projects {
+  ID    Int     @default(autoincrement())
+  Code  String? @db.NVarChar(100)
+  Name  String? @db.NVarChar(100)
+  CGuid String? @db.NVarChar(50)
+
+  @@ignore
+}
+
+model purchase_order {
+  ID              Int       @id(map: "PK_PurchasOrders") @default(autoincrement())
+  PostDate        DateTime? @db.Date
+  ReceiptDate     DateTime? @db.Date
+  PODate          DateTime? @db.Date
+  TypePayment     String    @db.NVarChar(50)
+  DiscPrcnt       Decimal?  @db.Decimal(20, 5)
+  TaxTotal        Decimal?  @db.Decimal(20, 5)
+  DocTotal        Decimal?  @db.Decimal(20, 5)
+  DocTotalFC      Decimal?  @db.Decimal(20, 5)
+  DocTotalSC      Decimal?  @db.Decimal(20, 5)
+  UserId          Int?
+  OwnerCode       Int?
+  Rounding        String?   @db.Char(1)
+  RoundingAmnt    Decimal?  @db.Decimal(20, 5)
+  Remarks         String?   @db.NVarChar(800)
+  ShiptoID        String?   @db.NVarChar(50)
+  BilltoID        String?   @db.NVarChar(50)
+  Status          String?   @db.NVarChar(10)
+  CreatedDate     DateTime  @db.Date
+  CGuid           String    @db.NVarChar(50)
+  SignatureImg    Bytes?    @db.Image
+  DueDateString   String?   @db.NVarChar(100)
+  SalesType       Int?
+  SAPDocEntry     Int?
+  TotalBefDisc    Decimal?  @db.Decimal(19, 5)
+  AprStatus       String    @db.Char(1)
+  AprBy           String?   @db.VarChar(100)
+  AprDate         DateTime? @db.Date
+  AprRemark       String?   @db.VarChar(500)
+  CreatedBy       Int?
+  UpdatedBy       Int?
+  UpdatedDate     DateTime? @db.Date
+  DMLFlag         Int?      @db.SmallInt
+  OrderCode       String?   @db.VarChar(100)
+  Branch_id       Int?
+  RequestType     String?   @db.VarChar(50)
+  TypeRequest     String?   @db.VarChar(50)
+  CustCode        String?   @db.VarChar(50)
+  CustName        String?   @db.VarChar(100)
+  purchaseRequest String?   @db.VarChar(100)
+  Pr_ID           String?   @db.VarChar(50)
+  DocName         String?   @db.VarChar(100)
+  RequestedNo     String?   @db.NVarChar(254)
+  series          String?   @db.NVarChar(254)
+  SAPDocNum       String?   @db.NVarChar(154)
+  BOL             String?   @db.NVarChar(800)
+  Freight         Decimal?  @db.Decimal(20, 5)
+  ReqBy           Int?
+  ExpenseType     String?   @db.NVarChar(154)
+  Department      String?   @db.NVarChar(154)
+  ActivityName    String?   @db.NVarChar(154)
+  relation_from   String?   @db.NVarChar(200)
+  SapStatus       String    @default("N", map: "DF__purchase___SapSt__1CDC41A7") @db.Char(1)
+  PaidAmt         Decimal?  @db.Decimal(18, 2)
+}
+
+model purchase_order_attachments {
+  ID         Int     @id(map: "PK_purchase_order_attachments") @default(autoincrement())
+  LineNum    Int     @db.SmallInt
+  CGuid      String  @db.NVarChar(50)
+  Attachment String? @db.VarChar(100)
+}
+
+model purchase_order_items {
+  ID            Int      @id(map: "PK_PurchasOrderItems") @default(autoincrement())
+  LineNum       Int
+  ItemID        Int
+  ItemName      String?  @db.VarChar(254)
+  LineStatus    String   @db.Char(1)
+  Quantity      Decimal? @db.Decimal(19, 5)
+  DeliveredQty  Decimal? @db.Decimal(19, 5)
+  OpenQty       Decimal? @db.Decimal(19, 5)
+  WhsCode       Int?
+  UnitPrice     Decimal? @db.Decimal(19, 5)
+  Currency      Int?     @db.SmallInt
+  Rate          Decimal? @db.Decimal(19, 5)
+  DiscPrcnt     Decimal? @db.Decimal(19, 5)
+  VATCode       String?  @db.NVarChar(100)
+  VATPer        Decimal? @db.Decimal(19, 5)
+  LineTax       Decimal? @db.Decimal(19, 5)
+  LineTotalLC   Decimal? @db.Decimal(19, 5)
+  LineTotalFC   Decimal? @db.Decimal(19, 5)
+  LineTotalSC   Decimal? @db.Decimal(19, 5)
+  SourceDocId   String?  @db.NVarChar(50)
+  SourceLineNum Int?
+  SourceDocType String?  @db.NVarChar(80)
+  SourceSystem  String?  @db.NVarChar(50)
+  TargetDocId   Int?
+  TargetLineNum Int?
+  TargetDocType String?  @db.NVarChar(80)
+  cost_center   Int?
+  project       String?  @db.NVarChar(199)
+  Remarks       String?  @db.NVarChar(800)
+  CGuid         String   @db.NVarChar(50)
+  SAPLineId     Int?
+  TotalBefDisc  Decimal? @db.Decimal(19, 5)
+  vendor        String?  @db.VarChar(200)
+  ferightType   String?  @db.VarChar(100)
+  vendorRef     String?  @db.VarChar(100)
+  mainCguid     String?  @db.NVarChar(100)
+  Location      String?  @db.NVarChar(100)
+  DIM1          String?  @db.NVarChar(100)
+  DIM2          String?  @db.NVarChar(100)
+  DIM3          String?  @db.NVarChar(100)
+  DIM4          String?  @db.NVarChar(100)
+  SapLine       String?  @db.VarChar(100)
+  SapType       String?  @db.VarChar(100)
+  SAPDocEntry   String?  @db.VarChar(100)
+  UoM           String?  @db.NVarChar(100)
+  IsBatch       String?  @db.Char(1)
+  ItemCode      String?  @db.NVarChar(100)
+  DIM5          String?  @db.NVarChar(100)
+  copy_from     String?  @db.VarChar(50)
+}
+
+model purchase_request {
+  ID              Int       @id(map: "PK_PurchasedRequest") @default(autoincrement())
+  CustCode        String    @db.NVarChar(50)
+  CustName        String?   @db.NVarChar(254)
+  Address         String?
+  CustRefNo       String?   @db.NVarChar(200)
+  ContPerson      Int?
+  Currency        String?   @db.NVarChar(6)
+  CurRate         Decimal?  @db.Decimal(20, 5)
+  PostDate        DateTime? @db.Date
+  DueDate         DateTime? @db.Date
+  TypeRequest     String    @db.NVarChar(50)
+  ActivityName    String?   @db.NVarChar(50)
+  ActivityCode    String?   @db.NVarChar(50)
+  RequestedByDate DateTime? @db.Date
+  RequestedNo     String?   @db.NVarChar(254)
+  Image1          String?   @db.VarChar(200)
+  Image2          String?   @db.VarChar(200)
+  Image3          String?   @db.VarChar(200)
+  DiscPrcnt       Decimal?  @db.Decimal(20, 5)
+  TaxTotal        Decimal?  @db.Decimal(20, 5)
+  DocTotal        Decimal?  @db.Decimal(20, 5)
+  DocTotalFC      Decimal?  @db.Decimal(20, 5)
+  DocTotalSC      Decimal?  @db.Decimal(20, 5)
+  SourceSeries    Int?
+  BOL             String?   @db.NVarChar(240)
+  SourceDocId     String?   @db.NVarChar(50)
+  SourceDocType   String?   @db.NVarChar(80)
+  SourceSystem    String?   @db.NVarChar(50)
+  UserId          Int?
+  OwnerCode       Int?
+  Rounding        String?   @db.Char(1)
+  RoundingAmnt    Decimal?  @db.Decimal(20, 5)
+  Remarks         String?   @db.NVarChar(250)
+  ShiptoID        String?   @db.NVarChar(50)
+  BilltoID        String?   @db.NVarChar(50)
+  Status          String    @db.NVarChar(10)
+  CreatedDate     DateTime  @default(now(), map: "DF__purchase___Creat__4DD47EBD") @db.Date
+  CGuid           String    @db.NVarChar(50)
+  SignatureImg    Bytes?    @db.Image
+  DueDateString   String?   @db.NVarChar(100)
+  SalesType       Int?
+  SAPDocEntry     Int?
+  TotalBefDisc    Decimal?  @db.Decimal(19, 5)
+  AprStatus       String    @db.Char(1)
+  AprBy           String?   @db.VarChar(100)
+  AprDate         DateTime? @db.Date
+  AprRemark       String?   @db.VarChar(500)
+  CreatedBy       Int?
+  UpdatedBy       Int?
+  UpdatedDate     DateTime? @db.Date
+  DMLFlag         Int?      @default(0, map: "DF__purchase___DMLFl__4EC8A2F6") @db.SmallInt
+  OrderCode       String?   @db.VarChar(100)
+  Branch_id       Int?
+  RequestType     String?   @db.VarChar(50)
+  PO_ID           String?   @db.VarChar(50)
+  PO_Qty          String?   @db.VarChar(100)
+  DocName         String?   @db.VarChar(100)
+  PaymentMethod   String?   @db.NVarChar(100)
+  series          String?   @db.NVarChar(100)
+  SAPDocNum       String?   @db.NVarChar(100)
+  Freight         Decimal?  @db.Decimal(20, 5)
+  Expense_type    String?   @db.NVarChar(100)
+  memo_text       String?   @db.Text
+  Ufs             String?   @db.VarChar(199)
+  Department      String?   @db.VarChar(300)
+  SapStatus       String    @default("N", map: "DF__purchase___SapSt__19FFD4FC") @db.Char(1)
+}
+
+model purchase_request_attachments {
+  ID         Int     @id(map: "PK_purchase_request_attachments") @default(autoincrement())
+  LineNum    Int
+  Attachment String? @db.VarChar(150)
+  CGuid      String  @db.NVarChar(200)
+}
+
+model purchase_request_items {
+  ID            Int      @id(map: "PK_PurchasedItems") @default(autoincrement())
+  LineNum       Int
+  ItemID        Int
+  ItemName      String?  @db.VarChar(254)
+  LineStatus    String   @db.Char(1)
+  Quantity      Decimal? @db.Decimal(19, 5)
+  DeliveredQty  Decimal? @db.Decimal(19, 5)
+  OpenQty       Decimal? @db.Decimal(19, 5)
+  WhsCode       Int?
+  UnitPrice     Decimal? @db.Decimal(19, 5)
+  Currency      Int?     @db.SmallInt
+  Rate          Decimal? @db.Decimal(19, 5)
+  DiscPrcnt     Decimal? @db.Decimal(19, 5)
+  VATCode       String?  @db.NVarChar(100)
+  VATPer        Decimal? @db.Decimal(19, 5)
+  LineTax       Decimal? @db.Decimal(19, 5)
+  LineTotalLC   Decimal? @db.Decimal(19, 5)
+  LineTotalFC   Decimal? @db.Decimal(19, 5)
+  LineTotalSC   Decimal? @db.Decimal(19, 5)
+  SourceDocId   String?  @db.NVarChar(50)
+  SourceCGuid   String?  @db.NVarChar(50)
+  SourceLineNum Int?
+  SourceDocType String?  @db.NVarChar(80)
+  SourceSystem  String?  @db.NVarChar(50)
+  TargetDocId   Int?
+  TargetLineNum Int?
+  TargetDocType String?  @db.NVarChar(80)
+  cost_center   Int?
+  project       String?  @db.NVarChar(199)
+  Remarks       String?  @db.NVarChar(800)
+  CGuid         String   @db.NVarChar(50)
+  SAPLineId     Int?
+  TotalBefDisc  Decimal? @db.Decimal(19, 5)
+  vendor        String?  @db.VarChar(200)
+  DIM1          String?  @db.NVarChar(50)
+  DIM2          String?  @db.NVarChar(50)
+  DIM3          String?  @db.NVarChar(50)
+  DIM4          String?  @db.NVarChar(50)
+  DIM5          String?  @db.VarChar(50)
+  ferightType   String?  @db.VarChar(100)
+  vendorRef     String?  @db.VarChar(100)
+  po_id         String?  @db.VarChar(50)
+  Location      String?  @db.NVarChar(50)
+  SapLine       String?  @db.VarChar(100)
+  SapType       String?  @db.VarChar(100)
+  SAPDocEntry   String?  @db.VarChar(100)
+  UoM           String?  @db.NVarChar(100)
+  IsBatch       String?  @db.Char(1)
+  ItemCode      String?  @db.NVarChar(100)
+}
+
+model QuotationAttachments {
+  ID         Int    @id(map: "PK_QuotationAttachments") @default(autoincrement())
+  LineNum    Int    @db.SmallInt
+  Attachment Bytes? @db.Image
+  CGuid      String @db.NVarChar(50)
+}
+
+model QuotationItems {
+  ID            Int      @id(map: "PK_QuotationItems") @default(autoincrement())
+  LineNum       Int
+  ItemID        Int
+  ItemName      String?  @db.VarChar(254)
+  LineStatus    String   @default("O", map: "DF_QuotationItems_LineStatus") @db.Char(1)
+  Quantity      Decimal? @db.Decimal(19, 5)
+  DeliveredQty  Decimal? @db.Decimal(19, 5)
+  OpenQty       Decimal? @db.Decimal(19, 5)
+  WhsCode       Int?
+  UnitPrice     Decimal? @db.Decimal(19, 5)
+  Currency      Int?     @db.SmallInt
+  Rate          Decimal? @db.Decimal(19, 5)
+  DiscPrcnt     Decimal? @db.Decimal(19, 5)
+  VATCode       String?  @db.VarChar(50)
+  VATPer        Decimal? @db.Decimal(19, 5)
+  LineTax       Decimal? @db.Decimal(19, 5)
+  LineTotalLC   Decimal? @db.Decimal(19, 5)
+  LineTotalFC   Decimal? @db.Decimal(19, 5)
+  LineTotalSC   Decimal? @db.Decimal(19, 5)
+  SourceDocId   String?  @db.NVarChar(50)
+  SourceLineNum Int?
+  SourceDocType String?  @db.NVarChar(80)
+  SourceSystem  String?  @db.NVarChar(50)
+  TargetDocId   Int?
+  TargetLineNum Int?
+  TargetDocType String?  @db.NVarChar(80)
+  cost_center   Int?
+  project       String?  @db.VarChar(50)
+  Remarks       String?  @db.NVarChar(800)
+  CGuid         String   @db.NVarChar(50)
+  SAPLineId     Int?
+  TotalBefDisc  Decimal? @db.Decimal(19, 5)
+  IsBatch       String?  @db.Char(1)
+  ItemCode      String?  @db.NVarChar(50)
+  UoM           String?  @db.NVarChar(100)
+}
+
+model Quotations {
+  ID            Int       @id(map: "PK_Quotations") @default(autoincrement())
+  CustCode      String    @db.NVarChar(50)
+  CustName      String    @db.NVarChar(254)
+  Address       String?
+  CustRefNo     String?   @db.NVarChar(200)
+  ContPerson    Int?
+  Currency      String?   @db.NVarChar(6)
+  CurRate       Decimal?  @db.Decimal(20, 5)
+  PostDate      DateTime? @db.Date
+  DueDate       DateTime? @db.Date
+  TaxDate       DateTime? @db.Date
+  DiscPrcnt     Decimal?  @db.Decimal(20, 5)
+  TaxTotal      Decimal?  @db.Decimal(20, 5)
+  DocTotal      Decimal?  @db.Decimal(20, 5)
+  DocTotalFC    Decimal?  @db.Decimal(20, 5)
+  DocTotalSC    Decimal?  @db.Decimal(20, 5)
+  SourceSeries  Int?
+  SourceDocId   String?   @db.NVarChar(50)
+  SourceDocType String?   @db.NVarChar(80)
+  SourceSystem  String?   @db.NVarChar(50)
+  UserId        Int?
+  OwnerCode     Int?
+  Rounding      String?   @default("N", map: "DF_Quotations_Rounding") @db.Char(1)
+  RoundingAmnt  Decimal?  @db.Decimal(20, 5)
+  Remarks       String?   @db.NVarChar(800)
+  ShiptoID      String?   @db.NVarChar(50)
+  BilltoID      String?   @db.NVarChar(50)
+  Status        String?   @db.NVarChar(10)
+  CreatedDate   DateTime  @default(now(), map: "DF_Quotations_CreatedDate") @db.Date
+  CGuid         String    @unique(map: "CGUID_Quotations") @db.NVarChar(50)
+  SignatureImg  Bytes?    @db.Image
+  DueDateString String?   @db.NVarChar(100)
+  IsNotesInfo   Boolean   @default(false, map: "DF_Quotations_IsNotesInfo")
+  IsColor       Boolean   @default(false, map: "DF_Quotations_IsColor")
+  SalesType     Int?
+  SAPDocEntry   Int?
+  TotalBefDisc  Decimal?  @db.Decimal(19, 5)
+  AprStatus     String    @default("Y", map: "DF__Quotation__AprSt__0D0FEE32") @db.Char(1)
+  AprBy         String?   @db.VarChar(100)
+  AprDate       DateTime? @db.Date
+  AprRemark     String?   @db.VarChar(500)
+  CreatedBy     Int?
+  UpdatedBy     Int?
+  UpdatedDate   DateTime? @db.Date
+  DMLFlag       Int?      @default(1, map: "DF__Quotation__DMLFl__0E04126B") @db.SmallInt
+  OrderCode     String?   @db.VarChar(100)
+  Branch_id     Int?
+  QuotCode      String?   @db.VarChar(100)
+  SAPDocNum     String?   @db.NVarChar(10)
+  ReqBy         Int?
+}
+
+model Reasons {
+  ID      Int     @id(map: "PK_Reasons") @default(autoincrement())
+  Code    String  @db.NVarChar(60)
+  Name    String  @db.NVarChar(200)
+  Remarks String? @db.NVarChar(800)
+  CGuid   String? @db.NVarChar(50)
+}
+
+model registered_devices {
+  ID                  Int       @id(map: "PK_registered_devices") @default(autoincrement())
+  user_id             Int
+  user_device_id      String    @db.NVarChar(500)
+  created_date        DateTime  @default(now(), map: "DF_registered_devices_created_date") @db.DateTime
+  last_sync_timestamp DateTime? @db.DateTime
+}
+
+model RetailerAddress {
+  ID                Int       @id(map: "PK_RetailerAddress") @default(autoincrement())
+  AddressCode       String    @db.NVarChar(100)
+  RetailerID        String    @default("0", map: "DF_RetailerAddress_RetailerID") @db.NVarChar(50)
+  ContactPersonName String?   @db.NVarChar(100)
+  Building          String?   @db.NVarChar(200)
+  Street            String?   @db.NVarChar(200)
+  Block             String?   @db.NVarChar(200)
+  ZipCode           String?   @db.NVarChar(200)
+  City              Int?
+  County            String?   @db.NVarChar(200)
+  District          Int?
+  State             Int?
+  Country           Int?
+  Latitude          Decimal?  @db.Decimal(18, 5)
+  Longitude         Decimal?  @db.Decimal(18, 5)
+  LicTradNum        String?   @db.NVarChar(64)
+  TaxCode           String?   @db.NVarChar(50)
+  TaxOffice         String?   @db.NVarChar(100)
+  Active            String    @default("Y", map: "DF_RetailerAddress_Active") @db.Char(1)
+  CGuid             String?   @db.NVarChar(50)
+  CreatedBy         Int?
+  CreatedDate       DateTime? @db.Date
+  UpdatedBy         Int?
+  UpdatedDate       DateTime? @db.Date
+  DMLFlag           Int?      @default(1, map: "DF__RetailerA__DMLFl__11D4A34F") @db.SmallInt
+}
+
+model RetailerContacts {
+  ID          Int       @id(map: "PK_RetailerContacts") @default(autoincrement())
+  RetailerId  String    @db.NVarChar(50)
+  FirstName   String?   @db.NVarChar(200)
+  MiddleName  String?   @db.NVarChar(200)
+  LastName    String?   @db.NVarChar(200)
+  Gender      String?   @db.Char(1)
+  Title       String?   @db.NVarChar(20)
+  Position    String?   @db.NVarChar(50)
+  Phone1      String?   @db.NVarChar(50)
+  Phone2      String?   @db.NVarChar(50)
+  E_Mail      String?   @db.NVarChar(50)
+  HomeAddress String?
+  Active      String?   @db.Char(1)
+  CGuid       String?   @db.NVarChar(50)
+  CreatedBy   Int?
+  CreatedDate DateTime? @db.Date
+  UpdatedBy   Int?
+  UpdatedDate DateTime? @db.Date
+  DMLFlag     Int?      @default(1, map: "DF__RetailerC__DMLFl__12C8C788") @db.SmallInt
+}
+
+model Retailers {
+  ID                     Int       @id(map: "PK_DCC_Retailers") @default(autoincrement())
+  Code                   String    @default("N'TBG'", map: "DF_Retailers_Code") @db.NVarChar(60)
+  Name                   String    @db.NVarChar(200)
+  Address                String?
+  AreaID                 Int?
+  Owner                  String?   @db.VarChar(50)
+  OwnerMobileNo          String?   @db.VarChar(50)
+  OwnerEmail             String?   @db.NVarChar(200)
+  BPGroup                Int?
+  BPClass                Int?
+  Balance                Decimal?  @db.Decimal(20, 5)
+  CrLimit                Decimal?  @db.Decimal(20, 5)
+  CreatedDate            DateTime  @default(now(), map: "DF_Retailers_CreatedDate") @db.DateTime
+  Latitude               Decimal?  @db.Decimal(18, 5)
+  Longitude              Decimal?  @db.Decimal(18, 5)
+  updated_at             DateTime? @db.DateTime
+  created_at             DateTime? @db.DateTime
+  AlternateOwnerMobileNo String?   @db.NVarChar(50)
+  CGuid                  String?   @db.NVarChar(50)
+  DocType                Int?
+  CreatedBy              Int?
+  ApprovedBy             Int?      @default(0, map: "DF__Retailers__Appro__5B438874")
+  ApprovalRemark         String?   @db.VarChar(500)
+  IsApproved             String    @default("N", map: "DF__Retailers__IsApp__5C37ACAD") @db.Char(2)
+  TIN                    String?   @db.VarChar(100)
+  VAT                    String?   @db.VarChar(100)
+  CreditDays             Int?      @default(0, map: "DF__Retailers__Credi__5D2BD0E6")
+  AprStatus              String    @default("Y", map: "DF__Retailers__AprSt__5E1FF51F") @db.Char(1)
+  AprBy                  String?   @db.VarChar(100)
+  AprDate                DateTime? @db.Date
+  AprRemark              String?   @db.VarChar(500)
+  UpdatedBy              Int?
+  UpdatedDate            DateTime? @db.Date
+  DMLFlag                Int?      @default(1, map: "DF__Retailers__DMLFl__5F141958") @db.SmallInt
+  Image1                 String?   @db.VarChar(200)
+  Image2                 String?   @db.VarChar(200)
+  Image3                 String?   @db.VarChar(200)
+  Territory              Int?
+  DueDate                DateTime? @db.Date
+  series                 Int?
+  series_num             String?   @db.VarChar(50)
+  PaymentTerms           String?   @db.VarChar(50)
+  Route                  String?   @db.NVarChar(100)
+  frozenFor              String?   @default("N'N'", map: "DF_Retailers_frozenFor") @db.NVarChar(10)
+  ListNum                Int?
+  CardType               String?   @db.Char(1)
+  CustomerGroup          String?   @db.NVarChar(10)
+  POSCustomer            String?   @db.Char(1)
+  SlpCode                Int?
+  Email                  String?   @db.VarChar(50)
+}
+
+model SalesSchemesPromos {
+  ID           Int       @id(map: "PK_SalesScheme") @default(autoincrement())
+  SchemeCode   String    @db.NVarChar(60)
+  SchemeName   String    @db.NVarChar(200)
+  Quantity     Decimal?  @db.Decimal(18, 5)
+  FreeQty      Decimal?  @db.Decimal(18, 5)
+  DiscountPer  Decimal?  @db.Decimal(18, 5)
+  SchemeType   Int?
+  ApplicableTo Int?
+  FromDate     DateTime? @db.Date
+  ToDate       DateTime? @db.Date
+  Active       Boolean?  @default(false, map: "DF_SalesScheme_Active")
+  Remarks      String?   @db.NVarChar(800)
+  CreatedDate  DateTime  @db.DateTime
+  UserId       Int       @default(0, map: "DF_SalesSchemesPromos_UserId")
+  CGuid        String?   @db.NVarChar(50)
+}
+
+model SalesType {
+  ID    Int     @id(map: "PK_SalesType") @default(autoincrement())
+  Name  String? @db.NVarChar(50)
+  CGuid String? @db.NVarChar(50)
+}
+
+model schema_info {
+  schema_major_version Int
+  schema_minor_version Int
+  schema_extended_info String @db.NVarChar(100)
+
+  @@id([schema_major_version, schema_minor_version], map: "PK_schema_info")
+}
+
+model scope_config {
+  config_id    String  @id(map: "PK_scope_config") @db.UniqueIdentifier
+  config_data  String  @db.Xml
+  scope_status String? @db.Char(1)
+}
+
+model scope_info {
+  scope_local_id                    Int                       @default(autoincrement())
+  scope_id                          String                    @default(dbgenerated("newid()"), map: "DF__scope_inf__scope__1D4655FB") @db.UniqueIdentifier
+  sync_scope_name                   String                    @id(map: "PK_scope_info") @db.NVarChar(100)
+  scope_sync_knowledge              Bytes?
+  scope_tombstone_cleanup_knowledge Bytes?
+  scope_timestamp                   Unsupported("timestamp")?
+  scope_config_id                   String?                   @db.UniqueIdentifier
+  scope_restore_count               Int                       @default(0, map: "DF__scope_inf__scope__1E3A7A34")
+  scope_user_comment                String?                   @db.NVarChar(Max)
+}
+
+model scope_parameters {
+  sync_scope_name String @id(map: "PK_scope_parameters") @db.NVarChar(100)
+  parameter_data  String @db.Xml
+}
+
+model scope_templates {
+  template_id          Int    @default(autoincrement())
+  template_name        String @id(map: "PK_scope_templates") @db.NVarChar(100)
+  template_config_id   String @db.UniqueIdentifier
+  template_description String @db.NVarChar(Max)
+}
+
+model States {
+  ID        Int         @id(map: "PK_States") @default(autoincrement())
+  Code      String      @db.NVarChar(6)
+  Name      String      @db.NVarChar(200)
+  CountryId Int?
+  CGuid     String?     @db.NVarChar(50)
+  Cities    Cities[]
+  Districts Districts[]
+  Countries Countries?  @relation(fields: [CountryId], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "FK_States_Countries")
+}
+
+model StockCount {
+  id         Int       @id(map: "PK__StockCou__3213E83F4789AD9B") @default(autoincrement())
+  userId     Int
+  DfltWhsID  Int
+  stock_date DateTime  @db.Date
+  stock_time DateTime? @db.Time
+  CGuid      String?   @db.VarChar(50)
+  Remark     String?   @db.Text
+  userName   String?   @db.VarChar(50)
+  CountCode  String?   @db.VarChar(100)
+  AprStatus  String?   @db.Char(1)
+  ReqBy      Int?
+  AprDate    DateTime? @db.DateTime
+  AprBy      Int?
+  AprRemark  String?   @db.Text
+  Status     String?   @db.Char(1)
+  ReceiptNo  String?   @db.VarChar(100)
+}
+
+model stockCounting1 {
+  id         Int       @id(map: "PK__stockCou__3213E83FF794CB6B") @default(autoincrement())
+  item_id    String?   @db.VarChar(30)
+  item_name  String?   @db.VarChar(200)
+  DfltWhsID  Int?
+  open_qty   Decimal?  @db.Decimal(19, 3)
+  stock_date DateTime? @db.Date
+}
+
+model stockCounting2 {
+  id              Int       @id(map: "PK__stockCou__3213E83F939B9FBD") @default(autoincrement())
+  item_id         String?   @db.VarChar(30)
+  item_name       String?   @db.VarChar(200)
+  DfltWhsID       Int?
+  open_qty        Decimal?  @db.Decimal(19, 3)
+  receipt         Decimal?  @db.Decimal(19, 3)
+  issued_transfer Decimal?  @db.Decimal(19, 3)
+  issued_sales    Decimal?  @db.Decimal(19, 3)
+  phys_new        Decimal?  @db.Decimal(19, 3)
+  phys_refill     Decimal?  @db.Decimal(19, 3)
+  phy_leak        Decimal?  @db.Decimal(19, 3)
+  closing_stock   Decimal?  @db.Decimal(19, 3)
+  stock_date      DateTime? @db.Date
+  gain_loss       Decimal?  @db.Decimal(19, 3)
+}
+
+model stockCountingH {
+  ID                Int       @id(map: "PK__stockCou__3214EC27E7F1BEA1") @default(autoincrement())
+  stock_date        DateTime? @db.Date
+  DfltWhsID         Int?
+  requested_by      Int?
+  requested_by_name String?   @db.VarChar(200)
+  apr_status        String?   @db.Char(1)
+  apr_name          String?   @db.VarChar(100)
+  apr_date          DateTime? @db.DateTime
+  nchar_field       String?   @db.NChar(10)
+}
+
+model StockCountItem {
+  id            Int      @id(map: "PK__StockCou__3213E83FD929139E") @default(autoincrement())
+  ItemID        String?  @db.VarChar(30)
+  item_name     String?  @db.VarChar(200)
+  invUOM        String?  @db.VarChar(200)
+  stockCountID  Int?
+  open_qty      Decimal? @db.Decimal(19, 3)
+  In_qty        Decimal? @db.Decimal(19, 3)
+  out_qty       Decimal? @db.Decimal(19, 3)
+  qty_deffrence Decimal? @db.Decimal(19, 3)
+  balance_qty   Decimal? @db.Decimal(19, 3)
+  CGuid         String?  @db.VarChar(200)
+  item_code     String?  @db.NVarChar(50)
+}
+
+model StockTransferRequestItems {
+  id         Int      @id(map: "PK__StockTra__3213E83F137E950F") @default(autoincrement())
+  HeaderID   Int?
+  ItemID     Int?
+  ItemCode   String?  @db.VarChar(50)
+  ItemName   String?  @db.VarChar(200)
+  FromWhsID  Int?
+  ToWhsID    Int?
+  Qty        Decimal? @db.Decimal(19, 3)
+  UoMCode    String?  @db.VarChar(20)
+  VehicleID  String?  @db.VarChar(50)
+  DriverName String?  @db.VarChar(200)
+  Route      String?  @db.VarChar(200)
+  SAPLine    Int?
+}
+
+model StockTransferRequests {
+  id                 Int       @id(map: "PK__StockTra__3213E83FE4FC27E6") @default(autoincrement())
+  CustomerName       String?   @db.VarChar(200)
+  CustomerCode       String?   @db.VarChar(100)
+  ContactPerson      String?   @db.VarChar(200)
+  Location           String?   @db.VarChar(200)
+  ShippingAddress    String?   @db.VarChar(200)
+  Status             String?   @db.Char(1)
+  PostingDate        DateTime? @db.Date
+  PostingTime        DateTime? @db.Time
+  DeliveryDate       DateTime? @db.Date
+  Attachment         String?   @db.NText
+  AttachmentPath     String?   @db.VarChar(200)
+  SalesEmployee      String?   @db.VarChar(200)
+  JournalRemarks     String?   @db.VarChar(500)
+  PickAndPackRemarks String?   @db.VarChar(500)
+  Remarks            String?   @db.VarChar(500)
+  Transporter        String?   @db.VarChar(200)
+  VehicleId          String?   @db.VarChar(100)
+  DriverName         String?   @db.VarChar(200)
+  IssuedBy           String?   @db.VarChar(200)
+  CreatedBy          Int?
+  CreatedDate        DateTime? @db.DateTime
+  ApprovedBy         Int?
+  ApprovedDate       DateTime? @db.DateTime
+  SAPDocNum          String?   @db.VarChar(50)
+  SAPDocEntry        Int?
+  SAPDraftKey        Int?
+  CGuid              String?   @db.VarChar(50)
+  ReqRef             String?   @db.VarChar(50)
+  Branch_id          Int?
+  StockReq           String?   @db.VarChar(100)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model TAXDT {
+  VATID   Int?
+  TaxPer  Decimal? @db.Decimal(19, 2)
+  VATNAME String?  @db.NVarChar(50)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model TempCard {
+  CardCode String @db.NVarChar(15)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model TempGH {
+  CardCode   String   @db.NVarChar(15)
+  CardName   String?  @db.NVarChar(100)
+  ID         Int
+  Address    String?  @db.NVarChar(100)
+  Cellular   String?  @db.NVarChar(50)
+  E_Mail     String?  @db.NVarChar(100)
+  Balance    Decimal? @db.Decimal(19, 6)
+  CGuid      String?  @db.NVarChar(50)
+  DocType    Int
+  CreateDate DateTime @db.DateTime
+  AreaID     Int
+  Approval   String   @db.VarChar(1)
+
+  @@ignore
+}
+
+model TmpItems {
+  ID              Int       @id(map: "PK_TmpItems") @default(autoincrement())
+  LineNum         Int
+  ItemID          Int
+  ItemName        String?   @db.VarChar(254)
+  LineStatus      String    @db.Char(1)
+  Quantity        Decimal?  @db.Decimal(19, 5)
+  DeliveredQty    Decimal?  @db.Decimal(19, 5)
+  OpenQty         Decimal?  @db.Decimal(19, 5)
+  WhsCode         Int?
+  UnitPrice       Decimal?  @db.Decimal(19, 5)
+  Currency        Int?      @db.SmallInt
+  Rate            Decimal?  @db.Decimal(19, 5)
+  DiscPrcnt       Decimal?  @db.Decimal(19, 5)
+  VATCode         String?   @db.VarChar(50)
+  VATPer          Decimal?  @db.Decimal(19, 5)
+  LineTax         Decimal?  @db.Decimal(19, 5)
+  LineTotalLC     Decimal?  @db.Decimal(19, 5)
+  LineTotalFC     Decimal?  @db.Decimal(19, 5)
+  LineTotalSC     Decimal?  @db.Decimal(19, 5)
+  SourceDocId     String?   @db.NVarChar(50)
+  SourceLineNum   Int?
+  cost_center     Int?
+  project         String?   @db.NVarChar(199)
+  Remarks         String?   @db.NVarChar(800)
+  BatchNo         String?   @db.NVarChar(50)
+  CGuid           String    @db.NVarChar(50)
+  SAPLineId       Int?
+  TotalBefDisc    Decimal?  @db.Decimal(19, 5)
+  Date            DateTime? @db.Date
+  MfgTime         DateTime? @db.Time
+  AffecQty        Decimal?  @db.Decimal(19, 5)
+  QualityStatus   String?   @db.VarChar(240)
+  NatureoftheComp String?   @db.VarChar(230)
+  NoInvTryMV      String?   @default("N", map: "DF_TmpItems_NoInvTryMV") @db.Char(1)
+  MfgDate         DateTime? @db.Date
+  IsBatch         String?   @default("N", map: "DF_TmpItems_IsBatch") @db.Char(1)
+  ItemCode        String?   @db.NVarChar(50)
+  mainCguid       String?   @db.NVarChar(50)
+  DIM1            String?   @db.NVarChar(50)
+  DIM2            String?   @db.NVarChar(50)
+  DIM3            String?   @db.NVarChar(50)
+  DIM4            String?   @db.NVarChar(50)
+  DIM5            String?   @db.NVarChar(50)
+  vendor          String?   @db.NVarChar(50)
+  ferightType     String?   @db.VarChar(100)
+  vendorRef       String?   @db.VarChar(100)
+  UoM             String?   @db.NVarChar(100)
+  IsBatchSerial   String?   @db.Char(1)
+  isBatchManaged  String?   @db.Char(1)
+  SelectedQty     Decimal?  @db.Decimal(19, 5)
+  SapLine         String?   @db.VarChar(100)
+  SapType         String?   @db.VarChar(100)
+  SAPDocEntry     String?   @db.VarChar(100)
+  Location        String?   @db.NVarChar(50)
+  GL              String?   @db.NVarChar(100)
+  copy_from       String?   @db.VarChar(50)
+}
+
+model UserAccounts {
+  ID            Int     @id(map: "PK__UserAcco__3214EC27488BB3F1") @default(autoincrement())
+  userId        Int
+  PayMeansId    Int?
+  AccountNumber String? @db.NVarChar(100)
+  Name          String? @db.VarChar(50)
+  AccountType   String? @db.VarChar(50)
+}
+
+model UserAttendance {
+  ID           Int       @id(map: "PK__UserAtte__3214EC0750E5D46B") @default(autoincrement())
+  UserId       Int?
+  UserCode     String?   @db.NVarChar(100)
+  LoginTime    DateTime? @db.DateTime
+  LoginImage   Bytes?    @db.Image
+  IsAbsent     Int?
+  ReasonId     String?   @db.NVarChar(250)
+  Remarks      String?   @db.NVarChar(250)
+  Approved     String?   @default("N", map: "DF_UserAttendance_Approved") @db.Char(1)
+  ApprovedBy   Int?
+  ApprovedTime DateTime? @db.DateTime
+  ApprRemarks  String?   @db.NVarChar(800)
+  OdoImage     Bytes?    @db.Image
+  CGuid        String?   @db.NVarChar(50)
+}
+
+model UserEOD {
+  ID             Int      @id(map: "PK_UserEOD") @default(autoincrement())
+  UserId         Int
+  EODDate        DateTime @db.Date
+  CallMade       Int      @default(0, map: "DF_UserEOD_CallMade")
+  ProductiveCall Int
+  PJPVisited     String?  @db.NVarChar(Max)
+  NONPJPVisited  String?  @db.NVarChar(Max)
+  CGuid          String?  @db.NVarChar(50)
+}
+
+model UserLocationTracking {
+  ID        Int      @id(map: "PK_USERLT") @default(autoincrement())
+  UserId    Int
+  pDate     DateTime @db.Date
+  pTime     DateTime @db.Time
+  Latitude  String   @db.NVarChar(200)
+  Longitude String   @db.NVarChar(200)
+  Location  String?  @db.NVarChar(500)
+  Remarks   String?
+  CGuid     String?  @db.NVarChar(50)
+  Users     Users    @relation(fields: [UserId], references: [id], onUpdate: NoAction, map: "FK_USERLT_Users")
+}
+
+model UserPerm {
+  ID        Int     @id(map: "PK_UserPerm") @default(autoincrement())
+  UserID    Int
+  PermBy    String  @default("P", map: "DF_UserPerm_PermBy") @db.Char(1)
+  PermById  Int
+  Permitted String  @default("N", map: "DF_UserPerm_Permission") @db.Char(1)
+  Access    String  @default("B", map: "DF_UserPerm_Access") @db.Char(1)
+  CGuid     String? @db.NVarChar(50)
+}
+
+model UserRegion {
+  ID         Int     @id(map: "PK__UserRegi__3214EC27331F6B6B") @default(autoincrement())
+  RegionCode Int?
+  IsActive   String? @db.VarChar(50)
+  UserCode   Int?
+  CGuid      String? @db.NVarChar(50)
+}
+
+model Users {
+  id                         Int                          @id(map: "PK_DCC_User") @default(autoincrement())
+  Code                       String?                      @db.VarChar(20)
+  FirstName                  String                       @db.VarChar(50)
+  MiddleName                 String?                      @db.VarChar(50)
+  LastName                   String?                      @db.VarChar(50)
+  Gender                     String                       @db.VarChar(50)
+  DOB                        DateTime?                    @db.DateTime
+  MobileNo                   String?                      @db.VarChar(50)
+  UserCode                   String?                      @db.VarChar(20)
+  password                   String                       @db.VarChar(255)
+  created_at                 DateTime?                    @db.DateTime
+  Address                    String?                      @db.NVarChar(254)
+  Email                      String?                      @db.NVarChar(200)
+  DesignationId              Int?
+  Active                     String?                      @default("Y", map: "DF_Users_Active") @db.Char(1)
+  IsAdmin                    String?                      @default("N", map: "DF_Users_IsAdmin") @db.Char(1)
+  AttenApprover              Int?
+  remember_token             String?                      @db.Text
+  updated_at                 DateTime?                    @db.DateTime
+  api_token                  String?                      @db.VarChar(500)
+  DeviceType                 String?                      @db.VarChar(50)
+  DeviceId                   String?                      @db.VarChar(500)
+  CGuid                      String?                      @db.VarChar(50)
+  CashAcct                   String?                      @db.NVarChar(50)
+  CheckAcct                  String?                      @db.NVarChar(50)
+  TigoPesa                   String?                      @db.NVarChar(50)
+  Mpesa                      String?                      @db.NVarChar(50)
+  AirtelMoney                String?                      @db.NVarChar(50)
+  BankDeposit                String?                      @db.NVarChar(50)
+  user_permission            String?                      @db.NVarChar(Max)
+  MaxDiscount                Decimal?                     @db.Decimal(19, 2)
+  isAllowLineDiscount        String?                      @default("N", map: "DF__Users__isAllowLi__49F4A06B") @db.Char(1)
+  DfltWhsID                  Int?
+  ApiUrl                     String?                      @db.VarChar(500)
+  ProfileImg                 String?                      @db.VarChar(50)
+  Route                      String?                      @db.NVarChar(100)
+  sales_emp                  Int?
+  cash_sales                 String?                      @db.Char(1)
+  InStock                    String?                      @db.Char(1)
+  DIM1                       String?                      @db.VarChar(100)
+  DIM2                       String?                      @db.VarChar(100)
+  DIM3                       String?                      @db.VarChar(100)
+  DIM4                       String?                      @db.VarChar(100)
+  Branch_id                  Int?
+  GITWhsCode                 String?                      @db.VarChar(100)
+  CustCode                   String?                      @db.VarChar(100)
+  CustName                   String?                      @db.VarChar(100)
+  user_type                  Int?
+  IsPriceEdit                String?                      @db.Char(1)
+  project                    String?                      @db.VarChar(100)
+  IsFrieghtAdd               String?                      @db.Char(1)
+  U_SlCode                   String?                      @db.NVarChar(20)
+  Department                 String?                      @db.VarChar(255)
+  m_approval_request_details m_approval_request_details[]
+  UserLocationTracking       UserLocationTracking[]
+}
+
+model UserSafety {
+  ID           Int       @id(map: "PK_UserSafety") @default(autoincrement())
+  UserCode     String    @db.VarChar(50)
+  TravelBy     Int
+  TravelRule   Int?
+  StartReading Decimal?  @db.Decimal(19, 2)
+  CreatedDate  DateTime? @default(now(), map: "DF__UserSafet__Creat__29AC2CE0") @db.DateTime
+  UserId       Int?
+  DriverName   String?   @db.VarChar(50)
+  SalesValue   Int?
+  CGuid        String?   @db.NVarChar(50)
+}
+
+model VATD {
+  ID        Int      @id(map: "PK_VATD") @default(autoincrement())
+  VATID     Int
+  FromDate  DateTime @db.Date
+  ToDate    DateTime @db.Date
+  TaxPer    Decimal  @db.Decimal(18, 5)
+  MinAmnt   Decimal? @db.Decimal(18, 5)
+  FixedAmnt Decimal? @db.Decimal(18, 5)
+  Remarks   String?  @db.NVarChar(500)
+  CGuid     String?  @db.NVarChar(50)
+  VATH      VATH     @relation(fields: [VATID], references: [ID], onUpdate: NoAction, map: "FK_VATD_VATH")
+}
+
+model VATH {
+  ID         Int     @id(map: "PK_VATH") @default(autoincrement())
+  VATCode    String  @db.NVarChar(50)
+  VATName    String  @db.NVarChar(200)
+  Active     Boolean @default(false, map: "DF_VATH_Active")
+  CGuid      String? @db.NVarChar(50)
+  VFDVATCode String? @db.NVarChar(50)
+  Items      Items[]
+  VATD       VATD[]
+}
+
+model Warehouses {
+  ID          Int      @id(map: "PK_DCC_MstWarehouse") @default(autoincrement())
+  Code        String   @db.VarChar(50)
+  Name        String   @db.VarChar(254)
+  CreatedDate DateTime @default(now(), map: "DF_Warehouses_CreatedDate") @db.DateTime
+  Street      String?  @db.VarChar(100)
+  Block       String?  @db.VarChar(100)
+  ZipCode     String?  @db.VarChar(20)
+  City        Int?
+  County      String?  @db.VarChar(20)
+  Country     Int?
+  State       Int?
+  Location    String?  @db.VarChar(100)
+  CGuid       String?  @db.NVarChar(50)
+  BPLId       String?  @db.NChar(50)
+}
+
+model ActivitiesMaster {
+  id         Int       @id(map: "PK__Activiti__3213E83FCF1F3B51") @default(autoincrement())
+  DIM1       String?   @db.NVarChar(150)
+  DIM2       String?   @db.NVarChar(150)
+  DIM3       String?   @db.NVarChar(150)
+  Code       String?   @default("getdate()", map: "DF__Activitie__creat__4830B400") @db.NVarChar(50)
+  Name       String?   @db.NVarChar(150)
+  created_at DateTime? @db.DateTime
+  user_id    Int?
+  DIM4       String?   @db.NVarChar(150)
+}
+
+model ApInvoice {
+  ID            Int       @id(map: "PK__ApInvoic__3214EC279DECF703") @default(autoincrement())
+  PostDate      DateTime  @db.Date
+  DeliveryDate  DateTime? @db.Date
+  PODate        DateTime? @db.Date
+  TypePayment   String?   @db.NVarChar(50)
+  DiscPrcnt     Decimal?  @db.Decimal(20, 5)
+  TaxTotal      Decimal?  @db.Decimal(20, 5)
+  DocTotal      Decimal?  @db.Decimal(20, 5)
+  DocTotalFC    Decimal?  @db.Decimal(20, 5)
+  DocTotalSC    Decimal?  @db.Decimal(20, 5)
+  UserId        Int?
+  OwnerCode     Int?
+  Rounding      String?   @db.Char(1)
+  RoundingAmnt  Decimal?  @db.Decimal(20, 5)
+  Remarks       String?   @db.NVarChar(800)
+  ShiptoID      String?   @db.NVarChar(50)
+  BilltoID      String?   @db.NVarChar(50)
+  Status        String?   @db.NVarChar(10)
+  CreatedDate   DateTime  @db.Date
+  CGuid         String    @db.NVarChar(50)
+  SignatureImg  Bytes?    @db.Image
+  DueDateString String?   @db.NVarChar(100)
+  SalesType     Int?
+  SAPDocEntry   Int?
+  TotalBefDisc  Decimal?  @db.Decimal(19, 5)
+  AprStatus     String?   @db.Char(1)
+  AprBy         String?   @db.VarChar(100)
+  AprDate       DateTime? @db.Date
+  AprRemark     String?   @db.VarChar(500)
+  CreatedBy     Int?
+  UpdatedBy     Int?
+  UpdatedDate   DateTime? @db.Date
+  DMLFlag       Int?      @db.SmallInt
+  OrderCode     String?   @db.VarChar(100)
+  Branch_id     Int?
+  RequestType   String?   @db.VarChar(50)
+  TypeRequest   String?   @db.VarChar(50)
+  CustCode      String?   @db.VarChar(50)
+  CustName      String?   @db.VarChar(100)
+  purchaseOrder String?   @db.VarChar(100)
+  DocName       String?   @db.VarChar(100)
+  RequestedNo   String?   @db.NVarChar(100)
+  series        String?   @db.NVarChar(100)
+  SAPDocNum     String?   @db.NVarChar(100)
+  BOL           String?   @db.NVarChar(100)
+  Freight       Decimal?  @db.Decimal(20, 5)
+  ReqBy         Int?
+  ExpenseType   String?   @db.NVarChar(100)
+  Department    String?   @db.NVarChar(100)
+  ActivityName  String?   @db.NVarChar(100)
+  relation_from String?   @db.NVarChar(200)
+  SapStatus     String?   @db.Char(1)
+  DueDate       DateTime? @db.Date
+}
+
+model ApInvoiceAttachment {
+  ID         Int     @id(map: "PK__ApInvoic__3214EC27FE50C0F5") @default(autoincrement())
+  LineNum    Int     @db.SmallInt
+  Attachment String? @db.VarChar(100)
+  CGuid      String  @db.NVarChar(50)
+}
+
+model ApInvoiceItem {
+  ID             Int      @id(map: "PK__ApInvoic__3214EC278326C918") @default(autoincrement())
+  LineNum        Int
+  ItemID         Int
+  ItemName       String?  @db.VarChar(254)
+  LineStatus     String?  @db.Char(1)
+  Quantity       Decimal? @db.Decimal(19, 5)
+  DeliveredQty   Decimal? @db.Decimal(19, 5)
+  OpenQty        Decimal? @db.Decimal(19, 5)
+  WhsCode        Int?
+  UnitPrice      Decimal? @db.Decimal(19, 5)
+  Currency       Int?     @db.SmallInt
+  Rate           Decimal? @db.Decimal(19, 5)
+  DiscPrcnt      Decimal? @db.Decimal(19, 5)
+  VATCode        String?  @db.NVarChar(100)
+  VATPer         Decimal? @db.Decimal(19, 5)
+  LineTax        Decimal? @db.Decimal(19, 5)
+  LineTotalLC    Decimal? @db.Decimal(19, 5)
+  LineTotalFC    Decimal? @db.Decimal(19, 5)
+  LineTotalSC    Decimal? @db.Decimal(19, 5)
+  SourceDocId    String?  @db.NVarChar(50)
+  SourceLineNum  Int?
+  SourceDocType  String?  @db.NVarChar(80)
+  SourceSystem   String?  @db.NVarChar(50)
+  TargetDocId    Int?
+  TargetLineNum  Int?
+  TargetDocType  String?  @db.NVarChar(80)
+  cost_center    Int?
+  project        String?  @db.NVarChar(199)
+  Remarks        String?  @db.NVarChar(800)
+  CGuid          String   @db.NVarChar(50)
+  SAPLineId      Int?
+  TotalBefDisc   Decimal? @db.Decimal(19, 5)
+  vendor         String?  @db.VarChar(200)
+  ferightType    String?  @db.VarChar(100)
+  vendorRef      String?  @db.VarChar(100)
+  mainCguid      String?  @db.NVarChar(100)
+  Location       String?  @db.NVarChar(100)
+  DIM1           String?  @db.NVarChar(100)
+  DIM2           String?  @db.NVarChar(100)
+  DIM3           String?  @db.NVarChar(100)
+  DIM4           String?  @db.NVarChar(100)
+  DIM5           String?  @db.NVarChar(100)
+  isBatchManaged String?  @db.Char(1)
+  IsBatchSerial  String?  @db.Char(1)
+  SelectedQty    Decimal? @db.Decimal(19, 5)
+  SapLine        String?  @db.VarChar(100)
+  SapType        String?  @db.VarChar(100)
+  SAPDocEntry    String?  @db.VarChar(100)
+  UoM            String?  @db.NVarChar(100)
+  IsBatch        String?  @db.Char(1)
+  ItemCode       String?  @db.NVarChar(100)
+}
+
+model ApInvoiceService {
+  ID             Int      @id(map: "PK__ApInvoic__3214EC2715E78642") @default(autoincrement())
+  Description    String?  @db.NVarChar(Max)
+  GLCode         String?  @db.NVarChar(100)
+  GLName         String?  @db.NVarChar(100)
+  TotalExclusive Decimal? @db.Decimal(19, 3)
+  TaxCode        String?  @db.NVarChar(100)
+  TaxAmount      Decimal? @db.Decimal(19, 3)
+  TotalInclusive Decimal? @db.Decimal(19, 3)
+  DIM1           String?  @db.NVarChar(100)
+  DIM2           String?  @db.NVarChar(100)
+  DIM3           String?  @db.NVarChar(100)
+  DIM4           String?  @db.NVarChar(100)
+  DIM5           String?  @db.VarChar(100)
+  VendorCode     String?  @db.NVarChar(100)
+  VendorName     String?  @db.VarChar(100)
+  PaymentTerms   String?  @db.VarChar(100)
+  Project        String?  @db.VarChar(100)
+  LineNum        Int?
+  CGuid          String?  @db.NVarChar(50)
+  TotalWithTax   Decimal? @db.Decimal(19, 3)
+  LineTotalLC    Decimal? @db.Decimal(19, 5)
+  LineTax        Decimal? @db.Decimal(19, 5)
+  Discount       Decimal? @db.Decimal(19, 5)
+  VatCode        String?  @db.NVarChar(50)
+  SourceDocId    Int?
+  SAPDocEntry    String?  @db.VarChar(50)
+  SapLine        Int?
+  mainCguid      String?  @db.NVarChar(50)
+  linestatus     String?  @db.VarChar(50)
+  BaseType       String?  @db.VarChar(50)
+}
+
+model approval_template_approvers {
+  id                     Int                @id(map: "PK__approval__3213E83F74698440") @default(autoincrement())
+  approval_template_id   Int
+  approver_id            Int
+  substitute_approver_id Int?
+  substitute_active      String             @default("N", map: "DF__approval___subst__23BE4960") @db.Char(1)
+  set_number             Int?
+  amount_from            Decimal?           @db.Decimal(19, 2)
+  amount_to              Decimal?           @db.Decimal(19, 2)
+  approval_templates     approval_templates @relation(fields: [approval_template_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK__approval___appro__24B26D99")
+}
+
+model approval_template_documents {
+  id                   Int                @id(map: "PK__approval__3213E83F27FEE923") @default(autoincrement())
+  approval_template_id Int
+  document_type        String             @db.NVarChar(50)
+  expense_type         String?            @db.NVarChar(50)
+  approval_templates   approval_templates @relation(fields: [approval_template_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK__approval___appro__2D7CBDC4")
+}
+
+model approval_template_originators {
+  id                   Int                @id(map: "PK__approval__3213E83F536E4E9D") @default(autoincrement())
+  approval_template_id Int
+  user_id              Int
+  approval_templates   approval_templates @relation(fields: [approval_template_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK__approval___appro__2E70E1FD")
+}
+
+model approval_templates {
+  id                            Int                             @id(map: "PK__approval__3213E83F1B95AD5F") @default(autoincrement())
+  name                          String                          @db.NVarChar(20)
+  description                   String?                         @db.NVarChar(100)
+  no_of_approval                Int
+  active                        String                          @default("N", map: "DF__approval___activ__3CF40B7E") @db.Char(1)
+  created_at                    DateTime?                       @default(now(), map: "DF__approval___creat__3DE82FB7") @db.DateTime
+  updated_at                    DateTime?                       @default(now(), map: "DF__approval___updat__3EDC53F0") @db.DateTime
+  approval_template_approvers   approval_template_approvers[]
+  approval_template_documents   approval_template_documents[]
+  approval_template_originators approval_template_originators[]
+}
+
+model ArInvoice {
+  ID              Int       @id(map: "PK__ArInvoic__3214EC2758E30588") @default(autoincrement())
+  CustCode        String    @db.NVarChar(50)
+  CustName        String    @db.NVarChar(254)
+  Address         String?
+  CustRefNo       String?   @db.NVarChar(200)
+  ContPerson      Int?
+  Currency        String?   @db.NVarChar(6)
+  CurRate         Decimal?  @db.Decimal(20, 5)
+  PostDate        DateTime? @db.Date
+  DueDate         DateTime? @db.Date
+  TaxDate         DateTime? @db.Date
+  DiscPrcnt       Decimal?  @db.Decimal(20, 5)
+  TaxTotal        Decimal?  @db.Decimal(20, 5)
+  DocTotal        Decimal?  @db.Decimal(20, 5)
+  DocTotalFC      Decimal?  @db.Decimal(20, 5)
+  DocTotalSC      Decimal?  @db.Decimal(20, 5)
+  SourceSeries    Int?
+  SourceDocId     String?   @db.NVarChar(50)
+  SourceDocType   String?   @db.NVarChar(80)
+  SourceSystem    String?   @db.NVarChar(50)
+  UserId          Int?
+  OwnerCode       Int?
+  Rounding        String?   @db.Char(1)
+  RoundingAmnt    Decimal?  @db.Decimal(20, 5)
+  Remarks         String?   @db.NVarChar(800)
+  ShiptoID        String?   @db.NVarChar(50)
+  BilltoID        String?   @db.NVarChar(50)
+  Status          String?   @db.NVarChar(10)
+  CreatedDate     DateTime  @db.Date
+  CGuid           String    @db.NVarChar(50)
+  SignatureImg    Bytes?    @db.Image
+  DueDateString   String?   @db.NVarChar(50)
+  IsNotesInfo     Boolean?
+  CashSales       String?   @db.Char(1)
+  SAPDocEntry     Int?
+  TotalBefDisc    Decimal?  @db.Decimal(19, 5)
+  AprStatus       String    @db.Char(1)
+  AprBy           String?   @db.VarChar(100)
+  AprDate         DateTime? @db.Date
+  AprRemark       String?   @db.VarChar(500)
+  CreatedBy       Int?
+  UpdatedBy       Int?
+  UpdatedDate     DateTime? @db.Date
+  DMLFlag         Int?      @db.SmallInt
+  NotifyStatus    String?   @db.Char(1)
+  AutoApproved    String?   @db.Char(1)
+  SAPDraftKey     Int?
+  InvoiceRecTime  DateTime? @db.Time
+  InvoiceCode     String?   @db.VarChar(100)
+  Attachement_1   String?   @db.VarChar(500)
+  Attachement_2   String?   @db.VarChar(500)
+  Branch_id       Int?
+  VehicleId       String?   @db.NVarChar(50)
+  DriverName      String?   @db.NVarChar(50)
+  DriverLicenseNo String?   @db.NVarChar(50)
+  TransporterName String?   @db.NVarChar(50)
+  Series          Int?
+  DocNumber       String?   @db.NVarChar(50)
+  Mode            Int?
+  Reference       String?   @db.NVarChar(100)
+  Attachment      String?   @db.NVarChar(Max)
+  SAPDocNum       String?   @db.NVarChar(50)
+  CANCELED        String?   @db.NVarChar(10)
+  ReqBy           Int?
+  ExpenseType     String?   @db.NVarChar(154)
+  relation_from   String?   @db.NVarChar(154)
+}
+
+model ArInvoiceItem {
+  ID            Int      @id(map: "PK__ArInvoic__3214EC27C3214CA5") @default(autoincrement())
+  LineNum       Int
+  ItemID        Int
+  ItemName      String?  @db.VarChar(254)
+  LineStatus    String   @db.Char(1)
+  Quantity      Decimal? @db.Decimal(19, 5)
+  DeliveredQty  Decimal? @db.Decimal(19, 5)
+  OpenQty       Decimal? @db.Decimal(19, 5)
+  WhsCode       String?  @db.NVarChar(200)
+  UnitPrice     Decimal? @db.Decimal(19, 5)
+  Currency      Int?     @db.SmallInt
+  Rate          Decimal? @db.Decimal(19, 5)
+  DiscPrcnt     Decimal? @db.Decimal(19, 5)
+  VATCode       String?  @db.NVarChar(200)
+  VATPer        Decimal? @db.Decimal(19, 5)
+  LineTax       Decimal? @db.Decimal(19, 5)
+  LineTotalLC   Decimal? @db.Decimal(19, 5)
+  LineTotalFC   Decimal? @db.Decimal(19, 5)
+  LineTotalSC   Decimal? @db.Decimal(19, 5)
+  SourceDocId   String?  @db.NVarChar(50)
+  SourceLineNum Int?
+  SourceDocType String?  @db.NVarChar(80)
+  SourceSystem  String?  @db.NVarChar(50)
+  TargetDocId   Int?
+  TargetLineNum Int?
+  TargetDocType String?  @db.NVarChar(80)
+  cost_center   Int?
+  project       String?  @db.NVarChar(200)
+  Remarks       String?  @db.NVarChar(800)
+  BatchNo       String?  @db.NVarChar(50)
+  CGuid         String   @db.NVarChar(50)
+  SAPLineId     Int?
+  TotalBefDisc  Decimal? @db.Decimal(19, 5)
+  IsBatch       String?  @default("N", map: "DF_ArInvoiceItem_IsBatch") @db.Char(1)
+  ItemCode      String?  @db.NVarChar(50)
+  mainCguid     String?  @db.NVarChar(50)
+  UoM           String?  @db.NVarChar(100)
+}
+
+model BomProcess {
+  ID           Int       @id(map: "PK__BomProce__3214EC277A43A98B") @default(autoincrement())
+  PreparedDate DateTime? @db.Date
+  PreparedBy   Int?
+  Project_id   String?   @db.NVarChar(50)
+  UserId       Int?
+  Remarks      String?   @db.Text
+  Status       String?   @db.NVarChar(10)
+  CreatedDate  DateTime? @db.Date
+  CGuid        String?   @db.NVarChar(50)
+  AprStatus    String?   @db.Char(1)
+  AprBy        String?   @db.VarChar(100)
+  AprDate      DateTime? @db.Date
+  AprRemark    String?   @db.Text
+  CreatedBy    Int?
+  UpdatedBy    Int?
+  UpdatedDate  DateTime? @db.Date
+  Branch_id    Int?
+  ReqBy        Int?
+  ReqNo        String?   @db.NVarChar(50)
+  DIM1         String?   @db.NVarChar(100)
+  DIM2         String?   @db.NVarChar(100)
+  DIM3         String?   @db.NVarChar(100)
+  DIM4         String?   @db.NVarChar(100)
+  SourceSystem String?   @db.NVarChar(50)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model BomProcessItem {
+  ID           Int
+  LineNum      Int
+  ItemID       Int
+  ItemCode     String?   @db.NVarChar(50)
+  ItemName     String?   @db.VarChar(254)
+  LineStatus   String?   @db.Char(1)
+  Quantity     Decimal?  @db.Decimal(19, 5)
+  Remarks      String?   @db.NVarChar(100)
+  DeliveredQty Decimal?  @db.Decimal(19, 5)
+  OpenQty      Decimal?  @db.Decimal(19, 5)
+  CGuid        String?   @db.NVarChar(100)
+  Date         DateTime? @db.Date
+  CreatedAt    DateTime  @db.DateTime
+
+  @@ignore
+}
+
+model DCC_BatchSerial {
+  ID               Int       @id(map: "PK__DCC_Batc__3214EC27F6547E80") @default(autoincrement())
+  CGuid            String    @db.NVarChar(200)
+  ItemCode         String    @db.NVarChar(50)
+  DistNumber       String    @db.NVarChar(36)
+  Quantity         Int?
+  MnfSerial        String?   @db.NVarChar(36)
+  LotNumber        String?   @db.NVarChar(36)
+  ExpDate          DateTime? @db.DateTime
+  MnfDate          DateTime? @db.DateTime
+  InDate           DateTime? @db.DateTime
+  Location         String?   @db.NVarChar(100)
+  Status           String?   @db.Char(1)
+  Notes            String?   @db.NText
+  CreateDate       DateTime? @db.Date
+  CreateTime       DateTime? @db.Time
+  MovType          String?   @db.NVarChar(50)
+  WhsCode          String?   @db.NVarChar(50)
+  itmManageBy      String?   @db.Char(1)
+  DistNumberUnique String?   @db.NVarChar(36)
+}
+
+model DCC_VFD_BILLS {
+  ROWID                      Int      @id(map: "PK__DCC_VFD___97BD02EB0A4BA3AA") @default(autoincrement())
+  DocEntry                   Int
+  CardCode                   String   @db.NVarChar(50)
+  CardName                   String   @db.NVarChar(200)
+  DocDate                    DateTime @db.DateTime
+  CreateDate                 DateTime @default(now(), map: "DF__DCC_VFD_B__Creat__16402405") @db.DateTime
+  IsProcessed                String   @default("N", map: "DF__DCC_VFD_B__IsPro__1734483E") @db.Char(1)
+  ObjType                    String   @db.NVarChar(10)
+  RequestData                String?  @db.Text
+  ResponseData               String?  @db.Text
+  status                     String?  @db.NVarChar(20)
+  statusDesc                 String?  @db.NVarChar(Max)
+  dateTime                   String?  @db.NVarChar(200)
+  rctNum                     String?  @db.NVarChar(200)
+  zNum                       String?  @db.NVarChar(200)
+  receiptStatus              String?  @db.NVarChar(200)
+  vrn                        String?  @db.NVarChar(250)
+  traReceiptVerificationCode String?  @db.NVarChar(Max)
+  traReceiptVerificationUrl  String?  @db.NVarChar(Max)
+}
+
+model Expenses {
+  id          Int       @id(map: "PK__Expenses__3213E83F914E0152") @default(autoincrement())
+  expenseType String    @db.VarChar(50)
+  Discription String    @db.Text
+  created_at  DateTime? @default(now(), map: "DF__Expenses__create__589C25F3") @db.DateTime
+  updated_at  DateTime? @default(now(), map: "DF__Expenses__update__59904A2C") @db.DateTime
+  AmountFrom  Decimal?  @db.Decimal(19, 5)
+  AmountTo    Decimal?  @db.Decimal(19, 5)
+}
+
+model FeedbackFarms {
+  ID          Int       @id(map: "PK__Feedback__3214EC27B2E4B0EF") @default(autoincrement())
+  UserId      Int
+  RSPNSTime   String?   @db.NVarChar(50)
+  STSFYDLVR   String?   @db.NVarChar(50)
+  QLTYPrdct   String?   @db.NVarChar(50)
+  CustCom     String?   @db.NVarChar(50)
+  Prdctknldg  String?   @db.NVarChar(50)
+  CustService String?   @db.NVarChar(50)
+  SKU         String?   @db.NVarChar(50)
+  BetterSrv   String?   @db.NVarChar(50)
+  createDate  DateTime? @db.Date
+  CustCode    String?   @db.NVarChar(50)
+  CustName    String?   @db.VarChar(100)
+  CustMobile  String?   @db.NVarChar(50)
+}
+
+model FreightCharges {
+  id                  Int       @id(map: "PK__FreightC__3213E83F9C6F3832") @default(autoincrement())
+  freight_name        String?   @db.VarChar(100)
+  remarks             String?   @db.Text
+  tax_group           String?   @db.VarChar(50)
+  tax_percent         Decimal?  @db.Decimal(5, 2)
+  total_tax_amount    Decimal?  @db.Decimal(15, 2)
+  distribution_method String?   @db.VarChar(50)
+  net_amount          Decimal?  @db.Decimal(15, 2)
+  status              String?   @db.Char(1)
+  gross_amount        Decimal?  @db.Decimal(15, 2)
+  distribution_rule   String?   @db.VarChar(100)
+  project             String?   @db.VarChar(100)
+  created_at          DateTime? @default(now(), map: "DF__FreightCh__creat__5A846E65") @db.DateTime
+  updated_at          DateTime? @default(now(), map: "DF__FreightCh__updat__5B78929E") @db.DateTime
+  SourceDocId         Int?
+  SourceMainDocId     Int?
+  Cguid               String?   @db.NVarChar(90)
+  DIMN1               String?   @db.NVarChar(90)
+  DIMN2               String?   @db.NVarChar(90)
+  DIMN3               String?   @db.NVarChar(90)
+  DIMN4               String?   @db.NVarChar(90)
+  SAP_ID              String?   @db.NVarChar(50)
+}
+
+model FreightSetup {
+  id                    Int       @id(map: "PK__FreightS__3213E83F653AF942") @default(autoincrement())
+  name                  String    @db.VarChar(255)
+  revenue_account       String?   @db.VarChar(100)
+  expense_account       String?   @db.VarChar(100)
+  output_tax_group      String?   @db.VarChar(100)
+  input_tax_group       String?   @db.VarChar(100)
+  fixed_amount_revenues Decimal?  @db.Decimal(15, 6)
+  fixed_amount_expenses Decimal?  @db.Decimal(15, 6)
+  gross_freight         String?   @default("0", map: "DF__FreightSe__gross__5F141958") @db.NVarChar(150)
+  wtax_liable           String?   @default("0", map: "DF__FreightSe__wtax___60083D91") @db.NVarChar(150)
+  distribution_method   String?   @db.NVarChar(150)
+  drawing_method        String?   @db.NVarChar(150)
+  stock_fixed_asset     String?   @default("0", map: "DF__FreightSe__stock__60FC61CA") @db.NVarChar(150)
+  last_purchase_price   String?   @default("0", map: "DF__FreightSe__last___61F08603") @db.NVarChar(150)
+  distr_rule            String?   @db.VarChar(100)
+  project               String?   @db.VarChar(100)
+  created_at            DateTime? @default(now(), map: "DF__FreightSe__creat__62E4AA3C") @db.DateTime
+  updated_at            DateTime? @default(now(), map: "DF__FreightSe__updat__63D8CE75") @db.DateTime
+  DIM1                  String?   @db.NVarChar(50)
+  DIM2                  String?   @db.NVarChar(50)
+  DIM3                  String?   @db.NVarChar(50)
+  DIM4                  String?   @db.NVarChar(50)
+  SAP_ID                String?   @db.NVarChar(50)
+}
+
+model goodRcptOrdrService {
+  ID             Int      @id(map: "PK_goodRcptOrdrService") @default(autoincrement())
+  Description    String?  @db.Text
+  GLCode         String?  @db.NVarChar(100)
+  GLName         String?  @db.NVarChar(100)
+  TotalExclusive Decimal? @db.Decimal(19, 3)
+  TaxCode        String?  @db.NVarChar(100)
+  TaxAmount      Decimal? @db.Decimal(19, 3)
+  TotalInclusive Decimal? @db.Decimal(19, 3)
+  DIM1           String?  @db.NVarChar(100)
+  DIM2           String?  @db.NVarChar(100)
+  DIM3           String?  @db.NVarChar(100)
+  DIM4           String?  @db.NVarChar(100)
+  VendorCode     String?  @db.NVarChar(100)
+  VendorName     String?  @db.VarChar(100)
+  PaymentTerms   String?  @db.VarChar(100)
+  Project        String?  @db.VarChar(100)
+  LineNum        Int?
+  CGuid          String?  @db.NVarChar(50)
+  TotalWithTax   Decimal? @db.Decimal(19, 3)
+  LineTotalLC    Decimal? @db.Decimal(19, 5)
+  LineTax        Decimal? @db.Decimal(19, 5)
+  DIM5           String?  @db.VarChar(100)
+  Discount       Decimal? @db.Decimal(19, 5)
+  VatCode        String?  @db.NVarChar(50)
+}
+
+model GoodRecieptAttechment {
+  ID         Int     @id(map: "PK__GoodReci__3214EC270E4716D2") @default(autoincrement())
+  LineNum    Int     @db.SmallInt
+  Attachment String? @db.VarChar(100)
+  CGuid      String  @db.NVarChar(50)
+}
+
+model GRPOService {
+  ID             Int      @id(map: "PK__GRPOServ__3214EC27FE7969DA") @default(autoincrement())
+  Description    String?  @db.Text
+  GLCode         String?  @db.NVarChar(100)
+  GLName         String?  @db.NVarChar(100)
+  TotalExclusive Decimal? @db.Decimal(19, 3)
+  TaxCode        String?  @db.NVarChar(100)
+  TaxAmount      Decimal? @db.Decimal(19, 3)
+  TotalInclusive Decimal? @db.Decimal(19, 3)
+  DIM1           String?  @db.NVarChar(100)
+  DIM2           String?  @db.NVarChar(100)
+  DIM3           String?  @db.NVarChar(100)
+  DIM4           String?  @db.NVarChar(100)
+  VendorCode     String?  @db.NVarChar(100)
+  VendorName     String?  @db.VarChar(100)
+  PaymentTerms   String?  @db.VarChar(100)
+  Project        String?  @db.VarChar(100)
+  LineNum        Int?
+  CGuid          String?  @db.NVarChar(50)
+  TotalWithTax   Decimal? @db.Decimal(19, 3)
+  LineTotalLC    Decimal? @db.Decimal(19, 5)
+  LineTax        Decimal? @db.Decimal(19, 5)
+  DIM5           String?  @db.VarChar(100)
+  Discount       Decimal? @db.Decimal(19, 3)
+  VatCode        String?  @db.NVarChar(50)
+  SourceDocId    Int?
+  SAPDocEntry    String?  @db.NVarChar(100)
+  SapLine        String?  @db.NVarChar(100)
+  mainCguid      String?  @db.NVarChar(100)
+  linestatus     String?  @db.Char(1)
+  BaseType       String?  @db.NVarChar(50)
+}
+
+model incoming_payment_invoices {
+  id                Int               @id(map: "PK__incoming__3213E83F88739231") @default(autoincrement())
+  parent_id         Int
+  ar_invoice_id     Int
+  applied_amount    Decimal           @db.Decimal(18, 2)
+  discount_amount   Decimal?          @default(0, map: "DF__incoming___disco__1A89E4E1") @db.Decimal(18, 2)
+  total_payment     Decimal           @db.Decimal(18, 2)
+  invoice_date      DateTime?         @db.Date
+  balance_due       Decimal?          @db.Decimal(18, 2)
+  total_received    Decimal?          @db.Decimal(18, 2)
+  incoming_payments incoming_payments @relation(fields: [parent_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK__incoming___paren__1995C0A8")
+}
+
+model incoming_payment_means {
+  id                Int               @id(map: "PK__incoming__3213E83FA129B431") @default(autoincrement())
+  parent_id         Int
+  means_type        String            @db.VarChar(20)
+  gl_account        String            @db.VarChar(100)
+  transfer_date     DateTime?         @db.Date
+  reference_num     String?           @db.VarChar(100)
+  check_bank_code   String?           @db.VarChar(50)
+  cc_name           String?           @db.VarChar(50)
+  amount            Decimal           @db.Decimal(18, 2)
+  is_cleared        Boolean?          @default(false, map: "DF__incoming___is_cl__1E5A75C5")
+  incoming_payments incoming_payments @relation(fields: [parent_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK__incoming___paren__1D66518C")
+}
+
+model incoming_payments {
+  id                        Int                         @id(map: "PK__incoming__3213E83FC32274D5") @default(autoincrement())
+  doc_number                String                      @unique(map: "UQ__incoming__0CA19B01E9ED950F") @db.VarChar(50)
+  customer_code             String                      @db.VarChar(100)
+  payment_type              String?                     @default("AR Invoice", map: "DF__incoming___payme__100C566E") @db.VarChar(50)
+  posting_date              DateTime?                   @default(now(), map: "DF__incoming___posti__11007AA7") @db.Date
+  document_date             DateTime?                   @default(now(), map: "DF__incoming___docum__11F49EE0") @db.Date
+  reference_number          String?                     @db.VarChar(100)
+  journal_remarks           String?                     @db.NVarChar(255)
+  total_amount              Decimal?                    @default(0, map: "DF__incoming___total__12E8C319") @db.Decimal(18, 2)
+  exchange_rate             Decimal?                    @db.Decimal(18, 2)
+  currency                  String?                     @default("TZS", map: "DF__incoming___curre__13DCE752") @db.VarChar(10)
+  status                    String?                     @default("Posted", map: "DF__incoming___statu__14D10B8B") @db.VarChar(50)
+  created_by                Int?
+  created_on                DateTime?                   @default(now(), map: "DF__incoming___creat__15C52FC4") @db.DateTime
+  updated_by                Int?
+  updated_on                DateTime?                   @db.DateTime
+  log_instance              Int?                        @default(1, map: "DF__incoming___log_i__16B953FD")
+  incoming_payment_invoices incoming_payment_invoices[]
+  incoming_payment_means    incoming_payment_means[]
+}
+
+model IncomingPayGlAccount {
+  id          Int       @id(map: "PK__Incoming__3213E83F781FBA01") @default(autoincrement())
+  parent_id   Int
+  gl_account  String?   @db.NVarChar(50)
+  description String?   @db.NVarChar(255)
+  amount      Decimal?  @default(0, map: "DF__IncomingP__amoun__3C74E891") @db.Decimal(18, 2)
+  status      String?   @default("active", map: "DF__IncomingP__statu__3D690CCA") @db.NVarChar(20)
+  created_by  Int?
+  updated_by  Int?
+  created_at  DateTime? @default(now(), map: "DF__IncomingP__creat__3E5D3103") @db.DateTime
+  updated_at  DateTime? @db.DateTime
+}
+
+model inventory_fifo_layers {
+  id             Int      @id(map: "PK__inventor__3213E83F709BB702") @default(autoincrement())
+  item_code      String   @db.VarChar(100)
+  warehouse_code String   @db.VarChar(50)
+  receipt_date   DateTime @db.Date
+  base_doc_type  String?  @db.VarChar(20)
+  base_doc_num   String?  @db.VarChar(50)
+  original_qty   Decimal  @db.Decimal(18, 4)
+  remaining_qty  Decimal  @db.Decimal(18, 4)
+  unit_cost      Decimal  @db.Decimal(18, 4)
+
+  @@index([item_code, warehouse_code, remaining_qty], map: "idx_layer_ageing")
+}
+
+model Inventory_items {
+  id            Int      @id(map: "PK__Inventor__3213E83F515341D1") @default(autoincrement())
+  HeaderID      Int?
+  ItemID        Int?
+  ItemCode      String?  @db.VarChar(50)
+  ItemName      String?  @db.VarChar(200)
+  FromWhsID     String?  @db.VarChar(200)
+  ToWhsID       String?  @db.VarChar(200)
+  Qty           Decimal? @db.Decimal(19, 3)
+  UoMCode       String?  @db.VarChar(20)
+  VehicleID     String?  @db.VarChar(50)
+  DriverName    String?  @db.VarChar(200)
+  Route         String?  @db.VarChar(200)
+  SAPLine       Int?
+  OpenQty       Decimal? @db.Decimal(19, 3)
+  IsBatch       String?  @default("N", map: "DF_Inventory_items_IsBatch") @db.Char(1)
+  ItemManagedBy String?  @default("N", map: "DF_Inventory_items_IsSerial") @db.Char(1)
+  SelectedQty   Decimal? @db.Decimal(19, 3)
+  GITWhsCode    String?  @db.VarChar(200)
+  SAPDocEntry   String?  @db.VarChar(200)
+  SourceDocId   Int?
+}
+
+model Inventory_Transfer {
+  id                 Int       @id(map: "PK__Inventor__3213E83FBA6F73C1") @default(autoincrement())
+  CustomerName       String?   @db.VarChar(200)
+  CustomerCode       String?   @db.VarChar(100)
+  ContactPerson      String?   @db.VarChar(200)
+  Location           String?   @db.VarChar(200)
+  ShippingAddress    String?   @db.VarChar(200)
+  Status             String?   @db.Char(1)
+  PostingDate        DateTime? @db.Date
+  PostingTime        DateTime? @db.Time
+  DeliveryDate       DateTime? @db.Date
+  Attachment         String?   @db.NText
+  AttachmentPath     String?   @db.VarChar(200)
+  SalesEmployee      String?   @db.VarChar(200)
+  JournalRemarks     String?   @db.VarChar(500)
+  PickAndPackRemarks String?   @db.VarChar(500)
+  Remarks            String?   @db.VarChar(500)
+  Transporter        String?   @db.VarChar(200)
+  VehicleId          String?   @db.VarChar(100)
+  DriverName         String?   @db.VarChar(200)
+  IssuedBy           String?   @db.VarChar(200)
+  CreatedBy          Int?
+  CreatedDate        DateTime? @db.DateTime
+  ApprovedBy         Int?
+  ApprovedDate       DateTime? @db.DateTime
+  SAPDocNum          String?   @db.VarChar(50)
+  SAPDocEntry        Int?
+  SAPDraftKey        Int?
+  CGuid              String?   @db.NVarChar(100)
+  ReqRef             String?   @db.VarChar(50)
+  invReq             String?   @db.NVarChar(100)
+  ReceiptNo          String?   @db.NVarChar(100)
+  FromWhsID          String?   @db.NVarChar(100)
+  ToWhsID            String?   @db.NVarChar(100)
+  TransfrType        Int?
+  GITWhsCode         String?   @db.NVarChar(100)
+  AprStatus          String?   @default("N", map: "DF_Inventory_Transfer_AprStatus") @db.Char(1)
+  series             String?   @db.NVarChar(100)
+  AprRemark          String?   @db.NVarChar(100)
+  ReqBy              Int?
+  AprDate            DateTime? @db.Date
+  AprBy              Int?
+}
+
+model InventoryTransferRequest {
+  id                 Int       @id(map: "PK__Inventor__3213E83FAC407B8D") @default(autoincrement())
+  CustomerName       String?   @db.VarChar(200)
+  CustomerCode       String?   @db.VarChar(100)
+  ContactPerson      String?   @db.VarChar(200)
+  Location           String?   @db.VarChar(200)
+  ShippingAddress    String?   @db.VarChar(200)
+  Status             String?   @db.Char(1)
+  PostingDate        DateTime? @db.Date
+  PostingTime        DateTime? @db.Time
+  DeliveryDate       DateTime? @db.Date
+  Attachment         String?   @db.NText
+  AttachmentPath     String?   @db.VarChar(200)
+  SalesEmployee      String?   @db.VarChar(200)
+  JournalRemarks     String?   @db.VarChar(500)
+  PickAndPackRemarks String?   @db.VarChar(500)
+  Remarks            String?   @db.VarChar(500)
+  Transporter        String?   @db.VarChar(200)
+  VehicleId          String?   @db.VarChar(100)
+  DriverName         String?   @db.VarChar(200)
+  IssuedBy           String?   @db.VarChar(200)
+  CreatedBy          Int?
+  CreatedDate        DateTime? @db.DateTime
+  ApprovedBy         Int?
+  ApprovedDate       DateTime? @db.DateTime
+  SAPDocNum          String?   @db.VarChar(50)
+  SAPDocEntry        Int?
+  SAPDraftKey        Int?
+  CGuid              String?   @db.NVarChar(100)
+  ReqRef             String?   @db.VarChar(50)
+  invReq             String?   @db.NVarChar(100)
+  ReceiptNo          String?   @db.NVarChar(100)
+  FromWhsID          String?   @db.NVarChar(100)
+  ToWhsID            String?   @db.NVarChar(100)
+  AprStatus          String?   @db.Char(1)
+  series             String?   @db.NVarChar(100)
+  AprRemark          String?   @db.NVarChar(100)
+  ReqBy              Int?
+  AprDate            DateTime? @db.Date
+  AprBy              Int?
+}
+
+model InventoryTransferRequest_Lines {
+  id          Int      @id(map: "PK__Inventor__3213E83F538E50EF") @default(autoincrement())
+  HeaderID    Int
+  ItemID      Int?
+  ItemCode    String?  @db.VarChar(50)
+  ItemName    String?  @db.VarChar(200)
+  FromWhsID   String?  @db.VarChar(200)
+  ToWhsID     String?  @db.VarChar(200)
+  Qty         Decimal? @db.Decimal(19, 3)
+  UoMCode     String?  @db.VarChar(20)
+  VehicleID   String?  @db.VarChar(50)
+  DriverName  String?  @db.VarChar(200)
+  Route       String?  @db.VarChar(200)
+  SAPLine     Int?
+  OpenQty     Decimal? @db.Decimal(19, 3)
+  SAPDocEntry String?  @db.VarChar(200)
+  SourceDocId Int?
+}
+
+model LabourRequest {
+  ID           Int       @id(map: "PK__LabourRe__3214EC2745BECEA4") @default(autoincrement())
+  ValidDate    DateTime? @db.Date
+  PostDate     DateTime? @db.Date
+  RequireDate  DateTime? @db.Date
+  UserId       Int?
+  Remarks      String?   @db.Text
+  Status       String?   @db.NVarChar(10)
+  CreatedDate  DateTime? @db.Date
+  CGuid        String?   @db.NVarChar(50)
+  AprStatus    String?   @db.Char(1)
+  AprBy        String?   @db.VarChar(100)
+  AprDate      DateTime? @db.Date
+  AprRemark    String?   @db.Text
+  CreatedBy    Int?
+  UpdatedBy    Int?
+  UpdatedDate  DateTime? @db.Date
+  Branch_id    Int?
+  ReqBy        Int?
+  ReqNo        String?   @db.NVarChar(50)
+  SourceSystem String?   @db.NVarChar(50)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model LabourRequestItem {
+  ID             Int       @default(autoincrement())
+  Description    String?   @db.NVarChar(Max)
+  GLCode         String?   @db.NVarChar(100)
+  GLName         String?   @db.NVarChar(100)
+  TotalExclusive Decimal?  @db.Decimal(19, 3)
+  TotalInclusive Decimal?  @db.Decimal(19, 3)
+  TaxCode        String?   @db.NVarChar(50)
+  LineNum        Int
+  LineStatus     String?   @db.Char(1)
+  UoM            String?   @db.NVarChar(100)
+  Project        String?   @db.NVarChar(100)
+  DIM1           String?   @db.NVarChar(100)
+  DIM2           String?   @db.NVarChar(100)
+  DIM3           String?   @db.NVarChar(100)
+  DIM4           String?   @db.NVarChar(100)
+  CGuid          String?   @db.NVarChar(100)
+  Date           DateTime? @db.Date
+
+  @@ignore
+}
+
+model MaterialRequest {
+  ID           Int       @id(map: "PK__Material__3214EC27326B5588") @default(autoincrement())
+  ValidDate    DateTime? @db.Date
+  PostDate     DateTime? @db.Date
+  RequireDate  DateTime? @db.Date
+  UserId       Int?
+  Remarks      String?   @db.Text
+  Status       String?   @db.NVarChar(10)
+  CreatedDate  DateTime? @db.Date
+  CGuid        String?   @db.NVarChar(50)
+  AprStatus    String?   @db.Char(1)
+  AprBy        String?   @db.VarChar(100)
+  AprDate      DateTime? @db.Date
+  AprRemark    String?   @db.Text
+  CreatedBy    Int?
+  UpdatedBy    Int?
+  UpdatedDate  DateTime? @db.Date
+  Branch_id    Int?
+  ReqBy        Int?
+  ReqNo        String?   @db.NVarChar(50)
+  SourceSystem String?   @db.NVarChar(50)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model MaterialRequestItem {
+  ID           Int
+  LineNum      Int
+  ItemID       Int
+  ItemCode     String?   @db.NVarChar(50)
+  ItemName     String?   @db.VarChar(254)
+  LineStatus   String?   @db.Char(1)
+  Quantity     Decimal?  @db.Decimal(19, 5)
+  DeliveredQty Decimal?  @db.Decimal(19, 5)
+  OpenQty      Decimal?  @db.Decimal(19, 5)
+  UoM          String?   @db.NVarChar(100)
+  project      String?   @db.NVarChar(100)
+  DIM1         String?   @db.NVarChar(100)
+  DIM2         String?   @db.NVarChar(100)
+  DIM3         String?   @db.NVarChar(100)
+  DIM4         String?   @db.NVarChar(100)
+  CGuid        String?   @db.NVarChar(100)
+  Date         DateTime? @db.Date
+
+  @@ignore
+}
+
+model outgoing_payment_invoices {
+  id                Int               @id(map: "PK__outgoing__3213E83F13857125") @default(autoincrement())
+  parent_id         Int
+  invice_date       DateTime?         @db.Date
+  ap_invoice_id     String            @db.NVarChar(50)
+  total_amount      Decimal?          @db.Decimal(18, 2)
+  balance_due       Decimal?          @db.Decimal(18, 2)
+  payment_amount    Decimal?          @db.Decimal(18, 2)
+  applied_amount    Decimal           @db.Decimal(18, 2)
+  discount_amount   Decimal?          @default(0, map: "DF__outgoing___disco__086B34A6") @db.Decimal(18, 2)
+  total_payment     Decimal           @db.Decimal(18, 2)
+  outgoing_payments outgoing_payments @relation(fields: [parent_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK__outgoing___paren__0777106D")
+}
+
+model outgoing_payment_means {
+  id                Int               @id(map: "PK__outgoing__3213E83F85246F91") @default(autoincrement())
+  parent_id         Int
+  means_type        String            @db.VarChar(20)
+  account_number    String?           @db.NVarChar(100)
+  bank_name         String?           @db.VarChar(100)
+  gl_account        String            @db.VarChar(100)
+  transfer_date     DateTime?         @db.Date
+  receipt_number    String?           @db.VarChar(100)
+  reference_num     String?           @db.VarChar(100)
+  check_date        DateTime?         @db.Date
+  check_number      String?           @db.NVarChar(100)
+  amount            Decimal           @db.Decimal(18, 2)
+  is_cleared        Boolean?          @default(true, map: "DF__outgoing___is_cl__0C3BC58A")
+  outgoing_payments outgoing_payments @relation(fields: [parent_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK__outgoing___paren__0B47A151")
+}
+
+model outgoing_payments {
+  id                        Int                         @id(map: "PK__outgoing__3213E83F379FF201") @default(autoincrement())
+  doc_number                String                      @unique(map: "UQ__outgoing__0CA19B01CF04BDF8") @db.VarChar(50)
+  vendor_code               String                      @db.VarChar(100)
+  base_request_id           Int?
+  payment_type              String?                     @default("AP Invoice", map: "DF__outgoing___payme__7DEDA633") @db.VarChar(50)
+  posting_date              DateTime?                   @default(now(), map: "DF__outgoing___posti__7EE1CA6C") @db.Date
+  document_date             DateTime?                   @default(now(), map: "DF__outgoing___docum__7FD5EEA5") @db.Date
+  reference_number          String?                     @db.VarChar(100)
+  journal_remarks           String?                     @db.NVarChar(255)
+  total_amount              Decimal?                    @default(0, map: "DF__outgoing___total__00CA12DE") @db.Decimal(18, 2)
+  exchnage_rate             Decimal?                    @db.Decimal(18, 2)
+  currency                  String?                     @default("TZS", map: "DF__outgoing___curre__01BE3717") @db.VarChar(10)
+  status                    String?                     @default("Posted", map: "DF__outgoing___statu__02B25B50") @db.VarChar(50)
+  total_invoice             Decimal?                    @db.Decimal(18, 2)
+  applied_payments          Decimal?                    @db.Decimal(18, 2)
+  bank_charge               Decimal?                    @db.Decimal(18, 2)
+  created_by                Int?
+  created_on                DateTime?                   @default(now(), map: "DF__outgoing___creat__03A67F89") @db.DateTime
+  updated_by                Int?
+  updated_on                DateTime?                   @db.DateTime
+  log_instance              Int?                        @default(1, map: "DF__outgoing___log_i__049AA3C2")
+  object_type               String?                     @default("R", map: "DF_outgoing_payments_object_type") @db.Char(1)
+  project_code              String?                     @db.NVarChar(100)
+  cost_center               String?                     @db.NVarChar(100)
+  approval_notes            String?                     @db.NVarChar(255)
+  supporting_document       String?                     @db.NVarChar(255)
+  outgoing_payment_invoices outgoing_payment_invoices[]
+  outgoing_payment_means    outgoing_payment_means[]
+  po_advance_requests       po_advance_requests[]
+}
+
+model OutgoingPayGlAccount {
+  id           Int       @id(map: "PK__Outgoing__3213E83FA55D3FC3") @default(autoincrement())
+  parent_id    Int
+  gl_account   String?   @db.NVarChar(50)
+  description  String?   @db.NVarChar(255)
+  amount       Decimal?  @default(0, map: "DF__OutgoingP__amoun__34D3C6C9") @db.Decimal(18, 2)
+  request_type String?   @db.NVarChar(10)
+  status       String?   @default("active", map: "DF__OutgoingP__statu__35C7EB02") @db.NVarChar(20)
+  created_by   Int?
+  updated_by   Int?
+  created_at   DateTime? @default(now(), map: "DF__OutgoingP__creat__36BC0F3B") @db.DateTime
+  updated_at   DateTime? @db.DateTime
+}
+
+model OutgoingPayPurchaseOrder {
+  id             Int       @id(map: "PK__Outgoing__3213E83FEA36EEF5") @default(autoincrement())
+  parent_id      Int
+  request_id     Int?
+  request_no     String?   @db.NVarChar(100)
+  po_total       Decimal?  @db.Decimal(18, 2)
+  advance_amount Decimal?  @default(0, map: "DF__OutgoingP__advan__2F1AED73") @db.Decimal(18, 2)
+  balance        Decimal?  @default(0, map: "DF__OutgoingP__balan__300F11AC") @db.Decimal(18, 2)
+  request_date   DateTime? @db.Date
+  request_type   String?   @db.NVarChar(10)
+  status         String?   @default("active", map: "DF__OutgoingP__statu__310335E5") @db.NVarChar(20)
+  created_by     Int?
+  updated_by     Int?
+  created_at     DateTime? @default(now(), map: "DF__OutgoingP__creat__31F75A1E") @db.DateTime
+  updated_at     DateTime? @db.DateTime
+}
+
+model petty_cash_accounts {
+  id                        Int                         @id(map: "PK__petty_ca__3213E83FE8586472") @default(autoincrement())
+  account_name              String                      @unique(map: "UQ__petty_ca__6894C54AA69D44C6") @db.VarChar(100)
+  gl_account_code           String                      @db.VarChar(100)
+  custodian_user_id         Int
+  authorized_limit          Decimal?                    @default(500.00, map: "DF__petty_cas__autho__25077354") @db.Decimal(18, 2)
+  current_balance           Decimal?                    @default(0.00, map: "DF__petty_cas__curre__25FB978D") @db.Decimal(18, 2)
+  currency                  String?                     @default("TZS", map: "DF__petty_cas__curre__26EFBBC6") @db.VarChar(10)
+  is_active                 Boolean?                    @default(true, map: "DF__petty_cas__is_ac__27E3DFFF")
+  last_replenished_date     DateTime?                   @db.DateTime
+  petty_cash_claims         petty_cash_claims[]
+  petty_cash_replenishments petty_cash_replenishments[]
+}
+
+model petty_cash_claims {
+  id                            Int                  @id(map: "PK__petty_ca__3213E83F7210149F") @default(autoincrement())
+  claim_number                  String               @unique(map: "UQ__petty_ca__8DF9683D5D738427") @db.VarChar(50)
+  requester_user_id             Int
+  department                    String?              @db.VarChar(100)
+  request_date                  DateTime?            @default(dbgenerated("CONVERT([date],getdate())"), map: "DF__petty_cas__reque__2BB470E3") @db.Date
+  total_requested               Decimal?             @default(0, map: "DF__petty_cas__total__2CA8951C") @db.Decimal(18, 2)
+  category                      String?              @db.VarChar(100)
+  currency                      String?              @default("TZS", map: "DF__petty_cas__curre__2D9CB955") @db.VarChar(10)
+  status                        String?              @default("Pending Manager", map: "DF__petty_cas__statu__2E90DD8E") @db.VarChar(50)
+  manager_approval_notes        String?              @db.NVarChar(255)
+  disbursed_from_account_id     Int?
+  disbursed_date                DateTime?            @db.DateTime
+  sap_outgoing_payment_docentry Int?
+  approved_by                   Int?
+  created_by                    Int?
+  created_on                    DateTime?            @default(now(), map: "DF__petty_cas__creat__30792600") @db.DateTime
+  updated_by                    Int?
+  updated_on                    DateTime?            @db.DateTime
+  log_instance                  Int?                 @default(1, map: "DF__petty_cas__log_i__316D4A39")
+  petty_cash_accounts           petty_cash_accounts? @relation(fields: [disbursed_from_account_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK__petty_cas__disbu__2F8501C7")
+  petty_cash_lines              petty_cash_lines[]
+}
+
+model petty_cash_lines {
+  id                     Int               @id(map: "PK__petty_ca__3213E83F429288A4") @default(autoincrement())
+  parent_id              Int
+  expense_gl_account     String            @db.VarChar(100)
+  description            String            @db.NVarChar(255)
+  amount                 Decimal           @db.Decimal(18, 2)
+  has_receipt_attachment Boolean?          @default(false, map: "DF__petty_cas__has_r__353DDB1D")
+  receipt_file_path      String?           @db.VarChar(500)
+  petty_cash_claims      petty_cash_claims @relation(fields: [parent_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK__petty_cas__paren__3449B6E4")
+}
+
+model petty_cash_replenishments {
+  id                   Int                 @id(map: "PK__petty_ca__3213E83F0E96D8C7") @default(autoincrement())
+  account_id           Int
+  request_date         DateTime?           @default(dbgenerated("CONVERT([date],getdate())"), map: "DF__petty_cas__reque__390E6C01") @db.Date
+  requested_by_user_id Int
+  amount               Decimal             @db.Decimal(18, 2)
+  source_bank_gl       String?             @db.VarChar(100)
+  remarks              String?             @db.NVarChar(255)
+  status               String?             @default("Pending Finance", map: "DF__petty_cas__statu__3A02903A") @db.VarChar(50)
+  sap_je_docentry      Int?
+  created_by           Int?
+  created_on           DateTime?           @default(now(), map: "DF__petty_cas__creat__3AF6B473") @db.DateTime
+  updated_by           Int?
+  updated_on           DateTime?           @db.DateTime
+  log_instance         Int?                @default(1, map: "DF__petty_cas__log_i__3BEAD8AC")
+  petty_cash_accounts  petty_cash_accounts @relation(fields: [account_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK__petty_cas__accou__381A47C8")
+}
+
+model po_advance_requests {
+  id                  Int                @id(map: "PK__po_advan__3213E83F9FC3F454") @default(autoincrement())
+  request_no          String             @unique(map: "UQ__po_advan__18D3F2FD0E10FE01") @db.VarChar(50)
+  po_id               Int
+  required_percentage Decimal            @db.Decimal(5, 2)
+  calculated_amount   Decimal            @db.Decimal(15, 2)
+  priority            String?            @default("Normal", map: "DF__po_advanc__prior__23A93AC7") @db.VarChar(20)
+  funds_required_by   DateTime           @db.Date
+  justification       String?            @db.NVarChar(Max)
+  proforma_attachment String?            @db.VarChar(500)
+  finance_status      String?            @default("Pending Finance", map: "DF__po_advanc__finan__249D5F00") @db.VarChar(50)
+  outgoing_payment_id Int?
+  cguid               String             @unique(map: "UQ__po_advan__46E81D5FEF4E0C83") @db.VarChar(100)
+  created_by          Int
+  created_on          DateTime?          @default(now(), map: "DF__po_advanc__creat__2685A772") @db.DateTime
+  updated_on          DateTime?          @default(now(), map: "DF__po_advanc__updat__2779CBAB") @db.DateTime
+  outgoing_payments   outgoing_payments? @relation(fields: [outgoing_payment_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK__po_advanc__outgo__25918339")
+}
+
+model project_boq_lines {
+  id             Int            @id(map: "PK__project___3213E83F09354966") @default(autoincrement())
+  parent_id      Int
+  stage_id       Int
+  resource_type  String         @db.VarChar(50)
+  item_code      String?        @db.VarChar(100)
+  description    String         @db.NVarChar(Max)
+  uom            String?        @db.VarChar(20)
+  est_qty        Decimal?       @default(0, map: "DF__project_b__est_q__69E6AD86") @db.Decimal(18, 2)
+  est_rate       Decimal?       @default(0, map: "DF__project_b__est_r__6ADAD1BF") @db.Decimal(18, 2)
+  budget_total   Decimal?       @db.Decimal(37, 4)
+  actual_cost    Decimal?       @default(0, map: "DF__project_b__actua__6BCEF5F8") @db.Decimal(18, 2)
+  committed_cost Decimal?       @default(0, map: "DF__project_b__commi__6CC31A31") @db.Decimal(18, 2)
+  created_by     Int?
+  created_on     DateTime?      @default(now(), map: "DF__project_b__creat__6DB73E6A") @db.DateTime
+  updated_by     Int?
+  updated_on     DateTime?      @db.DateTime
+  log_instance   Int?           @default(1, map: "DF__project_b__log_i__6EAB62A3")
+  CGuid          String?        @db.VarChar(50)
+  project_header project_header @relation(fields: [parent_id], references: [id], onUpdate: NoAction, map: "FK__project_b__paren__67FE6514")
+  project_stages project_stages @relation(fields: [stage_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK__project_b__stage__68F2894D")
+}
+
+model project_budget_periods {
+  id                       Int                        @id(map: "PK__project___3213E83FC0C650D5") @default(autoincrement())
+  project_id               Int
+  period_code              String                     @db.VarChar(50)
+  start_date               DateTime                   @db.Date
+  end_date                 DateTime                   @db.Date
+  budget_limit             Decimal                    @db.Decimal(18, 2)
+  approval_status          String?                    @default("Draft", map: "DF__project_b__appro__349EBC9F") @db.VarChar(50)
+  approved_by              Int?
+  is_closed                Boolean?                   @default(false, map: "DF__project_b__is_cl__3592E0D8")
+  project_progress_updates project_progress_updates[]
+
+  @@unique([project_id, period_code], map: "UQ_Project_Period")
+}
+
+model project_closing_details {
+  id                      Int       @id(map: "PK__project___3213E83F975A6CFB") @default(autoincrement())
+  project_id              Int       @unique(map: "UQ__project___BC799E1E96641EA7")
+  closure_status          String    @db.VarChar(50)
+  effective_date          DateTime  @db.Date
+  final_contract_value    Decimal   @db.Decimal(18, 2)
+  actual_total_cost       Decimal   @db.Decimal(18, 2)
+  retention_held          Decimal?  @default(0, map: "DF__project_c__reten__6CE315C2") @db.Decimal(18, 2)
+  settlement_remarks      String?   @db.NVarChar(Max)
+  signoff_attachment_path String?   @db.VarChar(500)
+  created_by              Int?
+  approved_by_executive   Int?
+  created_on              DateTime? @default(now(), map: "DF__project_c__creat__6DD739FB") @db.DateTime
+}
+
+model project_header {
+  id                 Int                 @id(map: "PK__project___3213E83FE7C08846") @default(autoincrement())
+  project_code       String              @unique(map: "UQ__project___891B3A6FC44DB763") @db.VarChar(50)
+  project_name       String              @db.VarChar(255)
+  client_bp_code     String?             @db.VarChar(100)
+  project_manager_id Int?
+  location           String?             @db.VarChar(255)
+  status             String?             @default("In Progress", map: "DF__project_h__statu__58BC2184") @db.VarChar(50)
+  start_date         DateTime?           @db.Date
+  end_date           DateTime?           @db.Date
+  currency           String?             @default("TZS", map: "DF__project_h__curre__59B045BD") @db.VarChar(10)
+  baseline_budget    Decimal?            @default(0, map: "DF__project_h__basel__5AA469F6") @db.Decimal(18, 2)
+  is_active          Boolean?            @default(true, map: "DF__project_h__is_ac__5B988E2F")
+  is_financial       Boolean?            @default(true, map: "DF__project_h__is_fi__5C8CB268")
+  created_by         Int?
+  created_on         DateTime?           @default(now(), map: "DF__project_h__creat__5D80D6A1") @db.DateTime
+  updated_by         Int?
+  updated_on         DateTime?           @db.DateTime
+  log_instance       Int?                @default(1, map: "DF__project_h__log_i__5E74FADA")
+  CGuid              String?             @db.VarChar(50)
+  project_boq_lines  project_boq_lines[]
+  project_issues     project_issues[]
+  project_stages     project_stages[]
+}
+
+model project_issues {
+  id             Int             @id(map: "PK__project___3213E83F891A59A5") @default(autoincrement())
+  parent_id      Int
+  stage_id       Int?
+  issue_title    String          @db.VarChar(255)
+  priority_level String?         @default("Medium", map: "DF__project_i__prior__737017C0") @db.VarChar(20)
+  assignee_id    Int?
+  description    String?         @db.NVarChar(Max)
+  status         String?         @default("Open", map: "DF__project_i__statu__74643BF9") @db.VarChar(50)
+  created_by     Int?
+  created_on     DateTime?       @default(now(), map: "DF__project_i__creat__75586032") @db.DateTime
+  updated_by     Int?
+  updated_on     DateTime?       @db.DateTime
+  log_instance   Int?            @default(1, map: "DF__project_i__log_i__764C846B")
+  project_header project_header  @relation(fields: [parent_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK__project_i__paren__7187CF4E")
+  project_stages project_stages? @relation(fields: [stage_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK__project_i__stage__727BF387")
+}
+
+model project_program_stages {
+  id                                                                                       Int                             @id(map: "PK__project___3213E83FD0155E66") @default(autoincrement())
+  parent_id                                                                                Int
+  parent_stage_id                                                                          Int?
+  stage_number                                                                             String                          @db.VarChar(30)
+  stage_name                                                                               String                          @db.VarChar(255)
+  level_depth                                                                              Int
+  cost_center_code                                                                         String?                         @db.VarChar(50)
+  weightage_pct                                                                            Decimal?                        @default(0.00, map: "DF__project_p__weigh__55FFB06A") @db.Decimal(5, 2)
+  is_milestone                                                                             Boolean?                        @default(false, map: "DF__project_p__is_mi__56F3D4A3")
+  is_crucial                                                                               Boolean?                        @default(false, map: "DF__project_p__is_cr__57E7F8DC")
+  risk_level                                                                               String?                         @default("Medium", map: "DF__project_p__risk___58DC1D15") @db.VarChar(20)
+  supervisor_user_id                                                                       Int?
+  planned_start_date                                                                       DateTime?                       @db.Date
+  planned_end_date                                                                         DateTime?                       @db.Date
+  baseline_start_date                                                                      DateTime?                       @db.Date
+  baseline_end_date                                                                        DateTime?                       @db.Date
+  duration_days                                                                            Int?
+  physical_completion_pct                                                                  Decimal?                        @default(0.00, map: "DF__project_p__physi__59D0414E") @db.Decimal(5, 2)
+  project_program_stages                                                                   project_program_stages?         @relation("project_program_stagesToproject_program_stages", fields: [parent_stage_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK__project_p__paren__541767F8")
+  other_project_program_stages                                                             project_program_stages[]        @relation("project_program_stagesToproject_program_stages")
+  project_progress_update_lines                                                            project_progress_update_lines[]
+  project_wbs_dependencies_project_wbs_dependencies_predecessor_idToproject_program_stages project_wbs_dependencies[]      @relation("project_wbs_dependencies_predecessor_idToproject_program_stages")
+  project_wbs_dependencies_project_wbs_dependencies_task_idToproject_program_stages        project_wbs_dependencies[]      @relation("project_wbs_dependencies_task_idToproject_program_stages")
+}
+
+model project_progress_logs {
+  id              Int            @id(map: "PK__project___3213E83FB93CBB8B") @default(autoincrement())
+  project_id      Int
+  stage_id        Int
+  log_date        DateTime       @default(dbgenerated("CONVERT([date],getdate())"), map: "DF__project_p__log_d__742F31CF") @db.Date
+  incremental_pct Decimal        @db.Decimal(5, 2)
+  cumulative_pct  Decimal        @db.Decimal(5, 2)
+  remarks         String?        @db.NVarChar(500)
+  created_by      Int
+  created_on      DateTime?      @default(now(), map: "DF__project_p__creat__75235608") @db.DateTime
+  project_stages  project_stages @relation(fields: [stage_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK__project_p__stage__733B0D96")
+}
+
+model project_progress_update_lines {
+  id                       Int                      @id(map: "PK__project___3213E83FFC9B57A9") @default(autoincrement())
+  parent_doc_id            Int
+  stage_id                 Int
+  reported_progress_pct    Decimal                  @db.Decimal(5, 2)
+  equipment_used           String?                  @db.NVarChar(255)
+  supervisor_notes         String?                  @db.NVarChar(Max)
+  project_progress_updates project_progress_updates @relation(fields: [parent_doc_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK__project_p__paren__681E60A5")
+  project_program_stages   project_program_stages   @relation(fields: [stage_id], references: [id], onUpdate: NoAction, map: "FK__project_p__stage__691284DE")
+}
+
+model project_progress_updates {
+  id                            Int                             @id(map: "PK__project___3213E83F60822EFC") @default(autoincrement())
+  doc_number                    String                          @unique(map: "UQ__project___0CA19B01EC6B909E") @db.VarChar(50)
+  project_id                    Int
+  budget_period_id              Int
+  from_date_time                DateTime                        @db.DateTime
+  to_date_time                  DateTime                        @db.DateTime
+  weather_condition             String?                         @db.VarChar(100)
+  crew_labor_count              Int?
+  remarks                       String?                         @db.NVarChar(Max)
+  approval_status               String?                         @default("Draft", map: "DF__project_p__appro__644DCFC1") @db.VarChar(50)
+  created_by                    Int
+  approved_by                   Int?
+  created_on                    DateTime?                       @default(now(), map: "DF__project_p__creat__6541F3FA") @db.DateTime
+  updated_on                    DateTime?                       @db.DateTime
+  project_progress_update_lines project_progress_update_lines[]
+  project_budget_periods        project_budget_periods          @relation(fields: [budget_period_id], references: [id], onUpdate: NoAction, map: "FK__project_p__budge__6359AB88")
+}
+
+model project_stages {
+  id                      Int                     @id(map: "PK__project___3213E83F4974630C") @default(autoincrement())
+  parent_id               Int
+  parent_stage_id         Int?
+  stage_number            String                  @db.VarChar(20)
+  stage_name              String                  @db.VarChar(255)
+  stage_type              String?                 @default("Stage", map: "DF__project_s__stage__6339AFF7") @db.VarChar(50)
+  created_by              Int?
+  created_on              DateTime?               @default(now(), map: "DF__project_s__creat__642DD430") @db.DateTime
+  updated_by              Int?
+  updated_on              DateTime?               @db.DateTime
+  log_instance            Int?                    @default(1, map: "DF__project_s__log_i__6521F869")
+  physical_completion_pct Decimal?                @default(0.00, map: "DF__project_s__physi__67C95AEA") @db.Decimal(5, 2)
+  last_progress_update    DateTime?               @db.Date
+  project_boq_lines       project_boq_lines[]
+  project_issues          project_issues[]
+  project_progress_logs   project_progress_logs[]
+  project_header          project_header          @relation(fields: [parent_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK__project_s__paren__61516785")
+  project_stages          project_stages?         @relation("project_stagesToproject_stages", fields: [parent_stage_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK__project_s__paren__62458BBE")
+  other_project_stages    project_stages[]        @relation("project_stagesToproject_stages")
+}
+
+model project_wbs_dependencies {
+  id                                                                                     Int                    @id(map: "PK__project___3213E83FDAA340B6") @default(autoincrement())
+  task_id                                                                                Int
+  predecessor_id                                                                         Int
+  dependency_type                                                                        String                 @default("FS", map: "DF__project_w__depen__5E94F66B") @db.VarChar(5)
+  lag_days                                                                               Int?                   @default(0, map: "DF__project_w__lag_d__5F891AA4")
+  project_program_stages_project_wbs_dependencies_predecessor_idToproject_program_stages project_program_stages @relation("project_wbs_dependencies_predecessor_idToproject_program_stages", fields: [predecessor_id], references: [id], onUpdate: NoAction, map: "FK__project_w__prede__5DA0D232")
+  project_program_stages_project_wbs_dependencies_task_idToproject_program_stages        project_program_stages @relation("project_wbs_dependencies_task_idToproject_program_stages", fields: [task_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK__project_w__task___5CACADF9")
+}
+
+model PurchaseOrdrService {
+  ID             Int      @id(map: "PK__Purchase__3214EC27D2EE74A2") @default(autoincrement())
+  Description    String?  @db.Text
+  GLCode         String?  @db.NVarChar(100)
+  GLName         String?  @db.NVarChar(100)
+  TotalExclusive Decimal? @db.Decimal(19, 3)
+  TaxCode        String?  @db.NVarChar(100)
+  TaxAmount      Decimal? @db.Decimal(19, 3)
+  TotalInclusive Decimal? @db.Decimal(19, 3)
+  DIM1           String?  @db.NVarChar(100)
+  DIM2           String?  @db.NVarChar(100)
+  DIM3           String?  @db.NVarChar(100)
+  DIM4           String?  @db.NVarChar(100)
+  VendorCode     String?  @db.NVarChar(100)
+  VendorName     String?  @db.VarChar(100)
+  PaymentTerms   String?  @db.VarChar(100)
+  Project        String?  @db.VarChar(100)
+  LineNum        Int?
+  CGuid          String?  @db.NVarChar(50)
+  TotalWithTax   Decimal? @db.Decimal(19, 3)
+  LineTotalLC    Decimal? @db.Decimal(19, 5)
+  LineTax        Decimal? @db.Decimal(19, 5)
+  DIM5           String?  @db.VarChar(100)
+  Discount       Decimal? @db.Decimal(19, 5)
+  VatCode        String?  @db.NVarChar(50)
+  SourceDocId    Int?
+  SAPDocEntry    String?  @db.NVarChar(100)
+  SapLine        String?  @db.NVarChar(100)
+  mainCguid      String?  @db.NVarChar(100)
+  linestatus     String?  @db.Char(1)
+  BaseType       String?  @db.NVarChar(50)
+}
+
+model PurchaseQuotation {
+  ID              Int       @id(map: "PK__Purchase__3214EC2763A76FD6") @default(autoincrement())
+  PostDate        DateTime? @db.Date
+  ReceiptDate     DateTime? @db.Date
+  TypePayment     String    @db.NVarChar(50)
+  DiscPrcnt       Decimal?  @db.Decimal(20, 5)
+  TaxTotal        Decimal?  @db.Decimal(20, 5)
+  DocTotal        Decimal?  @db.Decimal(20, 5)
+  DocTotalFC      Decimal?  @db.Decimal(20, 5)
+  DocTotalSC      Decimal?  @db.Decimal(20, 5)
+  UserId          Int?
+  Rounding        String?   @db.Char(1)
+  RoundingAmnt    Decimal?  @db.Decimal(20, 5)
+  Remarks         String?   @db.NVarChar(800)
+  Status          String?   @db.NVarChar(10)
+  CreatedDate     DateTime  @db.Date
+  CGuid           String    @db.NVarChar(50)
+  SalesType       Int?
+  SAPDocEntry     Int?
+  TotalBefDisc    Decimal?  @db.Decimal(19, 5)
+  AprStatus       String    @db.Char(1)
+  AprBy           String?   @db.VarChar(100)
+  AprDate         DateTime? @db.Date
+  AprRemark       String?   @db.VarChar(500)
+  CreatedBy       Int?
+  UpdatedBy       Int?
+  UpdatedDate     DateTime? @db.Date
+  DMLFlag         Int?      @db.SmallInt
+  Branch_id       Int?
+  RequestType     String?   @db.VarChar(50)
+  TypeRequest     String?   @db.VarChar(50)
+  CustCode        String?   @db.VarChar(50)
+  CustName        String?   @db.VarChar(100)
+  SAPDocNum       String?   @db.NVarChar(154)
+  ReqBy           Int?
+  ExpenseType     String?   @db.NVarChar(154)
+  SapStatus       String    @default("N", map: "DF__PurchaseQ__SapSt__1DD065E0") @db.Char(1)
+  log_instance    Int?      @default(1, map: "DF__PurchaseQ__log_i__0B7CAB7B")
+  IPAddress       String?   @db.NVarChar(100)
+  UserAgent       String?   @db.NVarChar(100)
+  deadline_date   DateTime? @db.Date
+  rfq_number      String?   @db.VarChar(50)
+  category_filter String?   @db.VarChar(50)
+  rfq_status      String?   @db.VarChar(50)
+  created_on      DateTime? @db.DateTime
+  rfq_id          String?   @db.VarChar(50)
+  RequestedNo     String?   @db.NVarChar(50)
+  SourceDocId     String?   @db.NVarChar(50)
+  SourceDocType   String?   @db.NVarChar(50)
+}
+
+model PurchaseQuotationAttachment {
+  ID         Int     @id(map: "PK__Purchase__3214EC275A47772A") @default(autoincrement())
+  LineNum    Int     @db.SmallInt
+  CGuid      String  @db.NVarChar(50)
+  Attachment String? @db.VarChar(100)
+}
+
+model PurchaseQuotationItem {
+  ID            Int      @id(map: "PK__Purchase__3214EC27B66187D1") @default(autoincrement())
+  LineNum       Int
+  ItemID        Int
+  ItemName      String?  @db.VarChar(254)
+  LineStatus    String   @db.Char(1)
+  Quantity      Decimal? @db.Decimal(19, 5)
+  DeliveredQty  Decimal? @db.Decimal(19, 5)
+  OpenQty       Decimal? @db.Decimal(19, 5)
+  WhsCode       Int?
+  UnitPrice     Decimal? @db.Decimal(19, 5)
+  Currency      Int?     @db.SmallInt
+  Rate          Decimal? @db.Decimal(19, 5)
+  DiscPrcnt     Decimal? @db.Decimal(19, 5)
+  VATCode       String?  @db.NVarChar(100)
+  VATPer        Decimal? @db.Decimal(19, 5)
+  LineTax       Decimal? @db.Decimal(19, 5)
+  LineTotalLC   Decimal? @db.Decimal(19, 5)
+  LineTotalFC   Decimal? @db.Decimal(19, 5)
+  LineTotalSC   Decimal? @db.Decimal(19, 5)
+  SourceDocId   String?  @db.NVarChar(50)
+  SourceLineNum Int?
+  SourceDocType String?  @db.NVarChar(80)
+  SourceSystem  String?  @db.NVarChar(50)
+  TargetDocId   Int?
+  TargetLineNum Int?
+  TargetDocType String?  @db.NVarChar(80)
+  cost_center   Int?
+  project       String?  @db.NVarChar(199)
+  Remarks       String?  @db.NVarChar(800)
+  CGuid         String   @db.NVarChar(50)
+  SAPLineId     Int?
+  TotalBefDisc  Decimal? @db.Decimal(19, 5)
+  vendor        String?  @db.VarChar(200)
+  ferightType   String?  @db.VarChar(100)
+  vendorRef     String?  @db.VarChar(100)
+  mainCguid     String?  @db.NVarChar(100)
+  Location      String?  @db.NVarChar(100)
+  DIM1          String?  @db.NVarChar(100)
+  DIM2          String?  @db.NVarChar(100)
+  DIM3          String?  @db.NVarChar(100)
+  DIM4          String?  @db.NVarChar(100)
+  DIM5          String?  @db.NVarChar(100)
+  SapLine       String?  @db.VarChar(100)
+  SapType       String?  @db.VarChar(100)
+  SAPDocEntry   String?  @db.VarChar(100)
+  UoM           String?  @db.NVarChar(100)
+  IsBatch       String?  @db.Char(1)
+  ItemCode      String?  @db.NVarChar(100)
+  parent_id     Int?
+}
+
+model PurchaseQuotationService {
+  ID             Int      @id(map: "PK__Purchase__3214EC276A9131EF") @default(autoincrement())
+  Description    String?  @db.Text
+  GLCode         String?  @db.NVarChar(100)
+  GLName         String?  @db.NVarChar(100)
+  TotalExclusive Decimal? @db.Decimal(19, 3)
+  TaxCode        String?  @db.NVarChar(100)
+  TaxAmount      Decimal? @db.Decimal(19, 3)
+  TotalInclusive Decimal? @db.Decimal(19, 3)
+  DIM1           String?  @db.NVarChar(100)
+  DIM2           String?  @db.NVarChar(100)
+  DIM3           String?  @db.NVarChar(100)
+  DIM4           String?  @db.NVarChar(100)
+  DIM5           String?  @db.VarChar(100)
+  VendorCode     String?  @db.NVarChar(100)
+  VendorName     String?  @db.VarChar(100)
+  PaymentTerms   String?  @db.VarChar(100)
+  Project        String?  @db.VarChar(100)
+  LineNum        Int?
+  CGuid          String?  @db.NVarChar(50)
+  TotalWithTax   Decimal? @db.Decimal(19, 3)
+  LineTotalLC    Decimal? @db.Decimal(19, 5)
+  LineTax        Decimal? @db.Decimal(19, 5)
+  Discount       Decimal? @db.Decimal(19, 5)
+  VatCode        String?  @db.NVarChar(50)
+  SourceDocId    Int?
+  SAPDocEntry    String?  @db.NVarChar(100)
+  SapLine        String?  @db.NVarChar(100)
+  mainCguid      String?  @db.NVarChar(100)
+  linestatus     String?  @db.Char(1)
+  BaseType       String?  @db.NVarChar(100)
+}
+
+model PurchaseReqService {
+  ID             Int      @id(map: "PK__Purchase__3214EC27418EA0A2") @default(autoincrement())
+  Description    String?  @db.Text
+  GLCode         String?  @db.NVarChar(100)
+  GLName         String?  @db.NVarChar(100)
+  TotalExclusive Decimal? @db.Decimal(19, 3)
+  TaxCode        String?  @db.NVarChar(100)
+  TaxAmount      Decimal? @db.Decimal(19, 3)
+  TotalInclusive Decimal? @db.Decimal(19, 3)
+  DIM1           String?  @db.NVarChar(100)
+  DIM2           String?  @db.NVarChar(100)
+  DIM3           String?  @db.NVarChar(100)
+  DIM4           String?  @db.NVarChar(100)
+  VendorCode     String?  @db.VarChar(100)
+  VendorName     String?  @db.VarChar(100)
+  PaymentTerms   String?  @db.VarChar(100)
+  Project        String?  @db.VarChar(100)
+  LineNum        Int?
+  CGuid          String?  @db.NVarChar(50)
+  TotalWithTax   Decimal? @db.Decimal(19, 3)
+  LineTotalLC    Decimal? @db.Decimal(19, 5)
+  LineTax        Decimal? @db.Decimal(19, 5)
+  DIM5           String?  @db.VarChar(100)
+  Discount       Decimal? @db.Decimal(19, 5)
+  VatCode        String?  @db.NVarChar(100)
+  SourceDocId    Int?
+  SAPDocEntry    String?  @db.NVarChar(100)
+  SapLine        String?  @db.NVarChar(100)
+  mainCguid      String?  @db.NVarChar(100)
+  linestatus     String?  @db.Char(1)
+  BaseType       String?  @db.NVarChar(100)
+}
+
+model Rfq_Header {
+  id              Int           @id(map: "PK__Rfq_Head__3213E83FC2F77930") @default(autoincrement())
+  rfq_number      String        @unique(map: "UQ__Rfq_Head__BDF90946E82FC5F3") @db.VarChar(50)
+  category_filter String?       @db.VarChar(100)
+  sent_date       DateTime?     @default(now(), map: "DF__Rfq_Heade__sent___795DFB40") @db.DateTime
+  deadline_date   DateTime?     @db.Date
+  status          String?       @default("Awaiting Quotes", map: "DF__Rfq_Heade__statu__7A521F79") @db.VarChar(50)
+  created_by      Int?
+  created_on      DateTime?     @default(now(), map: "DF__Rfq_Heade__creat__7B4643B2") @db.DateTime
+  updated_by      Int?
+  updated_on      DateTime?     @db.DateTime
+  log_instance    Int?          @default(1, map: "DF__Rfq_Heade__log_i__7C3A67EB")
+  Rfq_Lines       Rfq_Lines[]
+  Rfq_Vendors     Rfq_Vendors[]
+}
+
+model Rfq_Lines {
+  id                  Int        @id(map: "PK__Rfq_Line__3213E83F9D1EA526") @default(autoincrement())
+  parent_id           Int
+  pr_line_id          Int
+  item_code           String?    @db.VarChar(100)
+  description         String?    @db.NVarChar(Max)
+  req_qty             Decimal?   @db.Decimal(18, 2)
+  purchase_request_id Int?
+  purchase_request_no String?    @db.VarChar(100)
+  Rfq_Header          Rfq_Header @relation(fields: [parent_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK__Rfq_Lines__paren__06B7F65E")
+}
+
+model Rfq_Vendors {
+  id              Int        @id(map: "PK__Rfq_Vend__3213E83F6F76F7F7") @default(autoincrement())
+  parent_id       Int
+  vendor_code     String     @db.VarChar(100)
+  response_status String?    @default("Pending", map: "DF__Rfq_Vendo__respo__0A888742") @db.VarChar(50)
+  Rfq_Header      Rfq_Header @relation(fields: [parent_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK__Rfq_Vendo__paren__09946309")
+}
+
+model SelectBatchSerial {
+  ID                Int       @id(map: "PK__SelectBa__3214EC27FE4F8A74") @default(autoincrement())
+  UserId            Int
+  ItemCode          String?   @db.NVarChar(50)
+  itemName          String?   @db.NVarChar(100)
+  WhsCode           String?   @db.NVarChar(50)
+  BatchNo           String?   @db.NVarChar(50)
+  ExpDate           DateTime? @db.DateTime
+  MnfDate           DateTime? @db.DateTime
+  RemainingQuantity Decimal?  @db.Decimal(19, 6)
+  CGuid             String    @db.NVarChar(50)
+  createDate        DateTime? @db.Date
+  AvailableQty      Decimal?  @db.Decimal(19, 6)
+  IsSelect          String?   @db.Char(1)
+  UniqueId          String?   @db.NVarChar(200)
+  itmManageBy       String?   @db.Char(1)
+  IsSelectCopy      String?   @default("N", map: "DF_SelectBatchSerial_IsSelectCopy") @db.Char(1)
+  sourceCguid       String?   @db.NVarChar(50)
+}
+
+model SelectedBatches {
+  ID                Int       @id(map: "PK__Selected__3214EC2728B240C1") @default(autoincrement())
+  UserId            Int
+  ItemCode          String?   @db.NVarChar(50)
+  itemName          String?   @db.NVarChar(100)
+  WhsCode           String?   @db.NVarChar(50)
+  BatchNo           String?   @db.NVarChar(50)
+  ExpDate           DateTime? @db.DateTime
+  MnfDate           DateTime? @db.DateTime
+  RemainingQuantity Decimal?  @db.Decimal(19, 6)
+  CGuid             String    @db.NVarChar(50)
+  createDate        DateTime? @db.Date
+  AvailableQty      Decimal?  @db.Decimal(19, 6)
+  IsSelect          String?   @db.Char(1)
+  UniqueId          String?   @db.NVarChar(200)
+}
+
+model stock_count_header {
+  id                Int                 @id(map: "PK__stock_co__3213E83F0E629BE5") @default(autoincrement())
+  doc_number        String              @unique(map: "UQ__stock_co__0CA19B0163E111C9") @db.VarChar(50)
+  warehouse_code    String              @db.VarChar(50)
+  count_date        DateTime?           @default(dbgenerated("CONVERT([date],getdate())"), map: "DF__stock_cou__count__0F6D37F0") @db.Date
+  counter_user_id   Int?
+  status            String?             @default("Draft", map: "DF__stock_cou__statu__10615C29") @db.VarChar(50)
+  sap_docentry      Int?
+  remarks           String?             @db.NVarChar(255)
+  created_by        Int?
+  created_on        DateTime?           @default(now(), map: "DF__stock_cou__creat__11558062") @db.DateTime
+  updated_by        Int?
+  updated_on        DateTime?           @db.DateTime
+  log_instance      Int?                @default(1, map: "DF__stock_cou__log_i__1249A49B")
+  stock_count_lines stock_count_lines[]
+}
+
+model stock_count_lines {
+  id                 Int                @id(map: "PK__stock_co__3213E83F7E404ACD") @default(autoincrement())
+  parent_id          Int
+  item_code          String             @db.VarChar(100)
+  system_qty         Decimal            @db.Decimal(18, 4)
+  counted_qty        Decimal?           @db.Decimal(18, 4)
+  uom                String?            @db.VarChar(20)
+  is_counted         Boolean?           @default(false, map: "DF__stock_cou__is_co__161A357F")
+  variance_qty       Decimal?           @db.Decimal(19, 4)
+  stock_count_header stock_count_header @relation(fields: [parent_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK__stock_cou__paren__15261146")
+}
+
+model TempService {
+  ID             Int      @id(map: "PK_TempService") @default(autoincrement())
+  Description    String?  @db.Text
+  GLCode         String?  @db.NVarChar(100)
+  GLName         String?  @db.NVarChar(100)
+  TotalExclusive Decimal? @db.Decimal(19, 3)
+  TaxCode        String?  @db.NVarChar(100)
+  TaxAmount      Decimal? @db.Decimal(19, 3)
+  TotalInclusive Decimal? @db.Decimal(19, 3)
+  DIM1           String?  @db.NVarChar(100)
+  DIM2           String?  @db.NVarChar(100)
+  DIM3           String?  @db.NVarChar(100)
+  DIM4           String?  @db.NVarChar(100)
+  VendorCode     String?  @db.NVarChar(100)
+  VendorName     String?  @db.VarChar(100)
+  PaymentTerms   String?  @db.VarChar(100)
+  Project        String?  @db.VarChar(100)
+  LineNum        Int?
+  CGuid          String?  @db.NVarChar(50)
+  TotalWithTax   Decimal? @db.Decimal(19, 3)
+  LineTotalLC    Decimal? @db.Decimal(19, 5)
+  LineTax        Decimal? @db.Decimal(19, 5)
+  DIM5           String?  @db.VarChar(100)
+  Discount       Decimal? @db.Decimal(19, 5)
+  VatCode        String?  @db.NVarChar(100)
+  SourceDocId    Int?
+  SAPDocEntry    String?  @db.NVarChar(100)
+  SapLine        String?  @db.NVarChar(100)
+  mainCguid      String?  @db.NVarChar(100)
+  linestatus     String?  @db.Char(1)
+  BaseType       String?  @db.NVarChar(100)
+}
+
+model user_page_settings {
+  id              Int       @id(map: "PK__user_pag__3213E83FC397501A") @default(autoincrement())
+  user_id         String?   @db.NVarChar(Max)
+  page_name       String?   @db.VarChar(100)
+  column_settings String?   @db.NVarChar(Max)
+  created_at      DateTime? @db.DateTime
+  updated_at      DateTime? @db.DateTime
+}
+
+model wbs_template_headers {
+  id                 Int                  @id(map: "PK__wbs_temp__3213E83F6694C002") @default(autoincrement())
+  template_name      String               @unique(map: "UQ__wbs_temp__BB707B4E3EC9E469") @db.VarChar(150)
+  description        String?              @db.NVarChar(500)
+  is_active          Boolean?             @default(true, map: "DF__wbs_templ__is_ac__48A5B54C")
+  created_by         Int?
+  created_on         DateTime?            @default(now(), map: "DF__wbs_templ__creat__4999D985") @db.DateTime
+  wbs_template_lines wbs_template_lines[]
+}
+
+model wbs_template_lines {
+  id                       Int                  @id(map: "PK__wbs_temp__3213E83F66C9809D") @default(autoincrement())
+  template_id              Int
+  parent_line_id           Int?
+  stage_number             String               @db.VarChar(30)
+  stage_name               String               @db.VarChar(255)
+  level_depth              Int
+  default_cost_center      String?              @db.VarChar(50)
+  default_weightage_pct    Decimal?             @default(0.00, map: "DF__wbs_templ__defau__4F52B2DB") @db.Decimal(5, 2)
+  is_milestone             Boolean?             @default(false, map: "DF__wbs_templ__is_mi__5046D714")
+  is_crucial               Boolean?             @default(false, map: "DF__wbs_templ__is_cr__513AFB4D")
+  wbs_template_lines       wbs_template_lines?  @relation("wbs_template_linesTowbs_template_lines", fields: [parent_line_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK__wbs_templ__paren__4D6A6A69")
+  other_wbs_template_lines wbs_template_lines[] @relation("wbs_template_linesTowbs_template_lines")
+  wbs_template_headers     wbs_template_headers @relation(fields: [template_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK__wbs_templ__templ__4C764630")
+}

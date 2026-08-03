@@ -1,0 +1,18 @@
+import { Router } from 'express';
+import { LeadsController } from './leads.controller.js';
+import { auth } from '../../middleware/auth.middleware.js';
+import { checkPermission } from '../../middleware/rbac.middleware.js';
+import { PERMISSIONS } from '../../config/constants.js';
+
+const router = Router();
+const controller = new LeadsController();
+
+router.use(auth);
+
+router.get('/', checkPermission(PERMISSIONS.LEADS_VIEW), controller.getAll);
+router.get('/:id', checkPermission(PERMISSIONS.LEADS_VIEW), controller.getById);
+router.post('/', checkPermission(PERMISSIONS.LEADS_CREATE), controller.create);
+router.put('/:id', checkPermission(PERMISSIONS.LEADS_EDIT), controller.update);
+router.delete('/:id', checkPermission(PERMISSIONS.LEADS_DELETE), controller.delete);
+
+export default router;
