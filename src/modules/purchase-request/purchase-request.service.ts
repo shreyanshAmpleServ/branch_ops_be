@@ -16,6 +16,16 @@ export interface PurchaseRequestItemInput {
   project?: string;
   Remarks?: string;
   UoM?: string;
+  vendor?: string;
+  DIM1?: string;
+  DIM2?: string;
+  DIM3?: string;
+  DIM4?: string;
+  DIM5?: string;
+  ferightType?: string;
+  vendorRef?: string;
+  po_id?: string;
+  Location?: string;
 }
 
 export interface PurchaseRequestAttachmentInput {
@@ -93,7 +103,29 @@ export class PurchaseRequestService {
       orderBy: { CreatedDate: 'desc' },
     });
 
-    return requests;
+    const userIds = Array.from(new Set([
+      ...requests.map(r => r.CreatedBy).filter(Boolean),
+      ...requests.map(r => Number(r.CustCode)).filter(n => !isNaN(n))
+    ])) as number[];
+
+    let userMap: Record<number, string> = {};
+    if (userIds.length > 0) {
+      // Assuming 'Users' model exists as checked
+      const users = await (prisma as any).users.findMany({
+        where: { id: { in: userIds } },
+        select: { id: true, FirstName: true, LastName: true }
+      });
+      userMap = users.reduce((acc: any, u: any) => {
+        acc[u.id] = `${u.FirstName} ${u.LastName || ''}`.trim();
+        return acc;
+      }, {} as Record<number, string>);
+    }
+
+    return requests.map(req => ({
+      ...req,
+      CreatedByName: req.CreatedBy ? userMap[req.CreatedBy] : null,
+      CustName: !isNaN(Number(req.CustCode)) && userMap[Number(req.CustCode)] ? userMap[Number(req.CustCode)] : req.CustName
+    }));
   }
 
   /** Get single purchase request details by ID */
@@ -169,6 +201,16 @@ export class PurchaseRequestService {
         Remarks: item.Remarks || null,
         UoM: item.UoM || null,
         CGuid: cGuid,
+        vendor: item.vendor || null,
+        DIM1: item.DIM1 || null,
+        DIM2: item.DIM2 || null,
+        DIM3: item.DIM3 || null,
+        DIM4: item.DIM4 || null,
+        DIM5: item.DIM5 || null,
+        ferightType: item.ferightType || null,
+        vendorRef: item.vendorRef || null,
+        po_id: item.po_id || null,
+        Location: item.Location || null,
       };
     });
 
@@ -295,6 +337,16 @@ export class PurchaseRequestService {
             Remarks: item.Remarks || null,
             UoM: item.UoM || null,
             CGuid: cGuid,
+            vendor: item.vendor || null,
+            DIM1: item.DIM1 || null,
+            DIM2: item.DIM2 || null,
+            DIM3: item.DIM3 || null,
+            DIM4: item.DIM4 || null,
+            DIM5: item.DIM5 || null,
+            ferightType: item.ferightType || null,
+            vendorRef: item.vendorRef || null,
+            po_id: item.po_id || null,
+            Location: item.Location || null,
           };
         });
 
