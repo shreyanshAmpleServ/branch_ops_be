@@ -725,7 +725,7 @@ model goods_recepts_purchased_order_items {
   UoM            String?  @db.NVarChar(100)
   IsBatch        String?  @db.Char(1)
   ItemCode       String?  @db.NVarChar(100)
-  DIM5           String?  @db.NVarChar(100)
+  DIM5          String?  @db.NVarChar(100)
 }
 
 model GoodsIssueItems {
@@ -1121,7 +1121,11 @@ model Items {
   ItemPurchased    String?   @db.Char(1)
   ItemSales        String?   @db.Char(1)
   ItemInventory    String?   @db.Char(1)
-  VATH             VATH?     @relation(fields: [SaleVAT], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "FK_Items_VATH")
+  VATH                    VATH?                    @relation(fields: [SaleVAT], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "FK_Items_VATH")
+  purchase_order_items   purchase_order_items[]
+  purchase_request_items purchase_request_items[]
+  PurchaseQuotationItem  PurchaseQuotationItem[]
+  QuotationItems         QuotationItems[]
 }
 
 model ItemWhs {
@@ -1518,15 +1522,27 @@ model purchase_order {
   Department      String?   @db.NVarChar(154)
   ActivityName    String?   @db.NVarChar(154)
   relation_from   String?   @db.NVarChar(200)
-  SapStatus       String    @default("N", map: "DF__purchase___SapSt__1CDC41A7") @db.Char(1)
-  PaidAmt         Decimal?  @db.Decimal(18, 2)
+  SapStatus           String            @default("N", map: "DF__purchase___SapSt__1CDC41A7") @db.Char(1)
+  PaidAmt             Decimal?          @db.Decimal(18, 2)
+  Pq_ID               String?           @db.VarChar(50)
+  PurchaseRequestId   Int?
+  PurchaseQuotationId Int?
+  QuotationId         Int?
+  purchase_request    purchase_request?  @relation(fields: [PurchaseRequestId], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "FK_purchase_order_purchase_request")
+  purchase_quotation  PurchaseQuotation? @relation(fields: [PurchaseQuotationId], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "FK_purchase_order_PurchaseQuotation")
+  quotation           Quotations?        @relation(fields: [QuotationId], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "FK_purchase_order_Quotations")
+  creator             Users?             @relation(fields: [CreatedBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_purchase_order_Users")
+  items               purchase_order_items[]
+  attachments         purchase_order_attachments[]
 }
 
 model purchase_order_attachments {
-  ID         Int     @id(map: "PK_purchase_order_attachments") @default(autoincrement())
-  LineNum    Int     @db.SmallInt
-  CGuid      String  @db.NVarChar(50)
-  Attachment String? @db.VarChar(100)
+  ID              Int             @id(map: "PK_purchase_order_attachments") @default(autoincrement())
+  LineNum         Int             @db.SmallInt
+  CGuid           String          @db.NVarChar(50)
+  Attachment      String?         @db.VarChar(100)
+  PurchaseOrderId Int?
+  purchase_order  purchase_order? @relation(fields: [PurchaseOrderId], references: [ID], onDelete: Cascade, onUpdate: NoAction, map: "FK_purchase_order_attachments_purchase_order")
 }
 
 model purchase_order_items {
@@ -1576,9 +1592,13 @@ model purchase_order_items {
   SAPDocEntry   String?  @db.VarChar(100)
   UoM           String?  @db.NVarChar(100)
   IsBatch       String?  @db.Char(1)
-  ItemCode      String?  @db.NVarChar(100)
-  DIM5          String?  @db.NVarChar(100)
-  copy_from     String?  @db.VarChar(50)
+  ItemCode        String?         @db.NVarChar(100)
+  DIM5            String?         @db.NVarChar(100)
+  copy_from       String?         @db.VarChar(50)
+  PurchaseOrderId Int?
+  purchase_order  purchase_order? @relation(fields: [PurchaseOrderId], references: [ID], onDelete: Cascade, onUpdate: NoAction, map: "FK_purchase_order_items_purchase_order")
+  Items           Items?          @relation(fields: [ItemID], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "FK_purchase_order_items_Items")
+  Warehouses      Warehouses?     @relation(fields: [WhsCode], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "FK_purchase_order_items_Warehouses")
 }
 
 model purchase_request {
@@ -1647,14 +1667,22 @@ model purchase_request {
   memo_text       String?   @db.Text
   Ufs             String?   @db.VarChar(199)
   Department      String?   @db.VarChar(300)
-  SapStatus       String    @default("N", map: "DF__purchase___SapSt__19FFD4FC") @db.Char(1)
+  SapStatus           String                         @default("N", map: "DF__purchase___SapSt__19FFD4FC") @db.Char(1)
+  purchase_quotations PurchaseQuotation[]
+  quotations          Quotations[]
+  purchase_orders     purchase_order[]
+  creator             Users?                         @relation(fields: [CreatedBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_purchase_request_Users")
+  items               purchase_request_items[]
+  attachments         purchase_request_attachments[]
 }
 
 model purchase_request_attachments {
-  ID         Int     @id(map: "PK_purchase_request_attachments") @default(autoincrement())
-  LineNum    Int
-  Attachment String? @db.VarChar(150)
-  CGuid      String  @db.NVarChar(200)
+  ID                Int               @id(map: "PK_purchase_request_attachments") @default(autoincrement())
+  LineNum           Int
+  Attachment        String?           @db.VarChar(150)
+  CGuid             String            @db.NVarChar(200)
+  PurchaseRequestId Int?
+  purchase_request  purchase_request? @relation(fields: [PurchaseRequestId], references: [ID], onDelete: Cascade, onUpdate: NoAction, map: "FK_purchase_request_attachments_purchase_request")
 }
 
 model purchase_request_items {
@@ -1706,14 +1734,20 @@ model purchase_request_items {
   SAPDocEntry   String?  @db.VarChar(100)
   UoM           String?  @db.NVarChar(100)
   IsBatch       String?  @db.Char(1)
-  ItemCode      String?  @db.NVarChar(100)
+  ItemCode          String?           @db.NVarChar(100)
+  PurchaseRequestId Int?
+  purchase_request  purchase_request? @relation(fields: [PurchaseRequestId], references: [ID], onDelete: Cascade, onUpdate: NoAction, map: "FK_purchase_request_items_purchase_request")
+  Items             Items?            @relation(fields: [ItemID], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "FK_purchase_request_items_Items")
+  Warehouses        Warehouses?       @relation(fields: [WhsCode], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "FK_purchase_request_items_Warehouses")
 }
 
 model QuotationAttachments {
-  ID         Int    @id(map: "PK_QuotationAttachments") @default(autoincrement())
-  LineNum    Int    @db.SmallInt
-  Attachment Bytes? @db.Image
-  CGuid      String @db.NVarChar(50)
+  ID          Int         @id(map: "PK_QuotationAttachments") @default(autoincrement())
+  LineNum     Int         @db.SmallInt
+  Attachment  Bytes?      @db.Image
+  CGuid       String      @db.NVarChar(50)
+  QuotationId Int?
+  Quotations  Quotations? @relation(fields: [QuotationId], references: [ID], onDelete: Cascade, onUpdate: NoAction, map: "FK_QuotationAttachments_Quotations")
 }
 
 model QuotationItems {
@@ -1751,7 +1785,11 @@ model QuotationItems {
   TotalBefDisc  Decimal? @db.Decimal(19, 5)
   IsBatch       String?  @db.Char(1)
   ItemCode      String?  @db.NVarChar(50)
-  UoM           String?  @db.NVarChar(100)
+  UoM         String?     @db.NVarChar(100)
+  QuotationId Int?
+  Quotations  Quotations? @relation(fields: [QuotationId], references: [ID], onDelete: Cascade, onUpdate: NoAction, map: "FK_QuotationItems_Quotations")
+  Items       Items?      @relation(fields: [ItemID], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "FK_QuotationItems_Items")
+  Warehouses  Warehouses? @relation(fields: [WhsCode], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "FK_QuotationItems_Warehouses")
 }
 
 model Quotations {
@@ -1804,7 +1842,14 @@ model Quotations {
   Branch_id     Int?
   QuotCode      String?   @db.VarChar(100)
   SAPDocNum     String?   @db.NVarChar(10)
-  ReqBy         Int?
+  ReqBy             Int?
+  PurchaseRequestId Int?
+  Pr_ID             String?                 @db.VarChar(50)
+  purchase_request  purchase_request?       @relation(fields: [PurchaseRequestId], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "FK_Quotations_purchase_request")
+  purchase_orders   purchase_order[]
+  creator           Users?                  @relation(fields: [CreatedBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Quotations_Users")
+  items             QuotationItems[]
+  attachments       QuotationAttachments[]
 }
 
 model Reasons {
@@ -2338,6 +2383,10 @@ model Users {
   Department                 String?                      @db.VarChar(255)
   m_approval_request_details m_approval_request_details[]
   UserLocationTracking       UserLocationTracking[]
+  created_purchase_orders    purchase_order[]
+  created_purchase_requests  purchase_request[]
+  created_PurchaseQuotation  PurchaseQuotation[]
+  created_Quotations         Quotations[]
 }
 
 model UserSafety {
@@ -2390,8 +2439,12 @@ model Warehouses {
   Country     Int?
   State       Int?
   Location    String?  @db.VarChar(100)
-  CGuid       String?  @db.NVarChar(50)
-  BPLId       String?  @db.NChar(50)
+  CGuid                  String?                  @db.NVarChar(50)
+  BPLId                  String?                  @db.NChar(50)
+  purchase_order_items   purchase_order_items[]
+  purchase_request_items purchase_request_items[]
+  PurchaseQuotationItem  PurchaseQuotationItem[]
+  QuotationItems         QuotationItems[]
 }
 
 model ActivitiesMaster {
@@ -3693,15 +3746,24 @@ model PurchaseQuotation {
   created_on      DateTime? @db.DateTime
   rfq_id          String?   @db.VarChar(50)
   RequestedNo     String?   @db.NVarChar(50)
-  SourceDocId     String?   @db.NVarChar(50)
-  SourceDocType   String?   @db.NVarChar(50)
+  SourceDocId       String?           @db.NVarChar(50)
+  SourceDocType     String?           @db.NVarChar(50)
+  PurchaseRequestId Int?
+  Pr_ID             String?           @db.VarChar(50)
+  purchase_request  purchase_request?       @relation(fields: [PurchaseRequestId], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "FK_PurchaseQuotation_purchase_request")
+  purchase_orders   purchase_order[]
+  creator           Users?                        @relation(fields: [CreatedBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_PurchaseQuotation_Users")
+  items             PurchaseQuotationItem[]
+  attachments       PurchaseQuotationAttachment[]
 }
 
 model PurchaseQuotationAttachment {
-  ID         Int     @id(map: "PK__Purchase__3214EC275A47772A") @default(autoincrement())
-  LineNum    Int     @db.SmallInt
-  CGuid      String  @db.NVarChar(50)
-  Attachment String? @db.VarChar(100)
+  ID                  Int                @id(map: "PK__Purchase__3214EC275A47772A") @default(autoincrement())
+  LineNum             Int                @db.SmallInt
+  CGuid               String             @db.NVarChar(50)
+  Attachment          String?            @db.VarChar(100)
+  PurchaseQuotationId Int?
+  PurchaseQuotation   PurchaseQuotation? @relation(fields: [PurchaseQuotationId], references: [ID], onDelete: Cascade, onUpdate: NoAction, map: "FK_PurchaseQuotationAttachment_PurchaseQuotation")
 }
 
 model PurchaseQuotationItem {
@@ -3753,7 +3815,11 @@ model PurchaseQuotationItem {
   UoM           String?  @db.NVarChar(100)
   IsBatch       String?  @db.Char(1)
   ItemCode      String?  @db.NVarChar(100)
-  parent_id     Int?
+  parent_id           Int?
+  PurchaseQuotationId Int?
+  PurchaseQuotation   PurchaseQuotation? @relation(fields: [PurchaseQuotationId], references: [ID], onDelete: Cascade, onUpdate: NoAction, map: "FK_PurchaseQuotationItem_PurchaseQuotation")
+  Items               Items?             @relation(fields: [ItemID], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "FK_PurchaseQuotationItem_Items")
+  Warehouses          Warehouses?        @relation(fields: [WhsCode], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "FK_PurchaseQuotationItem_Warehouses")
 }
 
 model PurchaseQuotationService {

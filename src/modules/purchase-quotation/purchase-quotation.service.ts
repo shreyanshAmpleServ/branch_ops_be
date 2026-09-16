@@ -2,7 +2,7 @@ import { prisma } from '../../config/db.js';
 import { randomUUID } from 'crypto';
 import { NotFoundError } from '../../utils/appError.js';
 
-export interface PurchaseRequestItemInput {
+export interface PurchaseQuotationItemInput {
   ItemID: number;
   ItemCode?: string;
   ItemName?: string;
@@ -28,11 +28,11 @@ export interface PurchaseRequestItemInput {
   Location?: string;
 }
 
-export interface PurchaseRequestAttachmentInput {
+export interface PurchaseQuotationAttachmentInput {
   Attachment: string;
 }
 
-export interface PurchaseRequestInput {
+export interface PurchaseQuotationInput {
   CustCode: string;
   CustName?: string;
   Address?: string;
@@ -41,37 +41,46 @@ export interface PurchaseRequestInput {
   CurRate?: number;
   PostDate?: string;
   DueDate?: string;
-  TypeRequest: string;
-  RequestedByDate?: string;
-  RequestedNo?: string;
+  TaxDate?: string;
   Remarks?: string;
   Branch_id?: number;
-  RequestType?: string;
-  Expense_type?: string;
-  memo_text?: string;
+  QuotCode?: string;
+  DiscPrcnt?: number;
+  Rounding?: string;
+  RoundingAmnt?: number;
+  Freight?: number;
   Department?: string;
-  items: PurchaseRequestItemInput[];
-  attachments?: PurchaseRequestAttachmentInput[];
+  memo_text?: string;
+  Expense_type?: string;
+  RequestType?: string;
+  PurchaseRequestId?: number;
+  Pr_ID?: string;
+  items: PurchaseQuotationItemInput[];
+  attachments?: PurchaseQuotationAttachmentInput[];
 }
 
-export class PurchaseRequestService {
-  /** Get all purchase requests with filters */
-  public async getPurchaseRequests(params: {
+export class PurchaseQuotationService {
+  /** Get all purchase quotations with filters */
+  public async getPurchaseQuotations(params: {
     search?: string;
     status?: string;
     startDate?: string;
     endDate?: string;
     branchId?: number;
-    typeRequest?: string;
   }) {
     const where: any = {};
 
     if (params.status && params.status !== 'all') {
-      where.Status = params.status;
-    }
-
-    if (params.typeRequest && params.typeRequest !== 'all') {
-      where.TypeRequest = params.typeRequest;
+      const s = params.status.toLowerCase();
+      if (s === 'open' || params.status === 'O') {
+        where.Status = { in: ['O', 'Open', 'OPEN'] };
+      } else if (s === 'closed' || params.status === 'C' || params.status === 'L') {
+        where.Status = { in: ['C', 'L', 'Closed', 'CLOSED'] };
+      } else if (s === 'pending' || params.status === 'P') {
+        where.Status = { in: ['P', 'Pending', 'PENDING'] };
+      } else {
+        where.Status = params.status;
+      }
     }
 
     if (params.branchId) {
@@ -93,24 +102,23 @@ export class PurchaseRequestService {
       where.OR = [
         { CustCode: { contains: s } },
         { CustName: { contains: s } },
-        { RequestedNo: { contains: s } },
+        { QuotCode: { contains: s } },
         { Remarks: { contains: s } },
       ];
     }
 
-    const requests = await prisma.purchase_request.findMany({
+    const quotations = await prisma.quotations.findMany({
       where,
       orderBy: { CreatedDate: 'desc' },
     });
 
     const userIds = Array.from(new Set([
-      ...requests.map(r => r.CreatedBy).filter(Boolean),
-      ...requests.map(r => Number(r.CustCode)).filter(n => !isNaN(n))
+      ...quotations.map(q => q.CreatedBy).filter(Boolean),
+      ...quotations.map(q => Number(q.CustCode)).filter(n => !isNaN(n))
     ])) as number[];
 
     let userMap: Record<number, string> = {};
     if (userIds.length > 0) {
-      // Assuming 'Users' model exists as checked
       const users = await (prisma as any).users.findMany({
         where: { id: { in: userIds } },
         select: { id: true, FirstName: true, LastName: true }
@@ -121,45 +129,64 @@ export class PurchaseRequestService {
       }, {} as Record<number, string>);
     }
 
-    return requests.map(req => ({
-      ...req,
-      CreatedByName: req.CreatedBy ? userMap[req.CreatedBy] : null,
-      CustName: !isNaN(Number(req.CustCode)) && userMap[Number(req.CustCode)] ? userMap[Number(req.CustCode)] : req.CustName
+    return quotations.map(q => ({
+      ...q,
+      CreatedByName: q.CreatedBy ? userMap[q.CreatedBy] : null,
+      CustName: !isNaN(Number(q.CustCode)) && userMap[Number(q.CustCode)] ? userMap[Number(q.CustCode)] : q.CustName
     }));
   }
 
-  /** Get single purchase request details by ID */
-  public async getPurchaseRequestById(id: number) {
-    const request = await prisma.purchase_request.findUnique({
+  /** Get single purchase quotation details by ID */
+  public async getPurchaseQuotationById(id: number) {
+    const quotation = await prisma.quotations.findUnique({
       where: { ID: id },
     });
 
-    if (!request) return null;
+    if (!quotation) return null;
 
-    // Fetch items and attachments mapped by CGuid
-    const items = await prisma.purchase_request_items.findMany({
-      where: { CGuid: request.CGuid },
+    let createdByName: string | null = null;
+    if (quotation.CreatedBy) {
+      const user = await (prisma as any).users.findUnique({
+        where: { id: quotation.CreatedBy },
+        select: { id: true, FirstName: true, LastName: true }
+      });
+      if (user) {
+        createdByName = `${user.FirstName} ${user.LastName || ''}`.trim();
+      }
+    }
+
+    const items = await prisma.quotationItems.findMany({
+      where: { CGuid: quotation.CGuid },
       orderBy: { LineNum: 'asc' },
     });
 
-    const attachments = await prisma.purchase_request_attachments.findMany({
-      where: { CGuid: request.CGuid },
+    const rawAttachments = await prisma.quotationAttachments.findMany({
+      where: { CGuid: quotation.CGuid },
       orderBy: { LineNum: 'asc' },
     });
+
+    const attachments = rawAttachments.map(att => ({
+      ID: att.ID,
+      LineNum: att.LineNum,
+      CGuid: att.CGuid,
+      Attachment: att.Attachment
+        ? (Buffer.isBuffer(att.Attachment) ? att.Attachment.toString('utf-8') : String(att.Attachment))
+        : '',
+    }));
 
     return {
-      ...request,
+      ...quotation,
+      CreatedByName: createdByName || (quotation as any).CreatedByName || null,
       items,
       attachments,
     };
   }
 
-  /** Create new purchase request */
-  public async createPurchaseRequest(data: PurchaseRequestInput, createdById: number) {
+  /** Create new purchase quotation */
+  public async createPurchaseQuotation(data: PurchaseQuotationInput, createdById: number) {
     const cGuid = randomUUID();
     const docDate = data.PostDate ? new Date(data.PostDate) : new Date();
 
-    // Calculate document totals
     let totalBefDisc = 0;
     let taxTotal = 0;
     let docTotal = 0;
@@ -184,7 +211,7 @@ export class PurchaseRequestService {
         ItemID: item.ItemID,
         ItemCode: item.ItemCode || null,
         ItemName: item.ItemName || null,
-        LineStatus: 'O', // O = Open
+        LineStatus: 'O',
         Quantity: quantity,
         DeliveredQty: 0,
         OpenQty: quantity,
@@ -201,83 +228,80 @@ export class PurchaseRequestService {
         Remarks: item.Remarks || null,
         UoM: item.UoM || null,
         CGuid: cGuid,
-        vendor: item.vendor || null,
-        DIM1: item.DIM1 || null,
-        DIM2: item.DIM2 || null,
-        DIM3: item.DIM3 || null,
-        DIM4: item.DIM4 || null,
-        DIM5: item.DIM5 || null,
-        ferightType: item.ferightType || null,
-        vendorRef: item.vendorRef || null,
-        po_id: item.po_id || null,
-        Location: item.Location || null,
       };
     });
 
     const attachmentsData = (data.attachments || []).map((att, idx) => ({
       LineNum: idx + 1,
-      Attachment: att.Attachment,
+      Attachment: att.Attachment ? Buffer.from(att.Attachment, 'utf-8') : null,
       CGuid: cGuid,
     }));
 
-    // Generate RequestedNo if not provided
-    const requestedNo = data.RequestedNo || `PR-${Date.now().toString().slice(-6)}`;
+    const quotCode = data.QuotCode || `PQ-${Date.now().toString().slice(-6)}`;
+
+    // Add freight and rounding calculations
+    const headerDisc = Number(data.DiscPrcnt || 0);
+    const baseAfterHeaderDisc = totalBefDisc * (1 - headerDisc / 100);
+    const freightVal = Number(data.Freight || 0);
+    const roundingVal = data.Rounding === 'Y' ? Number(data.RoundingAmnt || 0) : 0;
+    const finalDocTotal = baseAfterHeaderDisc + taxTotal + freightVal + roundingVal;
 
     const result = await prisma.$transaction(async (tx) => {
-      // 1. Insert header
-      const header = await tx.purchase_request.create({
+      const header = await tx.quotations.create({
         data: {
           CustCode: data.CustCode,
-          CustName: data.CustName || null,
+          CustName: data.CustName || 'Supplier',
           Address: data.Address || null,
           CustRefNo: data.CustRefNo || null,
           Currency: data.Currency || 'TZS',
           CurRate: data.CurRate || 1.0,
           PostDate: docDate,
           DueDate: data.DueDate ? new Date(data.DueDate) : null,
-          TypeRequest: data.TypeRequest,
-          RequestedByDate: data.RequestedByDate ? new Date(data.RequestedByDate) : null,
-          RequestedNo: requestedNo,
-          DiscPrcnt: data.items.length > 0 ? 0 : 0, // Header discount can be 0 or calculated
+          TaxDate: data.TaxDate ? new Date(data.TaxDate) : null,
+          DiscPrcnt: headerDisc,
           TaxTotal: taxTotal,
-          DocTotal: docTotal,
+          DocTotal: finalDocTotal,
           TotalBefDisc: totalBefDisc,
+          Rounding: data.Rounding || 'N',
+          RoundingAmnt: Number(data.RoundingAmnt || 0),
           Remarks: data.Remarks || null,
           Status: 'Pending',
           CGuid: cGuid,
-          AprStatus: 'P', // P = Pending approval
+          AprStatus: 'P',
           CreatedBy: createdById,
           Branch_id: data.Branch_id || null,
-          RequestType: data.RequestType || 'Direct',
-          Expense_type: data.Expense_type || null,
-          memo_text: data.memo_text || null,
-          Department: data.Department || null,
+          QuotCode: quotCode,
+          PurchaseRequestId: data.PurchaseRequestId || null,
+          Pr_ID: data.Pr_ID || null,
         },
       });
 
-      // 2. Insert items
       if (itemsData.length > 0) {
-        await tx.purchase_request_items.createMany({
-          data: itemsData.map(item => ({ ...item, PurchaseRequestId: header.ID })),
+        await tx.quotationItems.createMany({
+          data: itemsData.map(item => ({ ...item, QuotationId: header.ID })),
         });
       }
 
       if (attachmentsData.length > 0) {
-        await tx.purchase_request_attachments.createMany({
-          data: attachmentsData.map(att => ({ ...att, PurchaseRequestId: header.ID })),
+        await tx.quotationAttachments.createMany({
+          data: attachmentsData.map(att => ({ ...att, QuotationId: header.ID })),
         });
       }
 
       return header;
     });
 
-    return this.getPurchaseRequestById(result.ID);
+    return this.getPurchaseQuotationById(result.ID);
   }
 
-  /** Update purchase request details and items */
-  public async updatePurchaseRequest(id: number, data: Partial<PurchaseRequestInput> & { Status?: string; AprStatus?: string; AprRemark?: string }, updatedById: number) {
-    const existing = await this.getPurchaseRequestById(id);
-    if (!existing) throw new NotFoundError('Purchase request not found');
+  /** Update purchase quotation details */
+  public async updatePurchaseQuotation(
+    id: number,
+    data: Partial<PurchaseQuotationInput> & { Status?: string; AprStatus?: string; AprRemark?: string },
+    updatedById: number
+  ) {
+    const existing = await this.getPurchaseQuotationById(id);
+    if (!existing) throw new NotFoundError('Purchase quotation not found');
 
     const cGuid = existing.CGuid;
     const docDate = data.PostDate ? new Date(data.PostDate) : existing.PostDate;
@@ -287,14 +311,11 @@ export class PurchaseRequestService {
     let docTotal = Number(existing.DocTotal || 0);
 
     const result = await prisma.$transaction(async (tx) => {
-      // If items are provided, replace existing items
       if (data.items) {
-        // 1. Delete old items
-        await tx.purchase_request_items.deleteMany({
+        await tx.quotationItems.deleteMany({
           where: { CGuid: cGuid },
         });
 
-        // 2. Re-calculate totals and prepare new items
         totalBefDisc = 0;
         taxTotal = 0;
         docTotal = 0;
@@ -336,70 +357,64 @@ export class PurchaseRequestService {
             Remarks: item.Remarks || null,
             UoM: item.UoM || null,
             CGuid: cGuid,
-            vendor: item.vendor || null,
-            DIM1: item.DIM1 || null,
-            DIM2: item.DIM2 || null,
-            DIM3: item.DIM3 || null,
-            DIM4: item.DIM4 || null,
-            DIM5: item.DIM5 || null,
-            ferightType: item.ferightType || null,
-            vendorRef: item.vendorRef || null,
-            po_id: item.po_id || null,
-            Location: item.Location || null,
           };
         });
 
-        // 3. Create new items
         if (itemsData.length > 0) {
-          await tx.purchase_request_items.createMany({
+          await tx.quotationItems.createMany({
             data: itemsData,
           });
         }
       }
 
-      // If attachments are provided, replace them
       if (data.attachments) {
-        await tx.purchase_request_attachments.deleteMany({
+        await tx.quotationAttachments.deleteMany({
           where: { CGuid: cGuid },
         });
 
         const attachmentsData = data.attachments.map((att, idx) => ({
           LineNum: idx + 1,
-          Attachment: att.Attachment,
+          Attachment: att.Attachment ? Buffer.from(att.Attachment, 'utf-8') : null,
           CGuid: cGuid,
         }));
 
         if (attachmentsData.length > 0) {
-          await tx.purchase_request_attachments.createMany({
+          await tx.quotationAttachments.createMany({
             data: attachmentsData,
           });
         }
       }
 
-      // Update header
-      const updatedHeader = await tx.purchase_request.update({
+      const headerDisc = data.DiscPrcnt !== undefined ? Number(data.DiscPrcnt) : Number(existing.DiscPrcnt || 0);
+      const baseAfterHeaderDisc = totalBefDisc * (1 - headerDisc / 100);
+      const freightVal = data.Freight !== undefined ? Number(data.Freight) : 0;
+      const isRounding = data.Rounding !== undefined ? data.Rounding : existing.Rounding;
+      const roundingVal = isRounding === 'Y' ? (data.RoundingAmnt !== undefined ? Number(data.RoundingAmnt) : Number(existing.RoundingAmnt || 0)) : 0;
+      const finalDocTotal = baseAfterHeaderDisc + taxTotal + freightVal + roundingVal;
+
+      const updatedHeader = await tx.quotations.update({
         where: { ID: id },
         data: {
           CustCode: data.CustCode || existing.CustCode,
           CustName: data.CustName || existing.CustName,
-          Address: data.Address || existing.Address,
-          CustRefNo: data.CustRefNo || existing.CustRefNo,
+          Address: data.Address !== undefined ? data.Address : existing.Address,
+          CustRefNo: data.CustRefNo !== undefined ? data.CustRefNo : existing.CustRefNo,
           Currency: data.Currency || existing.Currency,
           CurRate: data.CurRate || existing.CurRate,
           PostDate: docDate,
           DueDate: data.DueDate ? new Date(data.DueDate) : existing.DueDate,
-          TypeRequest: data.TypeRequest || existing.TypeRequest,
-          RequestedByDate: data.RequestedByDate ? new Date(data.RequestedByDate) : existing.RequestedByDate,
-          Remarks: data.Remarks || existing.Remarks,
+          TaxDate: data.TaxDate ? new Date(data.TaxDate) : existing.TaxDate,
+          Remarks: data.Remarks !== undefined ? data.Remarks : existing.Remarks,
           Status: data.Status || existing.Status,
+          DiscPrcnt: headerDisc,
           TaxTotal: taxTotal,
-          DocTotal: docTotal,
+          DocTotal: finalDocTotal,
           TotalBefDisc: totalBefDisc,
+          Rounding: isRounding,
+          RoundingAmnt: roundingVal,
           Branch_id: data.Branch_id !== undefined ? data.Branch_id : existing.Branch_id,
-          RequestType: data.RequestType || existing.RequestType,
-          Expense_type: data.Expense_type || existing.Expense_type,
-          memo_text: data.memo_text || existing.memo_text,
-          Department: data.Department || existing.Department,
+          PurchaseRequestId: data.PurchaseRequestId !== undefined ? data.PurchaseRequestId : existing.PurchaseRequestId,
+          Pr_ID: data.Pr_ID !== undefined ? data.Pr_ID : existing.Pr_ID,
           AprStatus: data.AprStatus || existing.AprStatus,
           AprRemark: data.AprRemark || existing.AprRemark,
           UpdatedBy: updatedById,
@@ -410,30 +425,27 @@ export class PurchaseRequestService {
       return updatedHeader;
     });
 
-    return this.getPurchaseRequestById(result.ID);
+    return this.getPurchaseQuotationById(result.ID);
   }
 
-  /** Delete purchase request and related items/attachments */
-  public async deletePurchaseRequest(id: number): Promise<boolean> {
-    const existing = await prisma.purchase_request.findUnique({
+  /** Delete purchase quotation and related items/attachments */
+  public async deletePurchaseQuotation(id: number): Promise<boolean> {
+    const existing = await prisma.quotations.findUnique({
       where: { ID: id },
     });
 
     if (!existing) return false;
 
     await prisma.$transaction(async (tx) => {
-      // 1. Delete items
-      await tx.purchase_request_items.deleteMany({
+      await tx.quotationItems.deleteMany({
         where: { CGuid: existing.CGuid },
       });
 
-      // 2. Delete attachments
-      await tx.purchase_request_attachments.deleteMany({
+      await tx.quotationAttachments.deleteMany({
         where: { CGuid: existing.CGuid },
       });
 
-      // 3. Delete header
-      await tx.purchase_request.delete({
+      await tx.quotations.delete({
         where: { ID: id },
       });
     });

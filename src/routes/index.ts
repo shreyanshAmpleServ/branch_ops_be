@@ -17,6 +17,8 @@ import retailersRoutes from '../modules/retailers/retailers.routes.js';
 import warehouseRoutes from '../modules/warehouse/warehouse.routes.js';
 import itemsRoutes from '../modules/items/items.routes.js';
 import purchaseRequestsRoutes from '../modules/purchase-request/purchase-request.routes.js';
+import purchaseQuotationsRoutes from '../modules/purchase-quotation/purchase-quotation.routes.js';
+import purchaseOrdersRoutes from '../modules/purchase-order/purchase-order.routes.js';
 
 const router = Router();
 
@@ -38,5 +40,7 @@ router.use('/retailers', retailersRoutes);
 router.use('/warehouse', warehouseRoutes);
 router.use('/items', itemsRoutes);
 router.use('/purchase-requests', purchaseRequestsRoutes);
+router.use('/purchase-quotations', purchaseQuotationsRoutes);
+router.use('/purchase-orders', purchaseOrdersRoutes);
 
 export default router;

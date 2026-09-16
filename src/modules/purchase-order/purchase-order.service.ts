@@ -2,7 +2,7 @@ import { prisma } from '../../config/db.js';
 import { randomUUID } from 'crypto';
 import { NotFoundError } from '../../utils/appError.js';
 
-export interface PurchaseRequestItemInput {
+export interface PurchaseOrderItemInput {
   ItemID: number;
   ItemCode?: string;
   ItemName?: string;
@@ -28,11 +28,11 @@ export interface PurchaseRequestItemInput {
   Location?: string;
 }
 
-export interface PurchaseRequestAttachmentInput {
+export interface PurchaseOrderAttachmentInput {
   Attachment: string;
 }
 
-export interface PurchaseRequestInput {
+export interface PurchaseOrderInput {
   CustCode: string;
   CustName?: string;
   Address?: string;
@@ -41,22 +41,36 @@ export interface PurchaseRequestInput {
   CurRate?: number;
   PostDate?: string;
   DueDate?: string;
-  TypeRequest: string;
-  RequestedByDate?: string;
-  RequestedNo?: string;
+  ReceiptDate?: string;
+  PODate?: string;
+  TaxDate?: string;
   Remarks?: string;
   Branch_id?: number;
-  RequestType?: string;
-  Expense_type?: string;
-  memo_text?: string;
+  OrderCode?: string;
+  RequestedNo?: string;
+  relation_from?: string;
+  DiscPrcnt?: number;
+  Rounding?: string;
+  RoundingAmnt?: number;
+  Freight?: number;
   Department?: string;
-  items: PurchaseRequestItemInput[];
-  attachments?: PurchaseRequestAttachmentInput[];
+  memo_text?: string;
+  ExpenseType?: string;
+  Expense_type?: string;
+  RequestType?: string;
+  TypeRequest?: string;
+  TypePayment?: string;
+  Pr_ID?: string;
+  Pq_ID?: string;
+  PurchaseRequestId?: number;
+  PurchaseQuotationId?: number;
+  items: PurchaseOrderItemInput[];
+  attachments?: PurchaseOrderAttachmentInput[];
 }
 
-export class PurchaseRequestService {
-  /** Get all purchase requests with filters */
-  public async getPurchaseRequests(params: {
+export class PurchaseOrderService {
+  /** Get all purchase orders with filters */
+  public async getPurchaseOrders(params: {
     search?: string;
     status?: string;
     startDate?: string;
@@ -67,15 +81,24 @@ export class PurchaseRequestService {
     const where: any = {};
 
     if (params.status && params.status !== 'all') {
-      where.Status = params.status;
-    }
-
-    if (params.typeRequest && params.typeRequest !== 'all') {
-      where.TypeRequest = params.typeRequest;
+      const s = params.status.toLowerCase();
+      if (s === 'open' || params.status === 'O') {
+        where.Status = { in: ['O', 'Open', 'OPEN'] };
+      } else if (s === 'closed' || params.status === 'C' || params.status === 'L') {
+        where.Status = { in: ['C', 'L', 'Closed', 'CLOSED'] };
+      } else if (s === 'pending' || params.status === 'P') {
+        where.Status = { in: ['P', 'Pending', 'PENDING'] };
+      } else {
+        where.Status = params.status;
+      }
     }
 
     if (params.branchId) {
       where.Branch_id = params.branchId;
+    }
+
+    if (params.typeRequest) {
+      where.TypeRequest = params.typeRequest;
     }
 
     if (params.startDate || params.endDate) {
@@ -93,24 +116,24 @@ export class PurchaseRequestService {
       where.OR = [
         { CustCode: { contains: s } },
         { CustName: { contains: s } },
+        { OrderCode: { contains: s } },
         { RequestedNo: { contains: s } },
         { Remarks: { contains: s } },
       ];
     }
 
-    const requests = await prisma.purchase_request.findMany({
+    const orders = await prisma.purchase_order.findMany({
       where,
       orderBy: { CreatedDate: 'desc' },
     });
 
     const userIds = Array.from(new Set([
-      ...requests.map(r => r.CreatedBy).filter(Boolean),
-      ...requests.map(r => Number(r.CustCode)).filter(n => !isNaN(n))
+      ...orders.map(o => o.CreatedBy).filter(Boolean),
+      ...orders.map(o => Number(o.CustCode)).filter(n => !isNaN(n))
     ])) as number[];
 
     let userMap: Record<number, string> = {};
     if (userIds.length > 0) {
-      // Assuming 'Users' model exists as checked
       const users = await (prisma as any).users.findMany({
         where: { id: { in: userIds } },
         select: { id: true, FirstName: true, LastName: true }
@@ -121,45 +144,64 @@ export class PurchaseRequestService {
       }, {} as Record<number, string>);
     }
 
-    return requests.map(req => ({
-      ...req,
-      CreatedByName: req.CreatedBy ? userMap[req.CreatedBy] : null,
-      CustName: !isNaN(Number(req.CustCode)) && userMap[Number(req.CustCode)] ? userMap[Number(req.CustCode)] : req.CustName
+    return orders.map(ord => ({
+      ...ord,
+      CreatedByName: ord.CreatedBy ? userMap[ord.CreatedBy] : null,
+      CustName: !isNaN(Number(ord.CustCode)) && userMap[Number(ord.CustCode)] ? userMap[Number(ord.CustCode)] : ord.CustName
     }));
   }
 
-  /** Get single purchase request details by ID */
-  public async getPurchaseRequestById(id: number) {
-    const request = await prisma.purchase_request.findUnique({
+  /** Get single purchase order details by ID */
+  public async getPurchaseOrderById(id: number) {
+    const order = await prisma.purchase_order.findUnique({
       where: { ID: id },
     });
 
-    if (!request) return null;
+    if (!order) return null;
 
-    // Fetch items and attachments mapped by CGuid
-    const items = await prisma.purchase_request_items.findMany({
-      where: { CGuid: request.CGuid },
+    let createdByName: string | null = null;
+    if (order.CreatedBy) {
+      const user = await (prisma as any).users.findUnique({
+        where: { id: order.CreatedBy },
+        select: { id: true, FirstName: true, LastName: true }
+      });
+      if (user) {
+        createdByName = `${user.FirstName} ${user.LastName || ''}`.trim();
+      }
+    }
+
+    const items = await prisma.purchase_order_items.findMany({
+      where: { CGuid: order.CGuid },
       orderBy: { LineNum: 'asc' },
     });
 
-    const attachments = await prisma.purchase_request_attachments.findMany({
-      where: { CGuid: request.CGuid },
+    const rawAttachments = await prisma.purchase_order_attachments.findMany({
+      where: { CGuid: order.CGuid },
       orderBy: { LineNum: 'asc' },
     });
+
+    const attachments = rawAttachments.map(att => ({
+      ID: att.ID,
+      LineNum: att.LineNum,
+      CGuid: att.CGuid,
+      Attachment: att.Attachment
+        ? (Buffer.isBuffer(att.Attachment) ? att.Attachment.toString('utf-8') : String(att.Attachment))
+        : '',
+    }));
 
     return {
-      ...request,
+      ...order,
+      CreatedByName: createdByName || null,
       items,
       attachments,
     };
   }
 
-  /** Create new purchase request */
-  public async createPurchaseRequest(data: PurchaseRequestInput, createdById: number) {
+  /** Create new purchase order */
+  public async createPurchaseOrder(data: PurchaseOrderInput, createdById: number) {
     const cGuid = randomUUID();
     const docDate = data.PostDate ? new Date(data.PostDate) : new Date();
 
-    // Calculate document totals
     let totalBefDisc = 0;
     let taxTotal = 0;
     let docTotal = 0;
@@ -184,7 +226,7 @@ export class PurchaseRequestService {
         ItemID: item.ItemID,
         ItemCode: item.ItemCode || null,
         ItemName: item.ItemName || null,
-        LineStatus: 'O', // O = Open
+        LineStatus: 'O',
         Quantity: quantity,
         DeliveredQty: 0,
         OpenQty: quantity,
@@ -209,7 +251,6 @@ export class PurchaseRequestService {
         DIM5: item.DIM5 || null,
         ferightType: item.ferightType || null,
         vendorRef: item.vendorRef || null,
-        po_id: item.po_id || null,
         Location: item.Location || null,
       };
     });
@@ -220,64 +261,70 @@ export class PurchaseRequestService {
       CGuid: cGuid,
     }));
 
-    // Generate RequestedNo if not provided
-    const requestedNo = data.RequestedNo || `PR-${Date.now().toString().slice(-6)}`;
+    const orderCode = data.OrderCode || `PO-${Date.now().toString().slice(-6)}`;
+    const requestedNo = data.RequestedNo || orderCode;
 
     const result = await prisma.$transaction(async (tx) => {
-      // 1. Insert header
-      const header = await tx.purchase_request.create({
+      const header = await tx.purchase_order.create({
         data: {
           CustCode: data.CustCode,
           CustName: data.CustName || null,
-          Address: data.Address || null,
-          CustRefNo: data.CustRefNo || null,
-          Currency: data.Currency || 'TZS',
-          CurRate: data.CurRate || 1.0,
           PostDate: docDate,
-          DueDate: data.DueDate ? new Date(data.DueDate) : null,
-          TypeRequest: data.TypeRequest,
-          RequestedByDate: data.RequestedByDate ? new Date(data.RequestedByDate) : null,
+          ReceiptDate: data.ReceiptDate ? new Date(data.ReceiptDate) : null,
+          PODate: data.PODate ? new Date(data.PODate) : docDate,
+          OrderCode: orderCode,
           RequestedNo: requestedNo,
-          DiscPrcnt: data.items.length > 0 ? 0 : 0, // Header discount can be 0 or calculated
+          DiscPrcnt: data.DiscPrcnt || 0,
           TaxTotal: taxTotal,
           DocTotal: docTotal,
           TotalBefDisc: totalBefDisc,
+          Freight: data.Freight || 0,
           Remarks: data.Remarks || null,
           Status: 'Pending',
           CGuid: cGuid,
-          AprStatus: 'P', // P = Pending approval
+          AprStatus: 'P',
           CreatedBy: createdById,
+          CreatedDate: new Date(),
           Branch_id: data.Branch_id || null,
           RequestType: data.RequestType || 'Direct',
-          Expense_type: data.Expense_type || null,
-          memo_text: data.memo_text || null,
+          TypeRequest: data.TypeRequest || 'Item',
+          ExpenseType: data.ExpenseType || data.Expense_type || null,
           Department: data.Department || null,
+          TypePayment: data.TypePayment || '',
+          Pr_ID: data.Pr_ID ? String(data.Pr_ID) : null,
+          Pq_ID: data.Pq_ID ? String(data.Pq_ID) : null,
+          PurchaseRequestId: data.PurchaseRequestId || (typeof data.Pr_ID === 'number' ? data.Pr_ID : null),
+          PurchaseQuotationId: data.PurchaseQuotationId || null,
+          relation_from: data.relation_from || null,
         },
       });
 
-      // 2. Insert items
       if (itemsData.length > 0) {
-        await tx.purchase_request_items.createMany({
-          data: itemsData.map(item => ({ ...item, PurchaseRequestId: header.ID })),
+        await tx.purchase_order_items.createMany({
+          data: itemsData.map(item => ({ ...item, PurchaseOrderId: header.ID })),
         });
       }
 
       if (attachmentsData.length > 0) {
-        await tx.purchase_request_attachments.createMany({
-          data: attachmentsData.map(att => ({ ...att, PurchaseRequestId: header.ID })),
+        await tx.purchase_order_attachments.createMany({
+          data: attachmentsData.map(att => ({ ...att, PurchaseOrderId: header.ID })),
         });
       }
 
       return header;
     });
 
-    return this.getPurchaseRequestById(result.ID);
+    return this.getPurchaseOrderById(result.ID);
   }
 
-  /** Update purchase request details and items */
-  public async updatePurchaseRequest(id: number, data: Partial<PurchaseRequestInput> & { Status?: string; AprStatus?: string; AprRemark?: string }, updatedById: number) {
-    const existing = await this.getPurchaseRequestById(id);
-    if (!existing) throw new NotFoundError('Purchase request not found');
+  /** Update purchase order details and items */
+  public async updatePurchaseOrder(
+    id: number,
+    data: Partial<PurchaseOrderInput> & { Status?: string; AprStatus?: string; AprRemark?: string },
+    updatedById: number
+  ) {
+    const existing = await this.getPurchaseOrderById(id);
+    if (!existing) throw new NotFoundError('Purchase order not found');
 
     const cGuid = existing.CGuid;
     const docDate = data.PostDate ? new Date(data.PostDate) : existing.PostDate;
@@ -287,14 +334,11 @@ export class PurchaseRequestService {
     let docTotal = Number(existing.DocTotal || 0);
 
     const result = await prisma.$transaction(async (tx) => {
-      // If items are provided, replace existing items
       if (data.items) {
-        // 1. Delete old items
-        await tx.purchase_request_items.deleteMany({
+        await tx.purchase_order_items.deleteMany({
           where: { CGuid: cGuid },
         });
 
-        // 2. Re-calculate totals and prepare new items
         totalBefDisc = 0;
         taxTotal = 0;
         docTotal = 0;
@@ -344,22 +388,19 @@ export class PurchaseRequestService {
             DIM5: item.DIM5 || null,
             ferightType: item.ferightType || null,
             vendorRef: item.vendorRef || null,
-            po_id: item.po_id || null,
             Location: item.Location || null,
           };
         });
 
-        // 3. Create new items
         if (itemsData.length > 0) {
-          await tx.purchase_request_items.createMany({
+          await tx.purchase_order_items.createMany({
             data: itemsData,
           });
         }
       }
 
-      // If attachments are provided, replace them
       if (data.attachments) {
-        await tx.purchase_request_attachments.deleteMany({
+        await tx.purchase_order_attachments.deleteMany({
           where: { CGuid: cGuid },
         });
 
@@ -370,70 +411,71 @@ export class PurchaseRequestService {
         }));
 
         if (attachmentsData.length > 0) {
-          await tx.purchase_request_attachments.createMany({
+          await tx.purchase_order_attachments.createMany({
             data: attachmentsData,
           });
         }
       }
 
-      // Update header
-      const updatedHeader = await tx.purchase_request.update({
-        where: { ID: id },
-        data: {
-          CustCode: data.CustCode || existing.CustCode,
-          CustName: data.CustName || existing.CustName,
-          Address: data.Address || existing.Address,
-          CustRefNo: data.CustRefNo || existing.CustRefNo,
-          Currency: data.Currency || existing.Currency,
-          CurRate: data.CurRate || existing.CurRate,
-          PostDate: docDate,
-          DueDate: data.DueDate ? new Date(data.DueDate) : existing.DueDate,
-          TypeRequest: data.TypeRequest || existing.TypeRequest,
-          RequestedByDate: data.RequestedByDate ? new Date(data.RequestedByDate) : existing.RequestedByDate,
-          Remarks: data.Remarks || existing.Remarks,
-          Status: data.Status || existing.Status,
-          TaxTotal: taxTotal,
-          DocTotal: docTotal,
-          TotalBefDisc: totalBefDisc,
-          Branch_id: data.Branch_id !== undefined ? data.Branch_id : existing.Branch_id,
-          RequestType: data.RequestType || existing.RequestType,
-          Expense_type: data.Expense_type || existing.Expense_type,
-          memo_text: data.memo_text || existing.memo_text,
-          Department: data.Department || existing.Department,
-          AprStatus: data.AprStatus || existing.AprStatus,
-          AprRemark: data.AprRemark || existing.AprRemark,
-          UpdatedBy: updatedById,
-          UpdatedDate: new Date(),
-        },
-      });
+      const updatePayload: any = {
+        UpdatedBy: updatedById,
+        UpdatedDate: new Date(),
+      };
 
-      return updatedHeader;
+      if (data.CustCode !== undefined) updatePayload.CustCode = data.CustCode;
+      if (data.CustName !== undefined) updatePayload.CustName = data.CustName;
+      if (data.PostDate !== undefined) updatePayload.PostDate = docDate;
+      if (data.ReceiptDate !== undefined) updatePayload.ReceiptDate = data.ReceiptDate ? new Date(data.ReceiptDate) : null;
+      if (data.PODate !== undefined) updatePayload.PODate = data.PODate ? new Date(data.PODate) : null;
+      if (data.Remarks !== undefined) updatePayload.Remarks = data.Remarks;
+      if (data.Branch_id !== undefined) updatePayload.Branch_id = data.Branch_id;
+      if (data.OrderCode !== undefined) updatePayload.OrderCode = data.OrderCode;
+      if (data.RequestedNo !== undefined) updatePayload.RequestedNo = data.RequestedNo;
+      if (data.relation_from !== undefined) updatePayload.relation_from = data.relation_from;
+      if (data.DiscPrcnt !== undefined) updatePayload.DiscPrcnt = data.DiscPrcnt;
+      if (data.Freight !== undefined) updatePayload.Freight = data.Freight;
+      if (data.Department !== undefined) updatePayload.Department = data.Department;
+      if (data.ExpenseType !== undefined) updatePayload.ExpenseType = data.ExpenseType;
+      if (data.Expense_type !== undefined) updatePayload.ExpenseType = data.Expense_type;
+      if (data.RequestType !== undefined) updatePayload.RequestType = data.RequestType;
+      if (data.TypeRequest !== undefined) updatePayload.TypeRequest = data.TypeRequest;
+      if (data.TypePayment !== undefined) updatePayload.TypePayment = data.TypePayment;
+      if (data.Status !== undefined) updatePayload.Status = data.Status;
+      if (data.AprStatus !== undefined) updatePayload.AprStatus = data.AprStatus;
+      if (data.AprRemark !== undefined) updatePayload.AprRemark = data.AprRemark;
+      if (data.Pr_ID !== undefined) updatePayload.Pr_ID = String(data.Pr_ID);
+      if (data.Pq_ID !== undefined) updatePayload.Pq_ID = String(data.Pq_ID);
+      if (data.PurchaseRequestId !== undefined) updatePayload.PurchaseRequestId = data.PurchaseRequestId;
+      if (data.PurchaseQuotationId !== undefined) updatePayload.PurchaseQuotationId = data.PurchaseQuotationId;
+
+      if (data.items) {
+        updatePayload.TotalBefDisc = totalBefDisc;
+        updatePayload.TaxTotal = taxTotal;
+        updatePayload.DocTotal = docTotal;
+      }
+
+      await tx.purchase_order.update({
+        where: { ID: id },
+        data: updatePayload,
+      });
     });
 
-    return this.getPurchaseRequestById(result.ID);
+    return this.getPurchaseOrderById(id);
   }
 
-  /** Delete purchase request and related items/attachments */
-  public async deletePurchaseRequest(id: number): Promise<boolean> {
-    const existing = await prisma.purchase_request.findUnique({
-      where: { ID: id },
-    });
-
+  /** Delete purchase order */
+  public async deletePurchaseOrder(id: number) {
+    const existing = await this.getPurchaseOrderById(id);
     if (!existing) return false;
 
     await prisma.$transaction(async (tx) => {
-      // 1. Delete items
-      await tx.purchase_request_items.deleteMany({
+      await tx.purchase_order_items.deleteMany({
         where: { CGuid: existing.CGuid },
       });
-
-      // 2. Delete attachments
-      await tx.purchase_request_attachments.deleteMany({
+      await tx.purchase_order_attachments.deleteMany({
         where: { CGuid: existing.CGuid },
       });
-
-      // 3. Delete header
-      await tx.purchase_request.delete({
+      await tx.purchase_order.delete({
         where: { ID: id },
       });
     });
