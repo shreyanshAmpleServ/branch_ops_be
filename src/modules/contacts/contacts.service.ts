@@ -2,15 +2,15 @@ import { prisma } from '../../config/db.js';
 import { NotFoundError } from '../../utils/appError.js';
 
 export class ContactsService {
-  public async getContacts(userId: string) {
-    return prisma.contact.findMany({
+  public async getContacts(userId: any) {
+    return (prisma as any).contact.findMany({
       where: { userId },
       orderBy: { createdAt: 'desc' },
     });
   }
 
-  public async getContactById(id: string, userId: string) {
-    const contact = await prisma.contact.findFirst({
+  public async getContactById(id: any, userId: any) {
+    const contact = await (prisma as any).contact.findFirst({
       where: { id, userId },
     });
 
@@ -21,8 +21,8 @@ export class ContactsService {
     return contact;
   }
 
-  public async createContact(data: any, userId: string) {
-    return prisma.contact.create({
+  public async createContact(data: any, userId: any) {
+    return (prisma as any).contact.create({
       data: {
         ...data,
         userId,
@@ -30,20 +30,20 @@ export class ContactsService {
     });
   }
 
-  public async updateContact(id: string, data: any, userId: string) {
+  public async updateContact(id: any, data: any, userId: any) {
     // Ensure contact exists and belongs to user
     await this.getContactById(id, userId);
 
-    return prisma.contact.update({
+    return (prisma as any).contact.update({
       where: { id },
       data,
     });
   }
 
-  public async deleteContact(id: string, userId: string) {
+  public async deleteContact(id: any, userId: any) {
     await this.getContactById(id, userId);
 
-    return prisma.contact.delete({
+    return (prisma as any).contact.delete({
       where: { id },
     });
   }

@@ -2,23 +2,23 @@ import { prisma } from '../../config/db.js';
 import { NotFoundError } from '../../utils/appError.js';
 
 export class DealsService {
-  public async getDeals(userId: string) {
-    return prisma.deal.findMany({
+  public async getDeals(userId: any) {
+    return (prisma as any).deal.findMany({
       where: { assignedToId: userId },
       orderBy: { createdAt: 'desc' },
     });
   }
 
-  public async getDealById(id: string, userId: string) {
-    const deal = await prisma.deal.findFirst({
+  public async getDealById(id: any, userId: any) {
+    const deal = await (prisma as any).deal.findFirst({
       where: { id, assignedToId: userId },
     });
     if (!deal) throw new NotFoundError('Deal not found.');
     return deal;
   }
 
-  public async createDeal(data: any, userId: string) {
-    return prisma.deal.create({
+  public async createDeal(data: any, userId: any) {
+    return (prisma as any).deal.create({
       data: {
         title: data.title,
         value: Number(data.value),
@@ -32,9 +32,9 @@ export class DealsService {
     });
   }
 
-  public async updateDeal(id: string, data: any, userId: string) {
+  public async updateDeal(id: any, data: any, userId: any) {
     await this.getDealById(id, userId);
-    return prisma.deal.update({
+    return (prisma as any).deal.update({
       where: { id },
       data: {
         ...data,
@@ -46,8 +46,8 @@ export class DealsService {
     });
   }
 
-  public async deleteDeal(id: string, userId: string) {
+  public async deleteDeal(id: any, userId: any) {
     await this.getDealById(id, userId);
-    return prisma.deal.delete({ where: { id } });
+    return (prisma as any).deal.delete({ where: { id } });
   }
 }

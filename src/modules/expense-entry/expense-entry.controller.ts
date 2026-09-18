@@ -16,7 +16,7 @@ export class ExpenseEntryController {
 
   public getById = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const id = parseInt(req.params.id);
+      const id = parseInt(req.params.id as string);
       const entry = await expenseEntryService.getEntryById(id);
       if (!entry) {
         res.status(404).json({ status: 'fail', message: 'Expense entry not found' });
@@ -51,7 +51,7 @@ export class ExpenseEntryController {
 
   public update = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const id = parseInt(req.params.id);
+      const id = parseInt(req.params.id as string);
       const entry = await expenseEntryService.updateEntry(id, req.body);
       if (!entry) {
         res.status(404).json({ status: 'fail', message: 'Expense entry not found' });
@@ -65,7 +65,7 @@ export class ExpenseEntryController {
 
   public delete = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const id = parseInt(req.params.id);
+      const id = parseInt(req.params.id as string);
       const success = await expenseEntryService.deleteEntry(id);
       if (!success) {
         res.status(404).json({ status: 'fail', message: 'Expense entry not found or delete failed' });

@@ -11,6 +11,7 @@ export class PurchaseQuotationController {
       const startDate = req.query.startDate as string;
       const endDate = req.query.endDate as string;
       const branchId = req.query.branchId ? parseInt(req.query.branchId as string) : undefined;
+      const typeRequest = req.query.typeRequest as string;
 
       const quotations = await purchaseQuotationService.getPurchaseQuotations({
         search,
@@ -18,6 +19,7 @@ export class PurchaseQuotationController {
         startDate,
         endDate,
         branchId,
+        typeRequest,
       });
 
       res.status(200).json({ status: 'success', data: quotations });

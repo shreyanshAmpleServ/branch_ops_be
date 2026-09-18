@@ -53,6 +53,7 @@ export interface PurchaseQuotationInput {
   memo_text?: string;
   Expense_type?: string;
   RequestType?: string;
+  TypeRequest?: string;
   PurchaseRequestId?: number;
   Pr_ID?: string;
   items: PurchaseQuotationItemInput[];
@@ -67,8 +68,13 @@ export class PurchaseQuotationService {
     startDate?: string;
     endDate?: string;
     branchId?: number;
+    typeRequest?: string;
   }) {
     const where: any = {};
+
+    if (params.typeRequest) {
+      where.TypeRequest = params.typeRequest;
+    }
 
     if (params.status && params.status !== 'all') {
       const s = params.status.toLowerCase();
@@ -129,8 +135,22 @@ export class PurchaseQuotationService {
       }, {} as Record<number, string>);
     }
 
+    const cGuids = quotations.map(q => q.CGuid).filter(Boolean) as string[];
+    let itemsMap: Record<string, any[]> = {};
+    if (cGuids.length > 0) {
+      const allItems = await prisma.quotationItems.findMany({
+        where: { CGuid: { in: cGuids } },
+        orderBy: { LineNum: 'asc' },
+      });
+      for (const itm of allItems) {
+        if (!itemsMap[itm.CGuid]) itemsMap[itm.CGuid] = [];
+        itemsMap[itm.CGuid].push(itm);
+      }
+    }
+
     return quotations.map(q => ({
       ...q,
+      items: itemsMap[q.CGuid] || [],
       CreatedByName: q.CreatedBy ? userMap[q.CreatedBy] : null,
       CustName: !isNaN(Number(q.CustCode)) && userMap[Number(q.CustCode)] ? userMap[Number(q.CustCode)] : q.CustName
     }));
@@ -271,6 +291,8 @@ export class PurchaseQuotationService {
           CreatedBy: createdById,
           Branch_id: data.Branch_id || null,
           QuotCode: quotCode,
+          RequestType: data.RequestType || 'Item',
+          TypeRequest: data.TypeRequest || 'Item',
           PurchaseRequestId: data.PurchaseRequestId || null,
           Pr_ID: data.Pr_ID || null,
         },
@@ -413,6 +435,8 @@ export class PurchaseQuotationService {
           Rounding: isRounding,
           RoundingAmnt: roundingVal,
           Branch_id: data.Branch_id !== undefined ? data.Branch_id : existing.Branch_id,
+          RequestType: data.RequestType !== undefined ? data.RequestType : (existing as any).RequestType,
+          TypeRequest: data.TypeRequest !== undefined ? data.TypeRequest : (existing as any).TypeRequest,
           PurchaseRequestId: data.PurchaseRequestId !== undefined ? data.PurchaseRequestId : existing.PurchaseRequestId,
           Pr_ID: data.Pr_ID !== undefined ? data.Pr_ID : existing.Pr_ID,
           AprStatus: data.AprStatus || existing.AprStatus,

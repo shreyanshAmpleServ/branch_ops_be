@@ -2,23 +2,23 @@ import { prisma } from '../../config/db.js';
 import { NotFoundError } from '../../utils/appError.js';
 
 export class TasksService {
-  public async getTasks(userId: string) {
-    return prisma.task.findMany({
+  public async getTasks(userId: any) {
+    return (prisma as any).task.findMany({
       where: { assignedToId: userId },
       orderBy: { createdAt: 'desc' },
     });
   }
 
-  public async getTaskById(id: string, userId: string) {
-    const task = await prisma.task.findFirst({
+  public async getTaskById(id: any, userId: any) {
+    const task = await (prisma as any).task.findFirst({
       where: { id, assignedToId: userId },
     });
     if (!task) throw new NotFoundError('Task not found.');
     return task;
   }
 
-  public async createTask(data: any, userId: string) {
-    return prisma.task.create({
+  public async createTask(data: any, userId: any) {
+    return (prisma as any).task.create({
       data: {
         title: data.title,
         description: data.description || null,
@@ -30,7 +30,7 @@ export class TasksService {
     });
   }
 
-  public async updateTask(id: string, data: any, userId: string) {
+  public async updateTask(id: any, data: any, userId: any) {
     await this.getTaskById(id, userId);
     
     let completedAt = undefined;
@@ -40,7 +40,7 @@ export class TasksService {
       completedAt = null as any; // Clear it out
     }
 
-    return prisma.task.update({
+    return (prisma as any).task.update({
       where: { id },
       data: {
         ...data,
@@ -50,8 +50,8 @@ export class TasksService {
     });
   }
 
-  public async deleteTask(id: string, userId: string) {
+  public async deleteTask(id: any, userId: any) {
     await this.getTaskById(id, userId);
-    return prisma.task.delete({ where: { id } });
+    return (prisma as any).task.delete({ where: { id } });
   }
 }

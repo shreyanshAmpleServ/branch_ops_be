@@ -121,8 +121,22 @@ export class PurchaseRequestService {
       }, {} as Record<number, string>);
     }
 
+    const cGuids = requests.map(r => r.CGuid).filter(Boolean) as string[];
+    let itemsMap: Record<string, any[]> = {};
+    if (cGuids.length > 0) {
+      const allItems = await prisma.purchase_request_items.findMany({
+        where: { CGuid: { in: cGuids } },
+        orderBy: { LineNum: 'asc' },
+      });
+      for (const itm of allItems) {
+        if (!itemsMap[itm.CGuid]) itemsMap[itm.CGuid] = [];
+        itemsMap[itm.CGuid].push(itm);
+      }
+    }
+
     return requests.map(req => ({
       ...req,
+      items: itemsMap[req.CGuid] || [],
       CreatedByName: req.CreatedBy ? userMap[req.CreatedBy] : null,
       CustName: !isNaN(Number(req.CustCode)) && userMap[Number(req.CustCode)] ? userMap[Number(req.CustCode)] : req.CustName
     }));

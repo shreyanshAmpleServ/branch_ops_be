@@ -7,4 +7,6 @@ const controller = new WarehouseController();
 router.use(auth);
 // GET /api/warehouse
 router.get('/', controller.getAll);
+// GET /api/warehouse/:id/items
+router.get('/:id/items', controller.getItems);
 export default router;

@@ -8,6 +8,9 @@ export class PurchaseRequestService {
         if (params.status && params.status !== 'all') {
             where.Status = params.status;
         }
+        if (params.typeRequest && params.typeRequest !== 'all') {
+            where.TypeRequest = params.typeRequest;
+        }
         if (params.branchId) {
             where.Branch_id = params.branchId;
         }
@@ -33,7 +36,41 @@ export class PurchaseRequestService {
             where,
             orderBy: { CreatedDate: 'desc' },
         });
-        return requests;
+        const userIds = Array.from(new Set([
+            ...requests.map(r => r.CreatedBy).filter(Boolean),
+            ...requests.map(r => Number(r.CustCode)).filter(n => !isNaN(n))
+        ]));
+        let userMap = {};
+        if (userIds.length > 0) {
+            // Assuming 'Users' model exists as checked
+            const users = await prisma.users.findMany({
+                where: { id: { in: userIds } },
+                select: { id: true, FirstName: true, LastName: true }
+            });
+            userMap = users.reduce((acc, u) => {
+                acc[u.id] = `${u.FirstName} ${u.LastName || ''}`.trim();
+                return acc;
+            }, {});
+        }
+        const cGuids = requests.map(r => r.CGuid).filter(Boolean);
+        let itemsMap = {};
+        if (cGuids.length > 0) {
+            const allItems = await prisma.purchase_request_items.findMany({
+                where: { CGuid: { in: cGuids } },
+                orderBy: { LineNum: 'asc' },
+            });
+            for (const itm of allItems) {
+                if (!itemsMap[itm.CGuid])
+                    itemsMap[itm.CGuid] = [];
+                itemsMap[itm.CGuid].push(itm);
+            }
+        }
+        return requests.map(req => ({
+            ...req,
+            items: itemsMap[req.CGuid] || [],
+            CreatedByName: req.CreatedBy ? userMap[req.CreatedBy] : null,
+            CustName: !isNaN(Number(req.CustCode)) && userMap[Number(req.CustCode)] ? userMap[Number(req.CustCode)] : req.CustName
+        }));
     }
     /** Get single purchase request details by ID */
     async getPurchaseRequestById(id) {
@@ -99,6 +136,16 @@ export class PurchaseRequestService {
                 Remarks: item.Remarks || null,
                 UoM: item.UoM || null,
                 CGuid: cGuid,
+                vendor: item.vendor || null,
+                DIM1: item.DIM1 || null,
+                DIM2: item.DIM2 || null,
+                DIM3: item.DIM3 || null,
+                DIM4: item.DIM4 || null,
+                DIM5: item.DIM5 || null,
+                ferightType: item.ferightType || null,
+                vendorRef: item.vendorRef || null,
+                po_id: item.po_id || null,
+                Location: item.Location || null,
             };
         });
         const attachmentsData = (data.attachments || []).map((att, idx) => ({
@@ -142,13 +189,12 @@ export class PurchaseRequestService {
             // 2. Insert items
             if (itemsData.length > 0) {
                 await tx.purchase_request_items.createMany({
-                    data: itemsData,
+                    data: itemsData.map(item => ({ ...item, PurchaseRequestId: header.ID })),
                 });
             }
-            // 3. Insert attachments
             if (attachmentsData.length > 0) {
                 await tx.purchase_request_attachments.createMany({
-                    data: attachmentsData,
+                    data: attachmentsData.map(att => ({ ...att, PurchaseRequestId: header.ID })),
                 });
             }
             return header;
@@ -210,6 +256,16 @@ export class PurchaseRequestService {
                         Remarks: item.Remarks || null,
                         UoM: item.UoM || null,
                         CGuid: cGuid,
+                        vendor: item.vendor || null,
+                        DIM1: item.DIM1 || null,
+                        DIM2: item.DIM2 || null,
+                        DIM3: item.DIM3 || null,
+                        DIM4: item.DIM4 || null,
+                        DIM5: item.DIM5 || null,
+                        ferightType: item.ferightType || null,
+                        vendorRef: item.vendorRef || null,
+                        po_id: item.po_id || null,
+                        Location: item.Location || null,
                     };
                 });
                 // 3. Create new items

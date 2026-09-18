@@ -6,7 +6,7 @@ const leadsService = new LeadsService();
 export class LeadsController {
   public getAll = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const leads = await leadsService.getLeads(req.user!.id);
+      const leads = await leadsService.getLeads(String(req.user!.id));
       res.status(200).json({ status: 'success', results: leads.length, data: { leads } });
     } catch (err) {
       next(err);
@@ -15,7 +15,7 @@ export class LeadsController {
 
   public getById = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const lead = await leadsService.getLeadById(req.params.id as string, req.user!.id);
+      const lead = await leadsService.getLeadById(req.params.id as string, String(req.user!.id));
       res.status(200).json({ status: 'success', data: { lead } });
     } catch (err) {
       next(err);
@@ -24,7 +24,7 @@ export class LeadsController {
 
   public create = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const lead = await leadsService.createLead(req.body, req.user!.id);
+      const lead = await leadsService.createLead(req.body, String(req.user!.id));
       res.status(201).json({ status: 'success', data: { lead } });
     } catch (err) {
       next(err);
@@ -33,7 +33,7 @@ export class LeadsController {
 
   public update = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const lead = await leadsService.updateLead(req.params.id as string, req.body, req.user!.id);
+      const lead = await leadsService.updateLead(req.params.id as string, req.body, String(req.user!.id));
       res.status(200).json({ status: 'success', data: { lead } });
     } catch (err) {
       next(err);
@@ -42,7 +42,7 @@ export class LeadsController {
 
   public delete = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      await leadsService.deleteLead(req.params.id as string, req.user!.id);
+      await leadsService.deleteLead(req.params.id as string, String(req.user!.id));
       res.status(204).json({ status: 'success', data: null });
     } catch (err) {
       next(err);

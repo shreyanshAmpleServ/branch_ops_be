@@ -8,12 +8,14 @@ export class PurchaseRequestController {
             const startDate = req.query.startDate;
             const endDate = req.query.endDate;
             const branchId = req.query.branchId ? parseInt(req.query.branchId) : undefined;
+            const typeRequest = req.query.typeRequest;
             const requests = await purchaseRequestService.getPurchaseRequests({
                 search,
                 status,
                 startDate,
                 endDate,
                 branchId,
+                typeRequest,
             });
             res.status(200).json({ status: 'success', data: requests });
         }

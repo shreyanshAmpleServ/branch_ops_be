@@ -1,0 +1,16 @@
+import { Router } from 'express';
+import { ItemPricesController } from './item-prices.controller.js';
+import { auth } from '../../middleware/auth.middleware.js';
+
+const router = Router();
+const controller = new ItemPricesController();
+
+router.use(auth);
+
+router.get('/price-lists', (req, res) => controller.getPriceLists(req, res));
+router.post('/price-lists', (req, res) => controller.createPriceList(req, res));
+router.get('/', (req, res) => controller.getItemPrices(req, res));
+router.post('/upsert', (req, res) => controller.upsertItemPrice(req, res));
+router.post('/bulk', (req, res) => controller.bulkUpdatePrices(req, res));
+
+export default router;

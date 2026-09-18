@@ -2,16 +2,16 @@ import { prisma } from '../../config/db.js';
 import { NotFoundError } from '../../utils/appError.js';
 
 export class LeadsService {
-  public async getLeads(userId: string) {
-    return prisma.lead.findMany({
+  public async getLeads(userId: any) {
+    return (prisma as any).lead.findMany({
       where: { assignedToId: userId },
       include: { contact: true },
       orderBy: { createdAt: 'desc' },
     });
   }
 
-  public async getLeadById(id: string, userId: string) {
-    const lead = await prisma.lead.findFirst({
+  public async getLeadById(id: any, userId: any) {
+    const lead = await (prisma as any).lead.findFirst({
       where: { id, assignedToId: userId },
       include: { contact: true },
     });
@@ -19,8 +19,8 @@ export class LeadsService {
     return lead;
   }
 
-  public async createLead(data: any, userId: string) {
-    return prisma.lead.create({
+  public async createLead(data: any, userId: any) {
+    return (prisma as any).lead.create({
       data: {
         title: data.title,
         value: Number(data.value),
@@ -35,9 +35,9 @@ export class LeadsService {
     });
   }
 
-  public async updateLead(id: string, data: any, userId: string) {
+  public async updateLead(id: any, data: any, userId: any) {
     await this.getLeadById(id, userId);
-    return prisma.lead.update({
+    return (prisma as any).lead.update({
       where: { id },
       data: {
         ...data,
@@ -47,8 +47,8 @@ export class LeadsService {
     });
   }
 
-  public async deleteLead(id: string, userId: string) {
+  public async deleteLead(id: any, userId: any) {
     await this.getLeadById(id, userId);
-    return prisma.lead.delete({ where: { id } });
+    return (prisma as any).lead.delete({ where: { id } });
   }
 }

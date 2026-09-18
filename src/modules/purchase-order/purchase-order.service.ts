@@ -144,8 +144,22 @@ export class PurchaseOrderService {
       }, {} as Record<number, string>);
     }
 
+    const cGuids = orders.map(o => o.CGuid).filter(Boolean) as string[];
+    let itemsMap: Record<string, any[]> = {};
+    if (cGuids.length > 0) {
+      const allItems = await prisma.purchase_order_items.findMany({
+        where: { CGuid: { in: cGuids } },
+        orderBy: { LineNum: 'asc' },
+      });
+      for (const itm of allItems) {
+        if (!itemsMap[itm.CGuid]) itemsMap[itm.CGuid] = [];
+        itemsMap[itm.CGuid].push(itm);
+      }
+    }
+
     return orders.map(ord => ({
       ...ord,
+      items: itemsMap[ord.CGuid] || [],
       CreatedByName: ord.CreatedBy ? userMap[ord.CreatedBy] : null,
       CustName: !isNaN(Number(ord.CustCode)) && userMap[Number(ord.CustCode)] ? userMap[Number(ord.CustCode)] : ord.CustName
     }));

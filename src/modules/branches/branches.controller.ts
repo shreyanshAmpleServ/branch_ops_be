@@ -17,7 +17,7 @@ export class BranchesController {
 
   public getById = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const id = parseInt(req.params.id);
+      const id = parseInt(req.params.id as string);
       const branch = await branchesService.getBranchById(id);
       if (!branch) {
         res.status(404).json({ status: 'fail', message: 'Branch not found' });
@@ -45,7 +45,7 @@ export class BranchesController {
 
   public update = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const id = parseInt(req.params.id);
+      const id = parseInt(req.params.id as string);
       const branch = await branchesService.updateBranch(id, req.body);
       if (!branch) {
         res.status(404).json({ status: 'fail', message: 'Branch not found' });
@@ -59,7 +59,7 @@ export class BranchesController {
 
   public delete = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const id = parseInt(req.params.id);
+      const id = parseInt(req.params.id as string);
       const success = await branchesService.deleteBranch(id);
       if (!success) {
         res.status(404).json({ status: 'fail', message: 'Branch not found or delete failed' });

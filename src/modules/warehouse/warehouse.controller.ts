@@ -22,4 +22,18 @@ export class WarehouseController {
       next(err);
     }
   };
+
+  /** GET /api/warehouse/:id/items — get items in warehouse */
+  public getItems = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params;
+      const result = await warehouseService.getWarehouseItems(Number(id));
+      res.status(200).json({
+        status: 'success',
+        ...result,
+      });
+    } catch (err) {
+      next(err);
+    }
+  };
 }
