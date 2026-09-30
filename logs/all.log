@@ -3645,3 +3645,888 @@
 [31m    at async l (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\@prisma\client\runtime\library.js:130:9633)[39m
 [31m    at async AuthService.refresh (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\modules\auth\auth.service.ts:151:18)[39m
 [31m    at async refresh (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\modules\auth\auth.controller.ts:55:45)[39m
+[2026-09-22 11:36:50:3650] [[32minfo[39m]: [32mServer is running in development mode on port 8000[39m
+[2026-09-22 11:39:46:3946] [[31merror[39m]: [31mPrismaClientInitializationError: [39m
+[31mInvalid `prisma.users.findFirst()` invocation in[39m
+[31mC:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\modules\auth\auth.service.ts:69:37[39m
+
+[31m  66   throw new BadRequestError('Email and password are required.');[39m
+[31m  67 }[39m
+[31m  68 [39m
+[31m→ 69 const user = await prisma.users.findFirst([39m
+[31mTimed out fetching a new connection from the connection pool. More info: http://pris.ly/d/connection-pool (Current connection pool timeout: 10, connection limit: 21)[39m
+[31m    at $n.handleRequestError (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\@prisma\client\runtime\library.js:121:7615)[39m
+[31m    at $n.handleAndLogRequestError (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\@prisma\client\runtime\library.js:121:6623)[39m
+[31m    at $n.request (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\@prisma\client\runtime\library.js:121:6307)[39m
+[31m    at async l (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\@prisma\client\runtime\library.js:130:9633)[39m
+[31m    at async AuthService.login (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\modules\auth\auth.service.ts:69:18)[39m
+[31m    at async login (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\modules\auth\auth.controller.ts:37:51)[39m
+[2026-09-22 11:58:31:5831] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-22 11:58:31:5831] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-22 11:58:31:5831] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-22 14:30:19:3019] [[32minfo[39m]: [32mServer is running in development mode on port 8000[39m
+[2026-09-23 09:36:35:3635] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-23 10:01:27:127] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-23 10:16:31:1631] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-23 10:44:44:4444] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-23 10:59:46:5946] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-23 11:15:42:1542] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-23 11:31:28:3128] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-23 12:38:32:3832] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-23 12:38:32:3832] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-23 12:38:32:3832] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-23 12:38:32:3832] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-23 12:55:31:5531] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-23 14:15:33:1533] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-23 15:18:49:1849] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-23 15:18:49:1849] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-23 15:18:49:1849] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-23 15:18:49:1849] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-23 15:18:49:1849] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-23 15:18:49:1849] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-23 15:18:49:1849] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-23 15:54:48:5448] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-23 16:16:10:1610] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-23 16:26:17:2617] [[31merror[39m]: [31mError: Invalid email or password.[39m
+[31m    at AuthService.login (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\modules\auth\auth.service.ts:79:13)[39m
+[31m    at async login (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\modules\auth\auth.controller.ts:37:51)[39m
+[2026-09-23 16:26:17:2617] [[31merror[39m]: [31mError: Refresh token is missing.[39m
+[31m    at AuthService.refresh (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\modules\auth\auth.service.ts:127:13)[39m
+[31m    at refresh (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\modules\auth\auth.controller.ts:55:63)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\route.js:157:13)[39m
+[31m    at Route.dispatch (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\route.js:117:3)[39m
+[31m    at handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:435:11)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:295:15[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[2026-09-23 16:26:50:2650] [[31merror[39m]: [31mError: Invalid email or password.[39m
+[31m    at AuthService.login (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\modules\auth\auth.service.ts:79:13)[39m
+[31m    at async login (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\modules\auth\auth.controller.ts:37:51)[39m
+[2026-09-23 16:26:50:2650] [[31merror[39m]: [31mError: Refresh token is missing.[39m
+[31m    at AuthService.refresh (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\modules\auth\auth.service.ts:127:13)[39m
+[31m    at refresh (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\modules\auth\auth.controller.ts:55:63)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\route.js:157:13)[39m
+[31m    at Route.dispatch (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\route.js:117:3)[39m
+[31m    at handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:435:11)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:295:15[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[2026-09-23 16:38:24:3824] [[31merror[39m]: [31mZodError: [[39m
+[31m  {[39m
+[31m    "origin": "string",[39m
+[31m    "code": "invalid_format",[39m
+[31m    "format": "email",[39m
+[31m    "pattern": "/^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$/",[39m
+[31m    "path": [[39m
+[31m      "body",[39m
+[31m      "email"[39m
+[31m    ],[39m
+[31m    "message": "Invalid email address"[39m
+[31m  }[39m
+[31m][39m
+[31m    at <anonymous> (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\validate.middleware.ts:7:35)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\route.js:157:13)[39m
+[31m    at file:///C:/Users/Lenovo/Desktop/NewBranch/branch-backend/node_modules/express-rate-limit/dist/index.mjs:970:7[39m
+[31m    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+[31m    at async file:///C:/Users/Lenovo/Desktop/NewBranch/branch-backend/node_modules/express-rate-limit/dist/index.mjs:825:5[39m
+[2026-09-23 16:38:37:3837] [[31merror[39m]: [31mError: Invalid email or password.[39m
+[31m    at AuthService.login (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\modules\auth\auth.service.ts:79:13)[39m
+[31m    at async login (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\modules\auth\auth.controller.ts:37:51)[39m
+[2026-09-23 16:54:55:5455] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-23 17:10:00:100] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-23 17:23:27:2327] [[32minfo[39m]: [32mServer is running in development mode on port 8000[39m
+[2026-09-25 10:27:20:2720] [[32minfo[39m]: [32mServer is running in development mode on port 8000[39m
+[2026-09-28 10:05:38:538] [[32minfo[39m]: [32mServer is running in development mode on port 8000[39m
+[2026-09-28 10:12:58:1258] [[31merror[39m]: [31mError: Authentication token is missing.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:36:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-28 10:12:58:1258] [[31merror[39m]: [31mError: Refresh token is missing.[39m
+[31m    at AuthService.refresh (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\modules\auth\auth.service.ts:127:13)[39m
+[31m    at refresh (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\modules\auth\auth.controller.ts:55:63)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\route.js:157:13)[39m
+[31m    at Route.dispatch (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\route.js:117:3)[39m
+[31m    at handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:435:11)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:295:15[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[2026-09-28 12:35:20:3520] [[32minfo[39m]: [32mServer is running in development mode on port 8000[39m
+[2026-09-28 12:35:54:3554] [[31merror[39m]: [31mError: Authentication token is missing.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:36:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-28 12:53:42:5342] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-28 12:53:42:5342] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-28 12:53:42:5342] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-28 12:53:42:5342] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-28 12:53:42:5342] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-28 12:53:42:5342] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-28 14:12:18:1218] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-28 14:12:18:1218] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-28 14:12:18:1218] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-28 14:12:18:1218] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-28 14:12:18:1218] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-28 14:12:18:1218] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-28 14:27:38:2738] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-28 14:58:57:5857] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-28 14:58:57:5857] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-28 14:58:57:5857] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-28 14:58:57:5857] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-28 14:58:57:5857] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-28 14:58:57:5857] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-28 15:52:34:5234] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-28 16:10:08:108] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-28 16:10:08:108] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-28 16:10:08:108] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-28 16:10:08:108] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-28 16:10:08:108] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-28 16:10:08:108] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-28 16:10:08:108] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-28 16:35:59:3559] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-28 16:35:59:3559] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-28 16:35:59:3559] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-28 16:35:59:3559] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-28 16:35:59:3559] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-28 16:35:59:3559] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-28 16:35:59:3559] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-28 16:35:59:3559] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-28 16:58:10:5810] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-28 16:58:10:5810] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-28 16:58:10:5810] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-28 16:58:10:5810] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-28 16:58:10:5810] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-28 16:58:10:5810] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-28 16:58:10:5810] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-28 16:58:10:5810] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[2026-09-28 17:34:01:341] [[31merror[39m]: [31mError: Invalid or expired authentication token.[39m
+[31m    at auth (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\src\middleware\auth.middleware.ts:44:13)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
+[31m    at C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:297:9[39m
+[31m    at processParams (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:582:12)[39m
+[31m    at next (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:291:5)[39m
+[31m    at Function.handle (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:186:3)[39m
+[31m    at router (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:60:12)[39m
+[31m    at Layer.handleRequest (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\lib\layer.js:152:17)[39m
+[31m    at trimPrefix (C:\Users\Lenovo\Desktop\NewBranch\branch-backend\node_modules\router\index.js:342:13)[39m
