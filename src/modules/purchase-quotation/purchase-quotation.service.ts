@@ -56,6 +56,8 @@ export interface PurchaseQuotationInput {
   TypeRequest?: string;
   PurchaseRequestId?: number;
   Pr_ID?: string;
+  CreatedBy?: number;
+  ReqBy?: number;
   items: PurchaseQuotationItemInput[];
   attachments?: PurchaseQuotationAttachmentInput[];
 }
@@ -284,13 +286,14 @@ export class PurchaseQuotationService {
 
     const result = await prisma.$transaction(async (tx) => {
       let creatorConnect: any = undefined;
-      if (createdById) {
+      const targetCreatedById = data.CreatedBy ? Number(data.CreatedBy) : createdById;
+      if (targetCreatedById) {
         const userExists = await (tx as any).users.findUnique({
-          where: { id: createdById },
+          where: { id: targetCreatedById },
           select: { id: true }
         });
         if (userExists) {
-          creatorConnect = { connect: { id: createdById } };
+          creatorConnect = { connect: { id: targetCreatedById } };
         }
       }
 
@@ -327,6 +330,7 @@ export class PurchaseQuotationService {
           CGuid: cGuid,
           AprStatus: 'P',
           creator: creatorConnect,
+          ReqBy: data.ReqBy ? Number(data.ReqBy) : (data.CreatedBy ? Number(data.CreatedBy) : null),
           Branch_id: data.Branch_id || null,
           QuotCode: quotCode,
           SalesType: isService ? 2 : 1,
@@ -506,6 +510,7 @@ export class PurchaseQuotationService {
           Rounding: isRounding,
           RoundingAmnt: roundingVal,
           Branch_id: data.Branch_id !== undefined ? data.Branch_id : existing.Branch_id,
+          ReqBy: data.ReqBy !== undefined ? (data.ReqBy ? Number(data.ReqBy) : null) : (data.CreatedBy ? Number(data.CreatedBy) : undefined),
           SalesType: salesType,
           purchase_request: prConnect,
           Pr_ID: data.Pr_ID !== undefined ? data.Pr_ID : existing.Pr_ID,

@@ -16,6 +16,7 @@ export class WarehouseController {
 
       res.status(200).json({
         status: 'success',
+        data: result.warehouses,
         ...result,
       });
     } catch (err) {

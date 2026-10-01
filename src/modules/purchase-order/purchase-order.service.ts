@@ -64,6 +64,8 @@ export interface PurchaseOrderInput {
   Pq_ID?: string;
   PurchaseRequestId?: number;
   PurchaseQuotationId?: number;
+  CreatedBy?: number;
+  ReqBy?: number;
   items: PurchaseOrderItemInput[];
   attachments?: PurchaseOrderAttachmentInput[];
 }
@@ -297,7 +299,8 @@ export class PurchaseOrderService {
           Status: 'Pending',
           CGuid: cGuid,
           AprStatus: 'P',
-          CreatedBy: createdById,
+          CreatedBy: data.CreatedBy ? Number(data.CreatedBy) : createdById,
+          ReqBy: data.ReqBy ? Number(data.ReqBy) : (data.CreatedBy ? Number(data.CreatedBy) : null),
           CreatedDate: new Date(),
           Branch_id: data.Branch_id || null,
           RequestType: data.RequestType || 'Direct',
@@ -461,6 +464,8 @@ export class PurchaseOrderService {
       if (data.Pq_ID !== undefined) updatePayload.Pq_ID = String(data.Pq_ID);
       if (data.PurchaseRequestId !== undefined) updatePayload.PurchaseRequestId = data.PurchaseRequestId;
       if (data.PurchaseQuotationId !== undefined) updatePayload.PurchaseQuotationId = data.PurchaseQuotationId;
+      if (data.CreatedBy !== undefined) updatePayload.CreatedBy = data.CreatedBy ? Number(data.CreatedBy) : null;
+      if (data.ReqBy !== undefined) updatePayload.ReqBy = data.ReqBy ? Number(data.ReqBy) : (data.CreatedBy ? Number(data.CreatedBy) : null);
 
       if (data.items) {
         updatePayload.TotalBefDisc = totalBefDisc;

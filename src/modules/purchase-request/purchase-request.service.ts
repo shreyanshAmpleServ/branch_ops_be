@@ -33,8 +33,9 @@ export interface PurchaseRequestAttachmentInput {
 }
 
 export interface PurchaseRequestInput {
-  CustCode: string;
+  CustCode?: string;
   CustName?: string;
+  CreatedBy?: number;
   Address?: string;
   CustRefNo?: string;
   Currency?: string;
@@ -241,7 +242,7 @@ export class PurchaseRequestService {
       // 1. Insert header
       const header = await tx.purchase_request.create({
         data: {
-          CustCode: data.CustCode,
+          CustCode: data.CustCode || (data.CreatedBy ? String(data.CreatedBy) : (createdById ? String(createdById) : '1')),
           CustName: data.CustName || null,
           Address: data.Address || null,
           CustRefNo: data.CustRefNo || null,
@@ -260,9 +261,9 @@ export class PurchaseRequestService {
           Status: 'Pending',
           CGuid: cGuid,
           AprStatus: 'P', // P = Pending approval
-          CreatedBy: createdById,
+          CreatedBy: data.CreatedBy ? Number(data.CreatedBy) : createdById,
           Branch_id: data.Branch_id || null,
-          RequestType: data.RequestType || 'Direct',
+          RequestType: data.RequestType || data.TypeRequest || 'Direct',
           Expense_type: data.Expense_type || null,
           memo_text: data.memo_text || null,
           Department: data.Department || null,
@@ -409,11 +410,12 @@ export class PurchaseRequestService {
           TaxTotal: taxTotal,
           DocTotal: docTotal,
           TotalBefDisc: totalBefDisc,
+          CreatedBy: data.CreatedBy !== undefined ? (data.CreatedBy ? Number(data.CreatedBy) : null) : existing.CreatedBy,
           Branch_id: data.Branch_id !== undefined ? data.Branch_id : existing.Branch_id,
           RequestType: data.RequestType || existing.RequestType,
           Expense_type: data.Expense_type || existing.Expense_type,
           memo_text: data.memo_text || existing.memo_text,
-          Department: data.Department || existing.Department,
+          Department: data.Department !== undefined ? data.Department : existing.Department,
           AprStatus: data.AprStatus || existing.AprStatus,
           AprRemark: data.AprRemark || existing.AprRemark,
           UpdatedBy: updatedById,
