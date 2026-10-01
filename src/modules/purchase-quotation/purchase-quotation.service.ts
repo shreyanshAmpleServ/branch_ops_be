@@ -73,7 +73,7 @@ export class PurchaseQuotationService {
     const where: any = {};
 
     if (params.typeRequest) {
-      where.TypeRequest = params.typeRequest;
+      where.SalesType = params.typeRequest === 'Service' ? 2 : 1;
     }
 
     if (params.status && params.status !== 'all') {
@@ -151,6 +151,8 @@ export class PurchaseQuotationService {
     return quotations.map(q => ({
       ...q,
       items: itemsMap[q.CGuid] || [],
+      TypeRequest: q.SalesType === 2 ? 'Service' : 'Item',
+      RequestType: q.SalesType === 2 ? 'Service' : 'Item',
       CreatedByName: q.CreatedBy ? userMap[q.CreatedBy] : null,
       CustName: !isNaN(Number(q.CustCode)) && userMap[Number(q.CustCode)] ? userMap[Number(q.CustCode)] : q.CustName
     }));
@@ -196,6 +198,8 @@ export class PurchaseQuotationService {
 
     return {
       ...quotation,
+      TypeRequest: quotation.SalesType === 2 ? 'Service' : 'Item',
+      RequestType: quotation.SalesType === 2 ? 'Service' : 'Item',
       CreatedByName: createdByName || (quotation as any).CreatedByName || null,
       items,
       attachments,
@@ -203,7 +207,7 @@ export class PurchaseQuotationService {
   }
 
   /** Create new purchase quotation */
-  public async createPurchaseQuotation(data: PurchaseQuotationInput, createdById: number) {
+  public async createPurchaseQuotation(data: PurchaseQuotationInput, createdById?: number) {
     const cGuid = randomUUID();
     const docDate = data.PostDate ? new Date(data.PostDate) : new Date();
 
@@ -211,11 +215,22 @@ export class PurchaseQuotationService {
     let taxTotal = 0;
     let docTotal = 0;
 
-    const itemsData = data.items.map((item, idx) => {
+    const itemsData = (data.items || []).map((item, idx) => {
+      const rawItemId = Number(item.ItemID || 0);
+      const validItemId = rawItemId > 0 ? rawItemId : 1;
       const quantity = Number(item.Quantity || 0);
-      const unitPrice = Number(item.UnitPrice || 0);
-      const discPrcnt = Number(item.DiscPrcnt || 0);
-      const vatPer = Number(item.VATPer || 0);
+      const unitPrice = Number(item.UnitPrice ?? (item as any).Price ?? 0);
+      const discPrcnt = Number(item.DiscPrcnt ?? (item as any).DiscountPercent ?? 0);
+      const vatPer = Number(item.VATPer ?? (item as any).VatRate ?? 0);
+      const vatCode = item.VATCode || (item as any).VatGroup || null;
+
+      const rawWhs: any = item.WhsCode;
+      let parsedWhs: number | null = null;
+      if (typeof rawWhs === 'number' && !isNaN(rawWhs)) {
+        parsedWhs = rawWhs;
+      } else if (typeof rawWhs === 'string' && rawWhs.trim() !== '' && !isNaN(parseInt(rawWhs, 10))) {
+        parsedWhs = parseInt(rawWhs, 10);
+      }
 
       const lineTotalBefDisc = quantity * unitPrice;
       const lineTotalAfterDisc = lineTotalBefDisc * (1 - discPrcnt / 100);
@@ -228,17 +243,17 @@ export class PurchaseQuotationService {
 
       return {
         LineNum: idx + 1,
-        ItemID: item.ItemID,
+        ItemID: validItemId,
         ItemCode: item.ItemCode || null,
         ItemName: item.ItemName || null,
         LineStatus: 'O',
         Quantity: quantity,
         DeliveredQty: 0,
         OpenQty: quantity,
-        WhsCode: item.WhsCode || null,
+        WhsCode: parsedWhs,
         UnitPrice: unitPrice,
         DiscPrcnt: discPrcnt,
-        VATCode: item.VATCode || null,
+        VATCode: vatCode,
         VATPer: vatPer,
         LineTax: lineTax,
         LineTotalLC: lineTotalLC,
@@ -265,8 +280,31 @@ export class PurchaseQuotationService {
     const freightVal = Number(data.Freight || 0);
     const roundingVal = data.Rounding === 'Y' ? Number(data.RoundingAmnt || 0) : 0;
     const finalDocTotal = baseAfterHeaderDisc + taxTotal + freightVal + roundingVal;
+    const isService = data.TypeRequest === 'Service' || data.RequestType === 'Service';
 
     const result = await prisma.$transaction(async (tx) => {
+      let creatorConnect: any = undefined;
+      if (createdById) {
+        const userExists = await (tx as any).users.findUnique({
+          where: { id: createdById },
+          select: { id: true }
+        });
+        if (userExists) {
+          creatorConnect = { connect: { id: createdById } };
+        }
+      }
+
+      let prConnect: any = undefined;
+      if (data.PurchaseRequestId) {
+        const prExists = await tx.purchase_request.findUnique({
+          where: { ID: data.PurchaseRequestId },
+          select: { ID: true }
+        });
+        if (prExists) {
+          prConnect = { connect: { ID: data.PurchaseRequestId } };
+        }
+      }
+
       const header = await tx.quotations.create({
         data: {
           CustCode: data.CustCode,
@@ -288,12 +326,11 @@ export class PurchaseQuotationService {
           Status: 'Pending',
           CGuid: cGuid,
           AprStatus: 'P',
-          CreatedBy: createdById,
+          creator: creatorConnect,
           Branch_id: data.Branch_id || null,
           QuotCode: quotCode,
-          RequestType: data.RequestType || 'Item',
-          TypeRequest: data.TypeRequest || 'Item',
-          PurchaseRequestId: data.PurchaseRequestId || null,
+          SalesType: isService ? 2 : 1,
+          purchase_request: prConnect,
           Pr_ID: data.Pr_ID || null,
         },
       });
@@ -320,7 +357,7 @@ export class PurchaseQuotationService {
   public async updatePurchaseQuotation(
     id: number,
     data: Partial<PurchaseQuotationInput> & { Status?: string; AprStatus?: string; AprRemark?: string },
-    updatedById: number
+    updatedById?: number
   ) {
     const existing = await this.getPurchaseQuotationById(id);
     if (!existing) throw new NotFoundError('Purchase quotation not found');
@@ -343,10 +380,21 @@ export class PurchaseQuotationService {
         docTotal = 0;
 
         const itemsData = data.items.map((item, idx) => {
+          const rawItemId = Number(item.ItemID || 0);
+          const validItemId = rawItemId > 0 ? rawItemId : 1;
           const quantity = Number(item.Quantity || 0);
-          const unitPrice = Number(item.UnitPrice || 0);
-          const discPrcnt = Number(item.DiscPrcnt || 0);
-          const vatPer = Number(item.VATPer || 0);
+          const unitPrice = Number(item.UnitPrice ?? (item as any).Price ?? 0);
+          const discPrcnt = Number(item.DiscPrcnt ?? (item as any).DiscountPercent ?? 0);
+          const vatPer = Number(item.VATPer ?? (item as any).VatRate ?? 0);
+          const vatCode = item.VATCode || (item as any).VatGroup || null;
+
+          const rawWhs: any = item.WhsCode;
+          let parsedWhs: number | null = null;
+          if (typeof rawWhs === 'number' && !isNaN(rawWhs)) {
+            parsedWhs = rawWhs;
+          } else if (typeof rawWhs === 'string' && rawWhs.trim() !== '' && !isNaN(parseInt(rawWhs, 10))) {
+            parsedWhs = parseInt(rawWhs, 10);
+          }
 
           const lineTotalBefDisc = quantity * unitPrice;
           const lineTotalAfterDisc = lineTotalBefDisc * (1 - discPrcnt / 100);
@@ -359,17 +407,17 @@ export class PurchaseQuotationService {
 
           return {
             LineNum: idx + 1,
-            ItemID: item.ItemID,
+            ItemID: validItemId,
             ItemCode: item.ItemCode || null,
             ItemName: item.ItemName || null,
             LineStatus: 'O',
             Quantity: quantity,
             DeliveredQty: 0,
             OpenQty: quantity,
-            WhsCode: item.WhsCode || null,
+            WhsCode: parsedWhs,
             UnitPrice: unitPrice,
             DiscPrcnt: discPrcnt,
-            VATCode: item.VATCode || null,
+            VATCode: vatCode,
             VATPer: vatPer,
             LineTax: lineTax,
             LineTotalLC: lineTotalLC,
@@ -379,6 +427,7 @@ export class PurchaseQuotationService {
             Remarks: item.Remarks || null,
             UoM: item.UoM || null,
             CGuid: cGuid,
+            QuotationId: id,
           };
         });
 
@@ -398,6 +447,7 @@ export class PurchaseQuotationService {
           LineNum: idx + 1,
           Attachment: att.Attachment ? Buffer.from(att.Attachment, 'utf-8') : null,
           CGuid: cGuid,
+          QuotationId: id,
         }));
 
         if (attachmentsData.length > 0) {
@@ -409,10 +459,31 @@ export class PurchaseQuotationService {
 
       const headerDisc = data.DiscPrcnt !== undefined ? Number(data.DiscPrcnt) : Number(existing.DiscPrcnt || 0);
       const baseAfterHeaderDisc = totalBefDisc * (1 - headerDisc / 100);
-      const freightVal = data.Freight !== undefined ? Number(data.Freight) : 0;
+      const freightVal = data.Freight !== undefined ? Number(data.Freight) : Number((existing as any).Freight || 0);
       const isRounding = data.Rounding !== undefined ? data.Rounding : existing.Rounding;
       const roundingVal = isRounding === 'Y' ? (data.RoundingAmnt !== undefined ? Number(data.RoundingAmnt) : Number(existing.RoundingAmnt || 0)) : 0;
       const finalDocTotal = baseAfterHeaderDisc + taxTotal + freightVal + roundingVal;
+
+      let salesType = existing.SalesType;
+      if (data.TypeRequest !== undefined || data.RequestType !== undefined) {
+        const isService = data.TypeRequest === 'Service' || data.RequestType === 'Service';
+        salesType = isService ? 2 : 1;
+      }
+
+      let prConnect: any = undefined;
+      if (data.PurchaseRequestId !== undefined) {
+        if (data.PurchaseRequestId) {
+          const prExists = await tx.purchase_request.findUnique({
+            where: { ID: data.PurchaseRequestId },
+            select: { ID: true }
+          });
+          if (prExists) {
+            prConnect = { connect: { ID: data.PurchaseRequestId } };
+          }
+        } else {
+          prConnect = { disconnect: true };
+        }
+      }
 
       const updatedHeader = await tx.quotations.update({
         where: { ID: id },
@@ -435,13 +506,12 @@ export class PurchaseQuotationService {
           Rounding: isRounding,
           RoundingAmnt: roundingVal,
           Branch_id: data.Branch_id !== undefined ? data.Branch_id : existing.Branch_id,
-          RequestType: data.RequestType !== undefined ? data.RequestType : (existing as any).RequestType,
-          TypeRequest: data.TypeRequest !== undefined ? data.TypeRequest : (existing as any).TypeRequest,
-          PurchaseRequestId: data.PurchaseRequestId !== undefined ? data.PurchaseRequestId : existing.PurchaseRequestId,
+          SalesType: salesType,
+          purchase_request: prConnect,
           Pr_ID: data.Pr_ID !== undefined ? data.Pr_ID : existing.Pr_ID,
           AprStatus: data.AprStatus || existing.AprStatus,
           AprRemark: data.AprRemark || existing.AprRemark,
-          UpdatedBy: updatedById,
+          UpdatedBy: updatedById || undefined,
           UpdatedDate: new Date(),
         },
       });

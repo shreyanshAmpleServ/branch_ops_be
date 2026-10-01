@@ -12,6 +12,9 @@ router.use(auth);
 // GET /api/users           — list all users (accessible to authenticated users; controller enforces admin for full list)
 router.get('/', controller.getAll);
 
+// POST /api/users          — create a new user
+router.post('/', controller.create);
+
 // GET /api/users/:id       — get single user (admin or self)
 router.get('/:id', controller.getById);
 

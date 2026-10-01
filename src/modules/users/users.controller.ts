@@ -5,6 +5,16 @@ import { ForbiddenError, BadRequestError } from '../../utils/appError.js';
 const usersService = new UsersService();
 
 export class UsersController {
+  /** POST /api/users — create a new user */
+  public create = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const user = await usersService.createUser(req.body);
+      res.status(201).json({ status: 'success', data: { user } });
+    } catch (err) {
+      next(err);
+    }
+  };
+
   /** GET /api/users — list all users (admin only) */
   public getAll = async (req: Request, res: Response, next: NextFunction) => {
     try {

@@ -19,10 +19,14 @@ const storage = multer.diskStorage({
 });
 
 const fileFilter = (req: any, file: any, cb: any) => {
-  const allowedExtensions = ['.jpg', '.jpeg', '.png', '.pdf', '.docx', '.csv', '.xlsx'];
+  const allowedExtensions = [
+    '.jpg', '.jpeg', '.png', '.webp', '.gif', '.svg',
+    '.pdf', '.docx', '.doc', '.csv', '.xlsx', '.xls',
+    '.txt', '.zip', '.rar'
+  ];
   const ext = path.extname(file.originalname).toLowerCase();
   
-  if (allowedExtensions.includes(ext)) {
+  if (allowedExtensions.includes(ext) || !ext) {
     cb(null, true);
   } else {
     cb(new BadRequestError(`Unsupported file extension: ${ext}. Allowed extensions: ${allowedExtensions.join(', ')}`), false);

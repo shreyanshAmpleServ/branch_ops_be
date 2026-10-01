@@ -1,7 +1,62 @@
 import { prisma } from '../../config/db.js';
-import { NotFoundError } from '../../utils/appError.js';
+import { randomUUID } from 'crypto';
+import { NotFoundError, BadRequestError } from '../../utils/appError.js';
 
 export class RetailersService {
+  /**
+   * Create a new Retailer (Customer / Supplier)
+   */
+  public async createRetailer(data: any, createdById?: number) {
+    const cardType = data.cardType || data.CardType || 'C';
+    let code = (data.code || data.Code || '').trim();
+    if (!code) {
+      const prefix = cardType === 'S' ? 'S_' : 'C_';
+      const count = await prisma.retailers.count({ where: { CardType: cardType } });
+      code = `${prefix}${String(count + 1).padStart(6, '0')}`;
+      // Verify uniqueness
+      const existing = await prisma.retailers.findUnique({ where: { Code: code } });
+      if (existing) {
+        code = `${prefix}${Date.now().toString().slice(-6)}`;
+      }
+    }
+
+    const name = data.name || data.Name;
+    if (!name) {
+      throw new BadRequestError('Retailer name is required');
+    }
+
+    const cGuid = randomUUID();
+
+    const created = await prisma.retailers.create({
+      data: {
+        Code: code,
+        Name: name,
+        CardType: cardType,
+        Address: data.address || data.Address || null,
+        Email: data.email || data.Email || null,
+        Owner: data.owner || data.Owner || null,
+        OwnerMobileNo: data.ownerMobileNo || data.OwnerMobileNo || null,
+        OwnerEmail: data.ownerEmail || data.OwnerEmail || null,
+        AlternateOwnerMobileNo: data.alternateOwnerMobileNo || data.AlternateOwnerMobileNo || null,
+        TIN: data.tin || data.TIN || null,
+        VAT: data.vat || data.VAT || null,
+        CrLimit: data.crLimit !== undefined ? data.crLimit : (data.CrLimit !== undefined ? data.CrLimit : 0),
+        CreditDays: data.creditDays !== undefined ? data.creditDays : (data.CreditDays !== undefined ? data.CreditDays : 0),
+        PaymentTerms: data.paymentTerms || data.PaymentTerms || null,
+        Route: data.route || data.Route || null,
+        Latitude: data.latitude !== undefined ? data.latitude : (data.Latitude !== undefined ? data.Latitude : null),
+        Longitude: data.longitude !== undefined ? data.longitude : (data.Longitude !== undefined ? data.Longitude : null),
+        AprStatus: data.aprStatus || data.AprStatus || 'Y',
+        IsApproved: (data.aprStatus || data.AprStatus) === 'N' ? 'N' : 'Y',
+        CGuid: cGuid,
+        CreatedBy: createdById || null,
+        CreatedDate: new Date(),
+        created_at: new Date(),
+      },
+    });
+
+    return this.getRetailerById(created.ID);
+  }
   /**
    * Paginated, filtered list of retailers (Customers/Suppliers)
    */
@@ -226,5 +281,15 @@ export class RetailersService {
     }
 
     return prisma.retailers.delete({ where: { ID: id } });
+  }
+
+  /**
+   * Get contacts by retailer code
+   */
+  public async getContactsByRetailerCode(code: string) {
+    return prisma.retailerContacts.findMany({
+      where: { RetailerId: code },
+      orderBy: { ID: 'asc' },
+    });
   }
 }

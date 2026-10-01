@@ -195,4 +195,22 @@ export class MasterService {
       typeId: s.ActTypeID,
     }));
   }
+
+  public async getSalesTypes(): Promise<MasterItem[]> {
+    try {
+      const salesTypes = await prisma.salesType.findMany({
+        select: { ID: true, Name: true, CGuid: true },
+      });
+      return salesTypes.map(st => ({
+        id: st.ID,
+        code: st.CGuid ?? String(st.ID),
+        name: st.Name ?? `Sales Type ${st.ID}`,
+      }));
+    } catch {
+      return [
+        { id: 1, code: '1000', name: 'Item' },
+        { id: 2, code: '2000', name: 'Service' },
+      ];
+    }
+  }
 }

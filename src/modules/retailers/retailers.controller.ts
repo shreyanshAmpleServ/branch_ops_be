@@ -6,6 +6,22 @@ const retailersService = new RetailersService();
 
 export class RetailersController {
   /**
+   * POST /api/retailers
+   */
+  public create = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const createdById = req.user ? req.user.id : undefined;
+      const retailer = await retailersService.createRetailer(req.body, createdById);
+      res.status(201).json({
+        status: 'success',
+        data: retailer,
+      });
+    } catch (err) {
+      next(err);
+    }
+  };
+
+  /**
    * GET /api/retailers
    */
   public getAll = async (req: Request, res: Response, next: NextFunction) => {
@@ -164,6 +180,22 @@ export class RetailersController {
       res.status(204).json({
         status: 'success',
         data: null,
+      });
+    } catch (err) {
+      next(err);
+    }
+  };
+
+  /**
+   * GET /api/retailers/:code/contacts
+   */
+  public getContacts = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const code = String(req.params.code || '');
+      const contacts = await retailersService.getContactsByRetailerCode(code);
+      res.status(200).json({
+        status: 'success',
+        data: contacts,
       });
     } catch (err) {
       next(err);

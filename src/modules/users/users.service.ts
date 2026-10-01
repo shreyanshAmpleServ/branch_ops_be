@@ -1,5 +1,7 @@
 import { prisma } from '../../config/db.js';
-import { NotFoundError } from '../../utils/appError.js';
+import bcrypt from 'bcryptjs';
+import { randomUUID } from 'crypto';
+import { NotFoundError, BadRequestError } from '../../utils/appError.js';
 
 // ─── Helper: shape a DB user into a clean API response ────────────────────────
 function mapUser(user: any) {
@@ -183,6 +185,105 @@ export class UsersService {
     }
 
     return mapUser(user);
+  }
+
+  /** Create a new user */
+  public async createUser(data: {
+    code?: string;
+    firstName: string;
+    middleName?: string;
+    lastName?: string;
+    email?: string;
+    password?: string;
+    mobileNo?: string;
+    gender?: string;
+    dob?: string;
+    address?: string;
+    department?: string;
+    active?: boolean;
+    isAdmin?: boolean;
+    branchId?: number | null;
+    project?: string | null;
+    dfltWhsId?: number | null;
+    route?: string | null;
+    maxDiscount?: number | null;
+    isPriceEdit?: boolean;
+    isAllowLineDiscount?: boolean;
+    isFrieghtAdd?: boolean;
+    dim1?: string | null;
+    dim2?: string | null;
+    dim3?: string | null;
+    dim4?: string | null;
+    cashAcct?: string | null;
+    checkAcct?: string | null;
+    tigoPesa?: string | null;
+    mpesa?: string | null;
+    airtelMoney?: string | null;
+    bankDeposit?: string | null;
+    userPermission?: string | null;
+  }) {
+    if (!data.firstName) {
+      throw new BadRequestError('First name is required.');
+    }
+
+    if (data.email) {
+      const existingUser = await prisma.users.findFirst({
+        where: { Email: data.email },
+      });
+      if (existingUser) {
+        throw new BadRequestError('Email address is already in use.');
+      }
+    }
+
+    const plainPassword = data.password && data.password.trim() ? data.password.trim() : '123456';
+    const hashedPassword = await bcrypt.hash(plainPassword, 10);
+
+    let code = (data.code || '').trim();
+    if (!code) {
+      const count = await prisma.users.count();
+      code = `EMP${String(count + 1).padStart(4, '0')}`;
+    }
+
+    const created = await prisma.users.create({
+      data: {
+        Code: code,
+        FirstName: data.firstName.trim(),
+        MiddleName: data.middleName ? data.middleName.trim() : null,
+        LastName: data.lastName ? data.lastName.trim() : null,
+        Email: data.email ? data.email.trim() : null,
+        password: hashedPassword,
+        MobileNo: data.mobileNo || null,
+        Gender: data.gender || 'Male',
+        DOB: data.dob ? new Date(data.dob) : null,
+        Address: data.address || null,
+        Department: data.department || null,
+        Active: data.active === false ? 'N' : 'Y',
+        IsAdmin: data.isAdmin ? 'Y' : 'N',
+        Branch_id: data.branchId || null,
+        project: data.project || null,
+        DfltWhsID: data.dfltWhsId || null,
+        Route: data.route || null,
+        MaxDiscount: data.maxDiscount !== undefined ? data.maxDiscount : 0,
+        IsPriceEdit: data.isPriceEdit ? 'Y' : 'N',
+        isAllowLineDiscount: data.isAllowLineDiscount ? 'Y' : 'N',
+        IsFrieghtAdd: data.isFrieghtAdd ? 'Y' : 'N',
+        DIM1: data.dim1 || null,
+        DIM2: data.dim2 || null,
+        DIM3: data.dim3 || null,
+        DIM4: data.dim4 || null,
+        CashAcct: data.cashAcct || null,
+        CheckAcct: data.checkAcct || null,
+        TigoPesa: data.tigoPesa || null,
+        Mpesa: data.mpesa || null,
+        AirtelMoney: data.airtelMoney || null,
+        BankDeposit: data.bankDeposit || null,
+        user_permission: data.userPermission || null,
+        CGuid: randomUUID(),
+        created_at: new Date(),
+      },
+    });
+
+    return mapUser(created);
   }
 
   /** Update user profile fields */

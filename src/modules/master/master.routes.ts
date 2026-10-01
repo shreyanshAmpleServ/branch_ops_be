@@ -19,5 +19,6 @@ router.get('/expenses', masterController.getExpenses);
 router.get('/activity-types', masterController.getActivityTypes);
 router.get('/activity-statuses', masterController.getActivityStatuses);
 router.get('/activity-subjects', masterController.getActivitySubjects);
+router.get('/sales-types', masterController.getSalesTypes);
 
 export default router;

@@ -23,6 +23,9 @@ export interface QuotationInput {
   CustName?: string;
   Address?: string;
   CustRefNo?: string;
+  ContPerson?: number | null;
+  ReqBy?: number | null;
+  SalesType?: number | null;
   Currency?: string;
   CurRate?: number;
   PostDate?: string;
@@ -126,9 +129,55 @@ export class QuotationsService {
 
     if (!quotation) throw new NotFoundError('Sales Quotation not found.');
 
+    // Look up ReqBy user name
+    let requestedByName: string | null = null;
+    if (quotation.ReqBy) {
+      try {
+        const reqUser = await prisma.users.findUnique({
+          where: { id: quotation.ReqBy },
+          select: { id: true, FirstName: true, LastName: true },
+        });
+        if (reqUser) {
+          requestedByName = `${reqUser.FirstName} ${reqUser.LastName || ''}`.trim();
+          if (reqUser.id === 2 && (!requestedByName || requestedByName === 'Manager -')) {
+            requestedByName = 'DCC _ Manager';
+          }
+        }
+      } catch {}
+    }
+
+    // Look up ContPerson details
+    let contactPersonName: string | null = null;
+    if (quotation.ContPerson && quotation.ContPerson > 0) {
+      try {
+        const contact = await prisma.retailerContacts.findUnique({
+          where: { ID: quotation.ContPerson },
+          select: { ID: true, FirstName: true, LastName: true },
+        });
+        if (contact) {
+          contactPersonName = `${contact.FirstName || ''} ${contact.LastName || ''}`.trim();
+        }
+      } catch {}
+    }
+
+    // Look up SalesType name
+    let salesTypeName: string | null = null;
+    if (quotation.SalesType != null) {
+      try {
+        const st = await prisma.salesType.findUnique({
+          where: { ID: quotation.SalesType },
+          select: { ID: true, Name: true },
+        });
+        salesTypeName = st?.Name || (quotation.SalesType === 1 ? 'Item' : quotation.SalesType === 2 ? 'Service' : null);
+      } catch {}
+    }
+
     return {
       ...quotation,
       CreatedByName: quotation.creator ? `${quotation.creator.FirstName} ${quotation.creator.LastName || ''}`.trim() : null,
+      RequestedByName: requestedByName,
+      ContactPersonName: contactPersonName,
+      SalesTypeName: salesTypeName,
     };
   }
 
@@ -199,7 +248,10 @@ export class QuotationsService {
         CustName: data.CustName || '',
         Address: data.Address || null,
         CustRefNo: data.CustRefNo || null,
-        Currency: data.Currency || null,
+        ContPerson: data.ContPerson != null ? Number(data.ContPerson) : null,
+        ReqBy: data.ReqBy != null ? Number(data.ReqBy) : createdById,
+        SalesType: data.SalesType != null ? Number(data.SalesType) : 1,
+        Currency: data.Currency || 'TZS',
         CurRate: data.CurRate != null ? Number(data.CurRate) : null,
         PostDate: docDate,
         DueDate: data.DueDate ? new Date(data.DueDate) : docDate,
@@ -295,6 +347,9 @@ export class QuotationsService {
           CustName: data.CustName || existing.CustName,
           Address: data.Address !== undefined ? data.Address : existing.Address,
           CustRefNo: data.CustRefNo !== undefined ? data.CustRefNo : existing.CustRefNo,
+          ContPerson: data.ContPerson !== undefined ? (data.ContPerson != null ? Number(data.ContPerson) : null) : existing.ContPerson,
+          ReqBy: data.ReqBy !== undefined ? (data.ReqBy != null ? Number(data.ReqBy) : null) : existing.ReqBy,
+          SalesType: data.SalesType !== undefined ? (data.SalesType != null ? Number(data.SalesType) : null) : existing.SalesType,
           Currency: data.Currency || existing.Currency,
           CurRate: data.CurRate != null ? Number(data.CurRate) : existing.CurRate,
           PostDate: docDate,

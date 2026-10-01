@@ -111,4 +111,13 @@ export class MasterController {
       next(err);
     }
   };
+
+  public getSalesTypes = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const data = await masterService.getSalesTypes();
+      res.status(200).json({ status: 'success', data });
+    } catch (err) {
+      next(err);
+    }
+  };
 }

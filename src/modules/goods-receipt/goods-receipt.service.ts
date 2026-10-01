@@ -188,12 +188,12 @@ export class GoodsReceiptService {
     });
 
     // Attachments
-    const rawAttachments = await prisma.purchase_order_attachments.findMany({
+    const rawAttachments = await (prisma as any).goodRecieptAttechment.findMany({
       where: { CGuid: receipt.CGuid },
       orderBy: { LineNum: 'asc' },
     });
 
-    const attachments = rawAttachments.map(att => ({
+    const attachments = rawAttachments.map((att: any) => ({
       ID: att.ID,
       LineNum: att.LineNum,
       CGuid: att.CGuid,
@@ -329,7 +329,7 @@ export class GoodsReceiptService {
 
       // Insert Attachments
       if (data.attachments && data.attachments.length > 0) {
-        await tx.purchase_order_attachments.createMany({
+        await (tx as any).goodRecieptAttechment.createMany({
           data: data.attachments.map((att, i) => ({
             LineNum: i + 1,
             CGuid: cGuid,
@@ -467,12 +467,12 @@ export class GoodsReceiptService {
 
       // Replace Attachments
       if (data.attachments) {
-        await tx.purchase_order_attachments.deleteMany({
+        await (tx as any).goodRecieptAttechment.deleteMany({
           where: { CGuid: existing.CGuid },
         });
 
         if (data.attachments.length > 0) {
-          await tx.purchase_order_attachments.createMany({
+          await (tx as any).goodRecieptAttechment.createMany({
             data: data.attachments.map((att, i) => ({
               LineNum: i + 1,
               CGuid: existing.CGuid,
@@ -501,7 +501,7 @@ export class GoodsReceiptService {
         where: { mainCguid: existing.CGuid },
       });
 
-      await tx.purchase_order_attachments.deleteMany({
+      await (tx as any).goodRecieptAttechment.deleteMany({
         where: { CGuid: existing.CGuid },
       });
 

@@ -10,6 +10,7 @@ router.use(auth);
 
 // Main collection routes
 router.get('/', controller.getAll);
+router.post('/', controller.create);
 router.get('/:id', controller.getById);
 router.put('/:id', controller.update);
 router.put('/:id/approve', controller.approve);
@@ -19,5 +20,6 @@ router.delete('/:id', controller.delete);
 router.get('/:code/orders', controller.getOrders);
 router.get('/:code/notes', controller.getNotes);
 router.get('/:code/complaints', controller.getComplaints);
+router.get('/:code/contacts', controller.getContacts);
 
 export default router;
